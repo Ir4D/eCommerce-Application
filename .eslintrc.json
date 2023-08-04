@@ -22,7 +22,7 @@
     "prettier/prettier": [
       "error",
       {
-        "trailingComma": true
+        "trailingComma": "none"
       }
     ],
     "import/prefer-default-export": "off",

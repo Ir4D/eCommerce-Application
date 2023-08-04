@@ -1,3 +1,1 @@
-export default function App() {
-  console.log("eCommerce-Application");
-}
+export default function App(): void {}
