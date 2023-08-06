@@ -1,3 +1,3 @@
 export default function App(): void {}
 
-var w = 1;
+const w = 1;
