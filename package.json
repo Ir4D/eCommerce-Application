@@ -10,7 +10,8 @@
     "lint": "eslint ./src",
     "lint:fix": "eslint ./src --fix --color",
     "prepare": "husky install",
-    "precommit": "lint-staged"
+    "precommit": "lint-staged",
+    "prettier": "prettier ./src --write"
   },
   "repository": {
     "type": "git",

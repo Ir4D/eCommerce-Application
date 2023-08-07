@@ -28,7 +28,9 @@ SPA has a liquid layout and looks great on various devices with a minimum resolu
 - Webpack;
 - Eslint;
 - Prettier;
-- CommerceTools.
+- CommerceTools;
+- Husky;
+- Jest.
 
 ### Setup
 
