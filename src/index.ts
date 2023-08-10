@@ -1,4 +1,4 @@
-import "./index.scss";
-import App from "./app";
+import './index.scss';
+import App from './app';
 
 App();

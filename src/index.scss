@@ -1,6 +1,34 @@
 $base-color: rgb(37, 79, 143);
+$blue: #274c5b;
+$green: #7eb693;
+$yellow: #efd372;
+$gray: #d4d4d4;
+$dark-gray: #525c60;
+$light-gray: #eff6f1;
+$white: #f9f8f8;
 
 .e-commerce {
   font-size: 200px;
   color: $base-color;
+}
+
+.body {
+  max-width: 1920px;
+  margin: auto;
+}
+
+.list {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.link {
+  text-decoration: none;
+  color: currentColor;
+}
+
+.header {
+  width: 1440px;
+  margin: auto;
 }
