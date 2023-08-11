@@ -12,9 +12,8 @@ const createCodeTemplate = (): string => {
           </li>
           <li class="nav-item"><a href="" class="nav-link link">Home</a></li>
           <li class="nav-item"><a href="" class="nav-link link">About</a></li>
-          <li class="nav-item"><a href="" class="nav-link link">Pages</a></li>
-          <li class="nav-item"><a href="" class="nav-link link">Shop</a></li>
-          <li class="nav-item"><a href="" class="nav-link link">News</a></li>
+          <li class="nav-item"><a href="" class="nav-link link">Catalog</a></li>
+          <li class="nav-item"><a href="" class="nav-link link">Log in</a></li>
         </ul>
       </nav>
       <ul class="profile_container profile_container--header list">
@@ -29,9 +28,9 @@ const createCodeTemplate = (): string => {
             <span class="cart">Cart (0)</span>
           </a>
         </li>
-        <li class="profile_container-item">
+        <li class="profile_container-item hidden">
           <a href="" class="profile_container-link link">
-            <img src="./images/avatar.png" alt="profile" class="profile" width="56" height="56" title="You're not autorized">
+            <img src="./images/avatar.png" alt="profile" class="profile" width="56" height="56"">
           </a>
         </li>
       </ul>

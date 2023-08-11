@@ -57,6 +57,10 @@ h6 {
   font-size: 1.5rem;
 }
 
+.hidden {
+  display: none;
+}
+
 .list {
   padding: 0;
   margin: 0;
@@ -105,7 +109,7 @@ h6 {
 
   &::after {
     content: url('./assets/images/icons/arrow-to-right.svg');
-    margin-left: 0.5rem;
+    margin-left: 1rem;
     width: 19px;
     height: 19px;
   }
@@ -265,5 +269,66 @@ h6 {
 
   &:last-child::before {
     content: url('./assets/images/icons/about-quality-icon.png');
+  }
+}
+
+.catalog {
+  max-width: 1400px;
+  margin: 150px auto;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  &-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+
+    margin-top: 40px;
+  }
+
+  &-item {
+    box-sizing: border-box;
+    width: 335px;
+    height: 483px;
+    padding: 25px;
+
+    background-color: $bg-dark;
+    border-radius: 30px;
+  }
+
+  &-card_btn {
+    padding: 5px 12px;
+
+    color: #fff;
+
+    background-color: $blue;
+    border-radius: 8px;
+
+    &::after {
+      display: none;
+    }
+  }
+
+  &-img {
+    width: 100%;
+    height: auto;
+  }
+
+  &-card_title,
+  &-card_price {
+    @include bold-text;
+  }
+
+  &-card_price {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 10px;
+    border-top: 1px solid $gray;
+  }
+
+  &-btn {
+    margin-top: 100px;
   }
 }
