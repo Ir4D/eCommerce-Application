@@ -26,6 +26,14 @@ body {
   font-family: 'Roboto', sans-serif;
 }
 
+h1 {
+  font-size: 4.375rem;
+}
+
+h3 {
+  font-size: 2.5rem;
+}
+
 .list {
   padding: 0;
   margin: 0;
@@ -122,8 +130,6 @@ body {
     @include title;
 
     margin-bottom: 1.5rem;
-
-    font-size: 4.375rem;
   }
 }
 
@@ -132,6 +138,47 @@ body {
 
   font-family: 'Yellowtail';
   font-style: italic;
-  color: $green;
   font-size: 2.25rem;
+
+  &--green {
+    color: $green;
+  }
+
+  &--white {
+    color: #fff;
+  }
+}
+
+.offer {
+  max-width: 1440px;
+  margin: 150px auto;
+
+  display: flex;
+  justify-content: space-between;
+
+  &-banner {
+    padding: 110px 350px 110px 55px;
+
+    border-radius: 30px;
+
+    &--first {
+      background: url('./assets/images/banner1.png') no-repeat;
+    }
+
+    &--second {
+      background: url('./assets/images/banner2.png') no-repeat;
+    }
+  }
+
+  &-content_wrapper {
+    width: 277px;
+  }
+
+  &-title {
+    @include title;
+
+    &--white {
+      color: #fff;
+    }
+  }
 }
