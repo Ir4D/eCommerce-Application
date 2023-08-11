@@ -19,6 +19,13 @@ $bg-dark: #f9f8f8;
   font-size: 1.25rem;
 }
 
+@mixin regular-text {
+  font-family: 'Open Sans', sans-serif;
+  color: $dark-gray;
+  font-weight: 1, 125rem;
+  line-height: 165.4%;
+}
+
 body {
   max-width: 1920px;
   margin: auto;
@@ -27,11 +34,27 @@ body {
 }
 
 h1 {
+  @include title;
+
   font-size: 4.375rem;
 }
 
+h2 {
+  @include title;
+
+  font-size: 3.125rem;
+}
+
 h3 {
+  @include title;
+
   font-size: 2.5rem;
+}
+
+h6 {
+  @include title;
+
+  font-size: 1.5rem;
 }
 
 .list {
@@ -60,12 +83,24 @@ h3 {
   border: none;
   border-radius: 16px;
 
+  cursor: pointer;
+  transition: 0.3s;
+
   &--yellow {
     background-color: $yellow;
+
+    &:hover {
+      background-color: darken($yellow, 10%);
+    }
   }
 
   &--blue {
     background-color: $blue;
+    color: #fff;
+
+    &:hover {
+      background-color: lighten($blue, 15%);
+    }
   }
 
   &::after {
@@ -127,8 +162,6 @@ h3 {
   }
 
   &-title {
-    @include title;
-
     margin-bottom: 1.5rem;
   }
 }
@@ -175,10 +208,62 @@ h3 {
   }
 
   &-title {
-    @include title;
-
     &--white {
       color: #fff;
     }
+  }
+}
+
+.about {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 272px 100px 100px;
+
+  background:
+    url('./assets/images/background-about.png') no-repeat,
+    $bg-dark;
+  background-position: left 100px top 0;
+
+  &-content_wrapper {
+    width: 690px;
+    margin-top: 136px;
+    display: flex;
+    flex-direction: column;
+    row-gap: 45px;
+  }
+
+  &-text {
+    @include regular-text;
+  }
+
+  &-features {
+    display: flex;
+    flex-direction: column;
+    row-gap: 2.125rem;
+  }
+
+  &-btn {
+    align-self: start;
+  }
+}
+
+.feature {
+  position: relative;
+  box-sizing: border-box;
+  width: 564px;
+  padding-left: 120px;
+
+  &::before {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  &:first-child::before {
+    content: url('./assets/images/icons/about-organic-icon.png');
+  }
+
+  &:last-child::before {
+    content: url('./assets/images/icons/about-quality-icon.png');
   }
 }
