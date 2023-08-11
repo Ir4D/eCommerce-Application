@@ -1,5 +1,8 @@
+import MainHeroView from './main-hero';
+
 const createCodeTemplate = (): string => {
-  return `<main></main>`;
+  const mainHeroView = new MainHeroView().render;
+  return `<main>${mainHeroView}</main>`;
 };
 
 export default class MainView {

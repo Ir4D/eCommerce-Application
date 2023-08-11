@@ -13,11 +13,17 @@ $bg-dark: #f9f8f8;
   font-weight: 800;
 }
 
-.body {
+@mixin bold-text {
+  color: $blue;
+  font-weight: 700;
+  font-size: 1.25rem;
+}
+
+body {
   max-width: 1920px;
   margin: auto;
 
-  font-family: sans-serif;
+  font-family: 'Roboto', sans-serif;
 }
 
 .list {
@@ -33,9 +39,38 @@ $bg-dark: #f9f8f8;
   transition: 0.3s;
 }
 
+.btn {
+  @include bold-text;
+  display: flex;
+  align-items: center;
+
+  box-sizing: border-box;
+  padding: 1.75rem 2.5rem;
+
+  line-height: 1.25rem;
+
+  border: none;
+  border-radius: 16px;
+
+  &--yellow {
+    background-color: $yellow;
+  }
+
+  &--blue {
+    background-color: $blue;
+  }
+
+  &::after {
+    content: url('./assets/images/icons/arrow-to-right.svg');
+    margin-left: 0.5rem;
+    width: 19px;
+    height: 19px;
+  }
+}
+
 .header {
   height: 54px;
-  margin: 1.5rem 10rem;
+  margin: 4rem 10rem;
   display: flex;
   justify-content: space-between;
 }
@@ -66,6 +101,37 @@ $bg-dark: #f9f8f8;
 }
 
 .nav-link {
-  @include title;
-  font-size: 1rem;
+  @include bold-text;
+}
+
+.hero {
+  background-color: $bg-dark;
+
+  &--main_page {
+    padding: 15.25rem 16.25rem;
+    background:
+      url('./assets/images/background-patterns.png') no-repeat,
+      url('./assets/images/background-img.png') no-repeat;
+  }
+
+  &-content_wrapper {
+    max-width: 530px;
+  }
+
+  &-title {
+    @include title;
+
+    margin-bottom: 1.5rem;
+
+    font-size: 4.375rem;
+  }
+}
+
+.subtitle {
+  margin: 0;
+
+  font-family: 'Yellowtail';
+  font-style: italic;
+  color: $green;
+  font-size: 2.25rem;
 }

@@ -31,7 +31,7 @@ const createCodeTemplate = (): string => {
         </li>
         <li class="profile_container-item">
           <a href="" class="profile_container-link link">
-            <img src="./images/avatar.png" alt="profile" class="profile" width="56" height="56" title="You're not registered">
+            <img src="./images/avatar.png" alt="profile" class="profile" width="56" height="56" title="You're not autorized">
           </a>
         </li>
       </ul>
