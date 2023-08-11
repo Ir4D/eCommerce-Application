@@ -43,7 +43,7 @@
     "max-lines-per-function": ["error", 40],
     "@typescript-eslint/explicit-function-return-type": "error",
     "@typescript-eslint/lines-between-class-members": "off",
-    "class-methods-use-this": "warn",
+    "class-methods-use-this": "off",
     "comma-dangle": ["off", "never"]
   }
 }

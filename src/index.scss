@@ -1,20 +1,23 @@
-$base-color: rgb(37, 79, 143);
 $blue: #274c5b;
 $green: #7eb693;
 $yellow: #efd372;
 $gray: #d4d4d4;
 $dark-gray: #525c60;
 $light-gray: #eff6f1;
-$white: #f9f8f8;
+$bg-dark: #f9f8f8;
 
-.e-commerce {
-  font-size: 200px;
-  color: $base-color;
+@mixin title {
+  margin: 0;
+
+  color: $blue;
+  font-weight: 800;
 }
 
 .body {
   max-width: 1920px;
   margin: auto;
+
+  font-family: sans-serif;
 }
 
 .list {
@@ -26,9 +29,43 @@ $white: #f9f8f8;
 .link {
   text-decoration: none;
   color: currentColor;
+
+  transition: 0.3s;
 }
 
 .header {
-  width: 1440px;
-  margin: auto;
+  height: 54px;
+  margin: 1.5rem 10rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.link:hover {
+  color: $green;
+}
+
+.nav,
+.profile_container,
+.logo,
+.profile_container-link--cart {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.nav,
+.profile_container {
+  gap: 2rem;
+  height: auto;
+}
+
+.logo-text {
+  @include title;
+  font-size: 2rem;
+}
+
+.nav-link {
+  @include title;
+  font-size: 1rem;
 }
