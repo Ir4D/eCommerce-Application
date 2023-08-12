@@ -1,4 +1,4 @@
-export default class TemplateMainPage {
+export default class TemplateErrorPage {
   private container: HTMLElement;
 
   constructor() {
@@ -6,7 +6,7 @@ export default class TemplateMainPage {
   }
 
   public render(): HTMLElement {
-    this.container.innerText = "MAIN";
+    this.container.innerText = "404";
     return this.container;
   }
 }

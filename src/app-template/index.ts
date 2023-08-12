@@ -1,21 +1,64 @@
 import Router from "../router/router";
 import TemplateLayout from "./template-components/template-layout";
+import TemplateMainPage from "./template-pages/main-page-template";
+import TemplateLoginPage from "./template-pages/login-page-template";
+import TemplateErrorPage from "./template-pages/error-page-template";
 
 export default class AppTemplate {
-  private router: Router;
   private container: HTMLElement;
   private templateLayout: TemplateLayout;
+  private templateLoginPage: TemplateLoginPage;
+  private templateMainPage: TemplateMainPage;
+  private templateErrorPage: TemplateErrorPage;
   private slot: HTMLElement;
 
   constructor() {
-    this.router = new Router();
     this.container = document.body;
-    this.slot = document.createElement("div");
-    this.slot.innerText = "SLOT";
     this.templateLayout = new TemplateLayout();
+    this.templateMainPage = new TemplateMainPage();
+    this.templateLoginPage = new TemplateLoginPage();
+    this.templateErrorPage = new TemplateErrorPage();
+    this.slot = document.createElement("div");
   }
+
+  private renderPage(route: string | boolean): void {
+    this.slot.innerHTML = "";
+    let pageHTML: HTMLElement;
+    if (route) {
+      switch (route) {
+        case "#main": {
+          pageHTML = this.templateMainPage.render();
+          break;
+        }
+        case "#login": {
+          pageHTML = this.templateLoginPage.render();
+          break;
+        }
+        default: {
+          pageHTML = this.templateErrorPage.render();
+        }
+      }
+    } else {
+      pageHTML = this.templateMainPage.render();
+    }
+
+    console.log("switch", route);
+    this.slot.append(pageHTML);
+  }
+
+  private handleRouteChange(): void {
+    window.addEventListener("hashchange", () => {
+      const { hash } = window.location;
+      this.renderPage(hash);
+      console.log("hashchange", hash);
+    });
+  }
+
   public start(): void {
     this.container.append(this.templateLayout.render());
     this.container.append(this.slot);
+    console.log("start", window.location.hash);
+    this.renderPage(window.location.hash);
+    this.handleRouteChange();
   }
 }
