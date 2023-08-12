@@ -51,6 +51,12 @@ h3 {
   font-size: 2.5rem;
 }
 
+h5 {
+  @include title;
+
+  font-size: 1.875rem;
+}
+
 h6 {
   @include title;
 
@@ -331,4 +337,119 @@ h6 {
   &-btn {
     margin-top: 100px;
   }
+}
+
+.special_offer {
+  background-color: $blue;
+  padding: 100px 0;
+
+  &-wrapper {
+    display: flex;
+    flex-direction: column;
+    row-gap: 50px;
+    justify-content: center;
+    align-items: center;
+
+    max-width: 1400px;
+    margin: auto;
+  }
+
+  &-top {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &-title {
+    color: #fff;
+  }
+
+  &-list {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+  }
+}
+
+.footer {
+  display: flex;
+  max-width: 1440px;
+  margin: auto;
+  padding: 50px;
+
+  &-contacts,
+  &-info,
+  &-additional {
+    padding: 0 50px;
+  }
+
+  &-contacts {
+    text-align: right;
+    border-right: 1px solid $gray;
+  }
+
+  &-info {
+    width: 500px;
+
+    text-align: center;
+  }
+
+  &-additional {
+    text-align: left;
+    border-left: 1px solid $gray;
+  }
+
+  &-text {
+    color: $dark-gray;
+  }
+
+  &-logo {
+    width: 180px;
+    margin: auto;
+  }
+}
+
+.contacts-title {
+  @include bold-text;
+
+  color: $dark-gray;
+}
+
+.info {
+  &-list {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+
+    margin-top: 80px;
+  }
+
+  &-item {
+    position: relative;
+
+    border-radius: 50%;
+    transition: 0.3s;
+    cursor: pointer;
+
+    &:hover::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+
+      border-radius: 50%;
+      background-color: $dark-gray;
+      opacity: 0.1;
+    }
+  }
+}
+
+.additional-list {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 15px;
 }

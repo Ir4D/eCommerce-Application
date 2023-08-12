@@ -7,9 +7,9 @@ const createCodeTemplate = (): string => {
   return `
   <section class="catalog catalog--main_page">
     <p class="subtitle subtitle--green">Catalog</p>
-    <h2 class="catalof titile">Our Products</h2>
+    <h2 class="catalof-titile">Our Products</h2>
     <ul class="catalog-list list">
-      ${goodItems.map((el) => new GoodCartView(el).render)} 
+      ${goodItems.map((el) => new GoodCartView(el).render).join('')} 
     </ul>
     <button class="catalog-btn btn btn--blue">Load More</button>
   </section>`;
