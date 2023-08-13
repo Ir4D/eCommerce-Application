@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 import Router from "../../router/router";
 
 export default class TemplateLayout {
@@ -6,13 +5,12 @@ export default class TemplateLayout {
 
   constructor() {
     this.container = document.createElement("div");
-    const mainLink = document.createElement("a");
-    const logInLink = document.createElement("a");
-    const descriptions = ["MAIN", "LOG IN"];
-    const hrefs = ["#main", "#login"];
-    [mainLink, logInLink].forEach((button, i) => {
-      button.href = hrefs[i];
-      button.innerText = descriptions[i];
+    Router.pages.forEach((route) => {
+      const button = document.createElement("button");
+      button.innerText = route.description;
+      button.addEventListener("click", () => {
+        Router.push(route.route);
+      });
       this.container.append(button);
     });
   }

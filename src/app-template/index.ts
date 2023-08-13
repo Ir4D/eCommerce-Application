@@ -21,16 +21,16 @@ export default class AppTemplate {
     this.slot = document.createElement("div");
   }
 
-  private renderPage(route: string | boolean): void {
+  private renderPage(route: string): void {
     this.slot.innerHTML = "";
     let pageHTML: HTMLElement;
     if (route) {
       switch (route) {
-        case "#main": {
+        case Router.pages[0].route: {
           pageHTML = this.templateMainPage.render();
           break;
         }
-        case "#login": {
+        case Router.pages[1].route: {
           pageHTML = this.templateLoginPage.render();
           break;
         }
@@ -39,10 +39,9 @@ export default class AppTemplate {
         }
       }
     } else {
+      Router.push(Router.pages[0].route);
       pageHTML = this.templateMainPage.render();
     }
-
-    console.log("switch", route);
     this.slot.append(pageHTML);
   }
 
@@ -50,14 +49,12 @@ export default class AppTemplate {
     window.addEventListener("hashchange", () => {
       const { hash } = window.location;
       this.renderPage(hash);
-      console.log("hashchange", hash);
     });
   }
 
   public start(): void {
     this.container.append(this.templateLayout.render());
     this.container.append(this.slot);
-    console.log("start", window.location.hash);
     this.renderPage(window.location.hash);
     this.handleRouteChange();
   }
