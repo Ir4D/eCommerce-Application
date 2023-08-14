@@ -1,3 +1,4 @@
+
 import Layout from "./pages/layout";
 
 export default class App {
@@ -8,3 +9,11 @@ export default class App {
     new Layout().render(this.appContainer);
   }
 }
+
+/* eslint-disable @typescript-eslint/no-unused-vars */
+// import { GetProductsPublished } from "./apiMethods";
+
+// export default function App(): void {
+//   GetProductsPublished();
+// }
+
