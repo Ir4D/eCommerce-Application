@@ -13,10 +13,10 @@ export default class HeaderView {
         <li class="nav-item">
           <a href="" class="nav-link"></a>
         </li>
-        <li class="nav-item"><a href=${Router.pages.main.route} class="nav-link link">Home</a></li>
-        <li class="nav-item"><a href=${Router.pages.about.route} class="nav-link link">About</a></li>
-        <li class="nav-item"><a href=${Router.pages.catalog.route} class="nav-link link">Catalog</a></li>
-        <li class="nav-item"><a href=${Router.pages.login.route} class="nav-link link">Log in</a></li>
+        <li class="nav-item"><a href=${Router.pages.main} class="nav-link link">Home</a></li>
+        <li class="nav-item"><a href=${Router.pages.about} class="nav-link link">About</a></li>
+        <li class="nav-item"><a href=${Router.pages.catalog} class="nav-link link">Catalog</a></li>
+        <li class="nav-item"><a href=${Router.pages.login} class="nav-link link">Log in</a></li>
       </ul>
     </nav>
     <ul class="profile_container profile_container--header list">
@@ -42,7 +42,6 @@ export default class HeaderView {
     this.container = document.createElement("header");
     this.container.classList.add("header");
     this.container.innerHTML = this.HTML;
-    console.log(this.container.querySelectorAll(".nav-link"));
   }
 
   // private addLinks(): void {

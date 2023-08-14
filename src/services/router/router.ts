@@ -1,20 +1,12 @@
 export default abstract class Router {
   public static pages = {
-    main: {
-      route: "#main"
-    },
-    about: {
-      route: "#about"
-    },
-    catalog: {
-      route: "#catalog"
-    },
-    login: {
-      route: "#login"
-    }
+    main: "#main",
+    about: "#about",
+    catalog: "#catalog",
+    login: "#login"
   };
 
-  public static push(location: string): void {
+  public static navigate(location: string): void {
     window.location.hash = location;
   }
 }

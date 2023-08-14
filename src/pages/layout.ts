@@ -10,7 +10,7 @@ import NotFoundView from "./404/404";
 export default class Layout {
   private header: HeaderView;
   private footer: FooterView;
-  public slot: HTMLDivElement;
+  private slot: HTMLDivElement;
 
   private main: MainView;
   private about: AboutView;
@@ -35,19 +35,19 @@ export default class Layout {
     let pageHTML: string;
     if (route) {
       switch (route) {
-        case Router.pages.main.route: {
+        case Router.pages.main: {
           pageHTML = this.main.render;
           break;
         }
-        case Router.pages.about.route: {
+        case Router.pages.about: {
           pageHTML = this.about.render;
           break;
         }
-        case Router.pages.catalog.route: {
+        case Router.pages.catalog: {
           pageHTML = this.catalog.render;
           break;
         }
-        case Router.pages.login.route: {
+        case Router.pages.login: {
           pageHTML = this.login.render;
           break;
         }
@@ -56,7 +56,7 @@ export default class Layout {
         }
       }
     } else {
-      Router.push(Router.pages.main.route);
+      Router.navigate(Router.pages.main);
       pageHTML = this.main.render;
     }
     this.slot.innerHTML = pageHTML;
