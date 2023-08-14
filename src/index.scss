@@ -1,6 +1,76 @@
 $base-color: rgb(37, 79, 143);
 
-.e-commerce {
-  font-size: 200px;
-  color: $base-color;
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+*:focus {
+  border-radius: 0;
+  outline: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+.pages {
+  display: flex;
+  margin-top: 10px;
+  margin-left: 7px;
+}
+
+.page-link {
+  display: inline-block;
+  margin-right: 5px;
+  margin-bottom: 0;
+  padding: 6px 15px;
+  border-radius: 2px;
+  background-color: #393f54cc;
+  color: #a8bbe3;
+  vertical-align: middle;
+  transition: all 0.3s;
+  border: 1px solid #7881a1;
+}
+
+.page-link:hover {
+  color: #dfe6ff;
+  box-shadow: 0 0 8px 2px #b69cf8d1;
+  border-image-slice: 1;
+  border-width: 1px;
+  border-image-source: linear-gradient(to right, #b69cf8, #5edcdc, #d3f9a7);
+}
+
+.page-link.disabled,
+.page-link:hover.disabled {
+  color: #646d8d;
+  border-width: 1px;
+  border-image-source: none;
+  box-shadow: none;
+  border: 1px solid #4e5674;
+  cursor: auto;
+}
+
+.disabled {
+  color: #646d8d;
+}
+
+#current-page {
+  margin-left: 5px;
+  margin-top: 10px;
+}
+
+.login-container,
+.signup-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 200px;
+}
+
+.login-submit,
+.signup-submit {
+  width: 90px;
+  margin-top: 10px;
 }
