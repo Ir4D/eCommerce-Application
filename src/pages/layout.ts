@@ -28,6 +28,7 @@ export default class Layout {
     this.notFound = new NotFoundView();
     this.slot = document.createElement("div");
     this.handleRouteChange();
+    // this.handlePopState();
   }
 
   private renderPage(route: string): void {
@@ -63,11 +64,27 @@ export default class Layout {
   }
 
   private handleRouteChange(): void {
-    window.addEventListener("hashchange", () => {
+    window.addEventListener("hashchange", (e) => {
+      e.preventDefault();
       const { hash } = window.location;
-      this.renderPage(hash);
+      // console.log("evenr", e);
+      // console.log("hash", hash);
+      if (hash) {
+        this.renderPage(hash);
+      } else {
+        Router.navigate(Router.pages.main);
+        // console.log("no hash", hash);
+      }
     });
   }
+
+  // private handlePopState(): void {
+  //   window.addEventListener("beforeunload", (e) => {
+  //     e.preventDefault();
+  //     window.location.hash = "6";
+  //     console.log("popstate", e);
+  //   });
+  // }
 
   public render(container: HTMLElement): void {
     container.append(this.header.render());
