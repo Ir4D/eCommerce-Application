@@ -3,7 +3,8 @@ export default abstract class Router {
     main: "#main",
     about: "#about",
     catalog: "#catalog",
-    login: "#login"
+    login: "#login",
+    signup: "#signup"
   };
 
   public static navigate(location: string): void {

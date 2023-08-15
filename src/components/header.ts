@@ -17,6 +17,7 @@ export default class HeaderView {
         <li class="nav-item"><a href=${Router.pages.about} class="nav-link link">About</a></li>
         <li class="nav-item"><a href=${Router.pages.catalog} class="nav-link link">Catalog</a></li>
         <li class="nav-item"><a href=${Router.pages.login} class="nav-link link">Log in</a></li>
+        <li class="nav-item"><a href=${Router.pages.signup} class="nav-link link">Sign up</a></li>
       </ul>
     </nav>
     <ul class="profile_container profile_container--header list">
@@ -43,11 +44,6 @@ export default class HeaderView {
     this.container.classList.add("header");
     this.container.innerHTML = this.HTML;
   }
-
-  // private addLinks(): void {
-  //   const navLinks = document.querySelectorAll("header");
-  //   console.log(navLinks);
-  // }
 
   public render(): HTMLElement {
     return this.container;

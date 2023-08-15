@@ -11,7 +11,7 @@ const createCodeTemplate = (): string => {
   const mainCatalogView = new MainCatalogView().render;
   const specialOfferView = new SpecialOfferView().render;
 
-  return `<main>${mainHeroView}${mainOfferView}${mainAboutView}${mainCatalogView}${specialOfferView}</main>`;
+  return `${mainHeroView}${mainOfferView}${mainAboutView}${mainCatalogView}${specialOfferView}`;
 };
 
 export default class MainView {
