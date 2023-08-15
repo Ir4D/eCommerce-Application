@@ -20,7 +20,7 @@ $bg-dark: #f9f8f8;
 }
 
 @mixin regular-text {
-  font-family: 'Open Sans', sans-serif;
+  font-family: "Open Sans", sans-serif;
   color: $dark-gray;
   font-weight: 1, 125rem;
   line-height: 165.4%;
@@ -30,7 +30,7 @@ body {
   max-width: 1920px;
   margin: auto;
 
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
 }
 
 h1 {
@@ -114,7 +114,7 @@ h6 {
   }
 
   &::after {
-    content: url('./assets/images/icons/arrow-to-right.svg');
+    content: url("./assets/images/icons/arrow-to-right.svg");
     margin-left: 1rem;
     width: 19px;
     height: 19px;
@@ -163,8 +163,8 @@ h6 {
   &--main_page {
     padding: 15.25rem 16.25rem;
     background:
-      url('./assets/images/background-patterns.png') no-repeat,
-      url('./assets/images/background-img.png') no-repeat;
+      url("./assets/images/background-patterns.png") no-repeat,
+      url("./assets/images/background-img.png") no-repeat;
   }
 
   &-content_wrapper {
@@ -179,7 +179,7 @@ h6 {
 .subtitle {
   margin: 0;
 
-  font-family: 'Yellowtail';
+  font-family: "Yellowtail";
   font-style: italic;
   font-size: 2.25rem;
 
@@ -205,11 +205,11 @@ h6 {
     border-radius: 30px;
 
     &--first {
-      background: url('./assets/images/banner1.png') no-repeat;
+      background: url("./assets/images/banner1.png") no-repeat;
     }
 
     &--second {
-      background: url('./assets/images/banner2.png') no-repeat;
+      background: url("./assets/images/banner2.png") no-repeat;
     }
   }
 
@@ -230,7 +230,7 @@ h6 {
   padding: 0 272px 100px 100px;
 
   background:
-    url('./assets/images/background-about.png') no-repeat,
+    url("./assets/images/background-about.png") no-repeat,
     $bg-dark;
   background-position: left 100px top 0;
 
@@ -270,11 +270,11 @@ h6 {
   }
 
   &:first-child::before {
-    content: url('./assets/images/icons/about-organic-icon.png');
+    content: url("./assets/images/icons/about-organic-icon.png");
   }
 
   &:last-child::before {
-    content: url('./assets/images/icons/about-quality-icon.png');
+    content: url("./assets/images/icons/about-quality-icon.png");
   }
 }
 
@@ -433,7 +433,7 @@ h6 {
     cursor: pointer;
 
     &:hover::after {
-      content: '';
+      content: "";
       position: absolute;
       top: 0;
       bottom: 0;
