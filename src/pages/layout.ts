@@ -10,7 +10,7 @@ import NotFoundView from "./404/404";
 export default class Layout {
   private header: HeaderView;
   private footer: FooterView;
-  private slot: HTMLDivElement;
+  private slot: HTMLElement;
 
   private main: MainView;
   private about: AboutView;
@@ -26,7 +26,7 @@ export default class Layout {
     this.catalog = new CatalogView();
     this.login = new LoginView();
     this.notFound = new NotFoundView();
-    this.slot = document.createElement("div");
+    this.slot = document.createElement("main");
     this.handleRouteChange();
   }
 
