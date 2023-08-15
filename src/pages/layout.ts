@@ -1,11 +1,11 @@
-import Router from "../services/router/router";
-import HeaderView from "../components/header";
-import FooterView from "../components/footer";
-import MainView from "./main/main";
-import AboutView from "./about/about";
-import CatalogView from "./catalog/catalog";
-import LoginView from "./login/login";
-import NotFoundView from "./404/404";
+import Router from '../services/router/router';
+import HeaderView from '../components/header';
+import FooterView from '../components/footer';
+import MainView from './main/main';
+import AboutView from './about/about';
+import CatalogView from './catalog/catalog';
+import LoginView from './login/login';
+import NotFoundView from './404/404';
 
 export default class Layout {
   private header: HeaderView;
@@ -26,12 +26,12 @@ export default class Layout {
     this.catalog = new CatalogView();
     this.login = new LoginView();
     this.notFound = new NotFoundView();
-    this.slot = document.createElement("main");
+    this.slot = document.createElement('main');
     this.handleRouteChange();
   }
 
   private renderPage(route: string): void {
-    this.slot.innerHTML = "";
+    this.slot.innerHTML = '';
     let pageHTML: string;
     if (route) {
       switch (route) {
@@ -63,7 +63,7 @@ export default class Layout {
   }
 
   private handleRouteChange(): void {
-    window.addEventListener("hashchange", () => {
+    window.addEventListener('hashchange', () => {
       const { hash } = window.location;
       this.renderPage(hash);
     });

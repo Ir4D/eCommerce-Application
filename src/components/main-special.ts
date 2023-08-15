@@ -1,5 +1,5 @@
-import { offers } from "../../utils";
-import GoodCartView from "../../components/good-cart";
+import { offers } from '../utils';
+import GoodCartView from './good-cart';
 
 const createCodeTemplate = (): string => {
   const offersItems: object[] = offers;
@@ -15,7 +15,7 @@ const createCodeTemplate = (): string => {
         <button class="special_offer-btn btn btn--yellow">View All Products</button>
       </div>
       <ul class="special_offer-list list">
-        ${offersItems.map((el) => new GoodCartView(el).render).join("")} 
+        ${offersItems.map((el) => new GoodCartView(el).render).join('')} 
       </ul>
     </div>
   </section>`;

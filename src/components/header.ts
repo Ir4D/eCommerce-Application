@@ -1,4 +1,4 @@
-import Router from "../services/router/router";
+import Router from '../services/router/router';
 
 export default class HeaderView {
   private container: HTMLElement;
@@ -39,8 +39,8 @@ export default class HeaderView {
     </ul>`;
 
   constructor() {
-    this.container = document.createElement("header");
-    this.container.classList.add("header");
+    this.container = document.createElement('header');
+    this.container.classList.add('header');
     this.container.innerHTML = this.HTML;
   }
 
