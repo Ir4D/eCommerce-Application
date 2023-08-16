@@ -4,7 +4,7 @@ export default class HeaderView {
   private container: HTMLElement;
   private HTML = `${new MenuView().render()}
     <ul class="profile_container profile_container--header list">
-      <li class="profile_container-item">
+      <li class="profile_container-item search-item">
         <a href="" class="profile_container-link link">
           <img src="./images/icons/search-icon.png" alt="search" class="search" width="56" height="56">
         </a>
@@ -27,11 +27,6 @@ export default class HeaderView {
     this.container.classList.add('header');
     this.container.innerHTML = this.HTML;
   }
-
-  // private addLinks(): void {
-  //   const navLinks = document.querySelectorAll("header");
-  //   console.log(navLinks);
-  // }
 
   public render(): HTMLElement {
     return this.container;

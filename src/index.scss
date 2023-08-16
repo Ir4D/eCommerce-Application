@@ -508,7 +508,7 @@ h6 {
   }
 }
 
-@media only screen and (max-width: 990px) {
+@media only screen and (max-width: 1100px) {
   .header {
     flex-wrap: wrap;
     justify-content: center;
@@ -516,10 +516,10 @@ h6 {
 
     margin: 50px auto;
     height: auto;
+  }
 
-    .nav {
-      width: 90vw;
-    }
+  .nav {
+    width: 90vw;
   }
 
   .hero {
@@ -561,7 +561,12 @@ h6 {
   }
 
   .nav {
+    height: 100vh;
+    width: 100vw;
+
     transform: scaleX(0);
+    transform-origin: 0 0;
+    transition: 0.5s;
 
     &-mobile {
       box-sizing: border-box;
@@ -577,7 +582,7 @@ h6 {
       border-top: 3px solid $blue;
       border-bottom: 3px solid $blue;
 
-      transition: 0.5s;
+      transition: 0.3s;
 
       & > span {
         position: absolute;
@@ -612,10 +617,9 @@ h6 {
 
     &.show {
       box-sizing: border-box;
-      height: 100vh;
-      width: 100vw;
 
       transform: scaleX(1);
+      overflow: hidden;
     }
   }
 
@@ -632,5 +636,41 @@ h6 {
     & span:last-child {
       transform: translateY(-9px) rotate(-45deg);
     }
+  }
+
+  .hero {
+    background-position: -180px;
+  }
+
+  .offer {
+    margin: 70px auto;
+
+    &-banner {
+      padding: 22px;
+      background-position: -200px;
+    }
+  }
+
+  .catalog {
+    margin: 70px auto;
+  }
+
+  h1 {
+    font-size: 3.3rem;
+  }
+
+  .special_offer-top {
+    flex-wrap: wrap;
+    gap: 30px;
+  }
+
+  .about-content_wrapper {
+    box-sizing: border-box;
+    width: 100%;
+    margin: auto;
+  }
+
+  .feature {
+    width: 100%;
   }
 }

@@ -3,7 +3,7 @@ import Router from '../services/router/router';
 const createCodeTemplate = (): string => {
   return ` 
     <nav>
-      <button id="nav-mobile"><span></span><span></span></button>
+      <button class="nav-mobile"><span></span><span></span></button>
       <ul class="nav nav--header list ">
         <li class="nav-item header-logo logo">
           <img src="./images/Logo.png" alt="logo" class="logo-img" width="37" height="54"
