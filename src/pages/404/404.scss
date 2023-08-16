@@ -1,41 +1,14 @@
-$blue: #274c5b;
-$green: #7eb693;
-$yellow: #efd372;
-$gray: #d4d4d4;
-$dark-gray: #525c60;
-$light-gray: #eff6f1;
-$bg-dark: #f9f8f8;
-
-@mixin title {
-  margin: 0;
-
-  color: $blue;
-  font-weight: 800;
-}
-
-@mixin bold-text {
-  color: $blue;
-  font-weight: 700;
-  font-size: 1.25rem;
-}
-
-@mixin regular-text {
-  font-family: "Open Sans", sans-serif;
-  color: $dark-gray;
-  font-weight: 1, 125rem;
-  line-height: 165.4%;
-}
-
 .not-found {
-  background: #bbc9c9;
+  background-color: #bbc9c9;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 100px;
+  gap: 10vw;
 }
 
 .not-found-image {
   content: url("../../assets/images/404-image-frame.png");
+  width: 45vw;
   margin: 3vw 0;
 }
 
@@ -47,7 +20,7 @@ $bg-dark: #f9f8f8;
 
 .not-found-info-title {
   color: #8fa8a8;
-  font-size: 13.7rem;
+  font-size: 20vw;
   font-weight: 700;
   line-height: 80%;
 }
@@ -55,53 +28,47 @@ $bg-dark: #f9f8f8;
 .not-found-info-subtitle {
   color: #274c5b;
   font-weight: 800;
-  font-size: 70px;
+  font-size: 4.5vw;
 }
 
 .not-found-info-description {
   color: #525c60;
   font-weight: 700;
-  font-size: 1.25rem;
+  font-size: 1vw;
+}
+
+.not-found-info-link {
+  align-self: start;
+  text-decoration: none;
 }
 
 .btn {
-  margin-top: 2vw;
-  @include bold-text;
-  display: flex;
-  align-items: center;
+  margin: 2vw 1vw;
+}
 
-  box-sizing: border-box;
-  padding: 1.75rem 2.5rem;
-
-  line-height: 1.25rem;
-
-  border: none;
-  border-radius: 16px;
-
-  cursor: pointer;
-  transition: 0.3s;
-
-  &--yellow {
-    background-color: $yellow;
-
-    &:hover {
-      background-color: darken($yellow, 10%);
-    }
+@media (max-width: 900px) {
+  .not-found {
+    flex-direction: column;
+    background: #bbc9c9 url("../../assets/images/404-image-frame.png") no-repeat
+      center/contain;
   }
-
-  &--blue {
-    background-color: $blue;
-    color: #fff;
-
-    &:hover {
-      background-color: lighten($blue, 15%);
-    }
+  .not-found-image {
+    display: none;
   }
-
-  &::after {
-    content: url("../../assets/images/icons/arrow-to-right.svg");
-    margin-left: 1rem;
-    width: 19px;
-    height: 19px;
+  .not-found-info {
+    padding: 5vw;
+  }
+  .not-found-info-title {
+    color: #274c5b;
+  }
+  .not-found-info-subtitle {
+    color: #8fa8a8;
+  }
+  .not-found-info-description {
+    font-size: 1.5vw;
+    font-weight: 700;
+  }
+  .not-found-info-link {
+    align-self: auto;
   }
 }
