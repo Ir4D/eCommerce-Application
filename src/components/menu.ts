@@ -17,6 +17,7 @@ const createCodeTemplate = (): string => {
         <li class="nav-item"><a href=${Router.pages.about} class="nav-link link">About</a></li>
         <li class="nav-item"><a href=${Router.pages.catalog} class="nav-link link">Catalog</a></li>
         <li class="nav-item"><a href=${Router.pages.login} class="nav-link link">Log in</a></li>
+        <li class="nav-item"><a href=${Router.pages.signup} class="nav-link link">Sign up</a></li>
       </ul>
     </nav>`;
 };

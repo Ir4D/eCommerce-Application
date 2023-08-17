@@ -2,10 +2,10 @@ import {
   createApiBuilderFromCtpClient,
   ClientResponse,
   ProductProjectionPagedQueryResponse
-} from "@commercetools/platform-sdk";
-import { createCtpClient } from "./api/BuildClients";
-import { apiData } from "./api/apiData";
-import Layout from "./pages/layout";
+} from '@commercetools/platform-sdk';
+import { createCtpClient } from './api/BuildClients';
+import { apiData } from './api/apiData';
+import Layout from './pages/layout';
 
 export default class App {
   public appContainer = document.querySelector<HTMLElement>('body');

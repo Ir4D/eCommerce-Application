@@ -1,5 +1,5 @@
-import SignupTitleView from "./signup-title";
-import SignupFormView from "./signup-form";
+import SignupTitleView from './signup-title';
+import SignupFormView from './signup-form';
 
 const createCodeTemplate = (): string => {
   const signupTitleView = new SignupTitleView().render;

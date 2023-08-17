@@ -1,12 +1,12 @@
-import Router from "../services/router/router";
-import HeaderView from "../components/header";
-import FooterView from "../components/footer";
-import MainView from "./main/main";
-import AboutView from "./about/about";
-import CatalogView from "./catalog/catalog";
-import LoginView from "./login/login";
-import SignupView from "./signup/signup";
-import NotFoundView from "./404/404";
+import Router from '../services/router/router';
+import HeaderView from '../components/header';
+import FooterView from '../components/footer';
+import MainView from './main/main';
+import AboutView from './about/about';
+import CatalogView from './catalog/catalog';
+import LoginView from './login/login';
+import SignupView from './signup/signup';
+import NotFoundView from './404/404';
 
 export default class Layout {
   private header: HeaderView;
@@ -29,7 +29,7 @@ export default class Layout {
     this.login = new LoginView();
     this.signup = new SignupView();
     this.notFound = new NotFoundView();
-    this.slot = document.createElement("main");
+    this.slot = document.createElement('main');
     this.handleRouteChange();
   }
 

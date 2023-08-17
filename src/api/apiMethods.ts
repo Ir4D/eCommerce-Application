@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import { createApiBuilderFromCtpClient } from "@commercetools/platform-sdk";
-import { apiData } from "./apiData";
-import { createCtpClient } from "./BuildClients";
+import { createApiBuilderFromCtpClient } from '@commercetools/platform-sdk';
+import { apiData } from './apiData';
+import { createCtpClient } from './BuildClients';
 
 const apiRoot = createApiBuilderFromCtpClient(createCtpClient()).withProjectKey(
   {
@@ -35,7 +35,7 @@ export function GetProductsPublished(): void {
 
 // Create a new customer
 export function CreateCustomer(EMAIL: string, PASSWORD: string): void {
-  console.log("CreateCustomer function");
+  console.log('CreateCustomer function');
   const createCustomer = () => {
     return apiRoot
       .me()
@@ -83,7 +83,7 @@ export function QueryCustomerByEmail(EMAIL: string): void {
   returnCustomerByEmail(EMAIL)
     .then(({ body }) => {
       if (body.results.length === 0) {
-        console.log("This email address has not been registered.");
+        console.log('This email address has not been registered.');
       } else {
         console.log(body.results[0].id);
       }
@@ -93,7 +93,7 @@ export function QueryCustomerByEmail(EMAIL: string): void {
 
 // Log in a customer with its email and password
 export function AuthenticateCustomer(EMAIL: string, PASSWORD: string): void {
-  console.log("AuthoriseCustomer function");
+  console.log('AuthoriseCustomer function');
   const authenticateCustomer = () => {
     return apiRoot
       .me()

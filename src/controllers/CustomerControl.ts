@@ -2,12 +2,12 @@
 /* eslint-disable max-lines-per-function */
 /* eslint-disable no-console */
 
-import { createApiBuilderFromCtpClient } from "@commercetools/platform-sdk";
-import { apiData } from "../api/apiData";
+import { createApiBuilderFromCtpClient } from '@commercetools/platform-sdk';
+import { apiData } from '../api/apiData';
 import {
   createCtpClientWithCredentials,
   createCtpClientWithScopes
-} from "../api/BuildClients";
+} from '../api/BuildClients';
 
 export class Customer {
   public async createCustomer(
