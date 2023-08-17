@@ -3,14 +3,30 @@
 /* eslint-disable no-console */
 
 import { createApiBuilderFromCtpClient } from "@commercetools/platform-sdk";
-import { apiData } from "./apiData";
+import { apiData } from "../api/apiData";
 import {
   createCtpClientWithCredentials,
   createCtpClientWithScopes
-} from "./BuildClients";
+} from "../api/BuildClients";
 
 export class Customer {
-  public async createCustomer(EMAIL: string, PASSWORD: string): Promise<void> {
+  public async createCustomer(
+    EMAIL: string,
+    PASSWORD: string,
+    FIRST_NAME: string,
+    LAST_NAME: string,
+    DOB: string,
+    COUNTRY_BILL: string,
+    STREET_BILL: string,
+    POST_BILL: string,
+    CITY_BILL: string,
+    COUNTRY_SHIP: string,
+    STREET_SHIP: string,
+    POST_SHIP: string,
+    CITY_SHIP: string,
+    BILLING_DEF: number | undefined,
+    SHIPPING_DEF: number | undefined
+  ): Promise<void> {
     const apiRoot = createApiBuilderFromCtpClient(
       createCtpClientWithScopes()
     ).withProjectKey({
@@ -23,7 +39,28 @@ export class Customer {
         .post({
           body: {
             email: EMAIL,
-            password: PASSWORD
+            password: PASSWORD,
+            firstName: FIRST_NAME,
+            lastName: LAST_NAME,
+            dateOfBirth: DOB,
+            addresses: [
+              {
+                country: COUNTRY_BILL,
+                streetName: STREET_BILL,
+                postalCode: POST_BILL,
+                city: CITY_BILL
+              },
+              {
+                country: COUNTRY_SHIP,
+                streetName: STREET_SHIP,
+                postalCode: POST_SHIP,
+                city: CITY_SHIP
+              }
+            ],
+            billingAddresses: [0],
+            shippingAddresses: [1],
+            defaultBillingAddress: BILLING_DEF,
+            defaultShippingAddress: SHIPPING_DEF
           }
         })
         .execute();

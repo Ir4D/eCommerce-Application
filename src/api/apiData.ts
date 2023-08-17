@@ -1,4 +1,4 @@
-const apiDataAdmin = {
+export const apiDataAdmin = {
   PROJECT_KEY: "rss-ecom-app",
   CLIENT_ID: "tdIsIEbnK71vruL5Z3hwP9Fx",
   CLIENT_SECRET: "8P26HVz-pnxEpRSbBw29n5pMXGwRUfCp",
@@ -43,7 +43,6 @@ export const apiDataPassword = {
     "create_anonymous_token:rss-ecom-app manage_my_quotes:rss-ecom-app manage_my_quote_requests:rss-ecom-app manage_my_profile:rss-ecom-app manage_my_orders:rss-ecom-app manage_my_shopping_lists:rss-ecom-app view_categories:rss-ecom-app manage_my_business_units:rss-ecom-app manage_my_payments:rss-ecom-app view_published_products:rss-ecom-app"
 };
 
-// optional - API Client for password flow with with the scope "manage_customers"
 export const apiDataPassManageCustomers = {
   PROJECT_KEY: "rss-ecom-app",
   CLIENT_ID: "pAMvorhpN5_-mQDEarU8KpCh",
