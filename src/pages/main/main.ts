@@ -1,8 +1,8 @@
-import MainHeroView from "./main-hero";
-import MainOfferView from "./main-offers";
-import MainAboutView from "./main-about";
-import MainCatalogView from "./main-catalog";
-import SpecialOfferView from "./main-special";
+import MainHeroView from '../../components/main-hero';
+import MainOfferView from '../../components/main-offers';
+import MainAboutView from '../../components/main-about';
+import MainCatalogView from '../../components/main-catalog';
+import SpecialOfferView from '../../components/main-special';
 
 const createCodeTemplate = (): string => {
   const mainHeroView = new MainHeroView().render;

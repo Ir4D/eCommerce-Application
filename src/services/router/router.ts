@@ -1,5 +1,6 @@
 export default abstract class Router {
   public static pages = {
+
     main: "#main",
     about: "#about",
     catalog: "#catalog",
