@@ -1,4 +1,4 @@
-import Router from "../../services/router/router";
+import Router from '../../services/router/router';
 
 export default class NotFoundView {
   public get render(): string {
