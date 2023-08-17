@@ -34,7 +34,7 @@ export default class Layout {
   }
 
   private renderPage(route: string): void {
-    this.slot.innerHTML = "";
+    this.slot.innerHTML = '';
     let pageHTML: string;
     if (route) {
       switch (route) {
@@ -59,6 +59,7 @@ export default class Layout {
           break;
         }
         default: {
+          Router.navigate(Router.pages.notFound);
           pageHTML = this.notFound.render;
         }
       }
@@ -70,7 +71,7 @@ export default class Layout {
   }
 
   private handleRouteChange(): void {
-    window.addEventListener("hashchange", () => {
+    window.addEventListener('hashchange', () => {
       const { hash } = window.location;
       this.renderPage(hash);
     });

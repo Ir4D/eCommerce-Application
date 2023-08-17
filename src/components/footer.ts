@@ -2,8 +2,8 @@ export default class FooterView {
   private container: HTMLElement;
 
   constructor() {
-    this.container = document.createElement("footer");
-    this.container.classList.add("footer");
+    this.container = document.createElement('footer');
+    this.container.classList.add('footer');
     this.container.innerHTML = `<div class="footer-contacts">
     <h5 class="footer-title">Contact Us</h5>
     <ul class="contacts-list list">
