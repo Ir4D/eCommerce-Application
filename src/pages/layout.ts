@@ -52,6 +52,7 @@ export default class Layout {
           break;
         }
         default: {
+          Router.navigate(Router.pages.notFound);
           pageHTML = this.notFound.render;
         }
       }
