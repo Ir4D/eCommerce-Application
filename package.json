@@ -28,6 +28,8 @@
   },
   "homepage": "https://github.com/Ir4D/eCommerce-Application#readme",
   "devDependencies": {
+    "@commercetools/platform-sdk": "^5.0.0",
+    "@commercetools/sdk-client-v2": "^2.2.0",
     "@types/jest": "^29.5.3",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "copy-webpack-plugin": "^11.0.0",
@@ -68,5 +70,9 @@
     "*.scss": [
       "prettier --write"
     ]
+  },
+  "dependencies": {
+    "@commercetools/platform-sdk": "^5.0.0",
+    "@commercetools/sdk-client-v2": "^2.2.0"
   }
 }
