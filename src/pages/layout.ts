@@ -16,7 +16,7 @@ export default class Layout {
   private about: AboutView;
   private catalog: CatalogView;
   private login: LoginView;
-  private notFound: LoginView;
+  private notFound: NotFoundView;
 
   constructor() {
     this.header = new HeaderView();
