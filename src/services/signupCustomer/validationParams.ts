@@ -46,6 +46,26 @@ function isValidCountry(inputCountry: string): boolean {
   return false;
 }
 
+function isValidPostalCodeBill(code: string): boolean {
+  const country = (document.querySelector('.country_bill') as HTMLInputElement)
+    ?.value;
+  const countryData = countries.find((item) => item.name === country);
+  if (countryData && countryData.postalCode.test(code)) {
+    return true;
+  }
+  return false;
+}
+
+function isValidPostalCodeShip(code: string): boolean {
+  const country = (document.querySelector('.country_ship') as HTMLInputElement)
+    ?.value;
+  const countryData = countries.find((item) => item.name === country);
+  if (countryData && countryData.postalCode.test(code)) {
+    return true;
+  }
+  return false;
+}
+
 const emailValidator = createInputValidator(
   'email',
   isValidEmail,
@@ -88,6 +108,18 @@ const cityValidator = createInputValidator(
   'City must contain at least one character'
 );
 
+const postalCodeBillValidator = createInputValidator(
+  'post_bill',
+  isValidPostalCodeBill,
+  'The Postal code format does not correspond to the submittd country'
+);
+
+const postalCodeShipValidator = createInputValidator(
+  'post_ship',
+  isValidPostalCodeShip,
+  'The Postal code format does not correspond to the submittd country'
+);
+
 const countyValidator = createInputValidator(
   'country',
   isValidCountry,
@@ -102,5 +134,7 @@ export const validators: Record<string, (input: string) => boolean> = {
   dob: isValidDob,
   street: isValidText,
   city: isValidCity,
-  country: isValidCountry
+  country: isValidCountry,
+  post_bill: isValidPostalCodeBill,
+  post_ship: isValidPostalCodeShip
 };

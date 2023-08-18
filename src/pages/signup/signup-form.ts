@@ -75,7 +75,7 @@ const formBillingAddress = `
     <input class="form-city_input city_bill city" type="text" id="city" name="city" minlength="1" required></input>
     <div class="error-message"></div>
     <label class="form-postalCode_label" for="postalCode">Postal code*</label>
-    <input class="form-postalCode_input post_bill" type="text" id="postalCode" name="postalCode" required></input>
+    <input class="form-postalCode_input post_bill postal-code" type="text" id="postalCode" name="postalCode" required></input>
     <div class="error-message"></div>
     <label class="form-country_label for="country"">Country*</label>
     <input class="form-country_input country_bill country" type="text" id="country_bill" name="country" list="countries_bill" required></input>
@@ -98,7 +98,7 @@ const formShippinAddress = `
     <input class="form-city_input city_ship city" type="text" id="city" name="city" minlength="1" required></input>
     <div class="error-message"></div>
     <label class="form-postalCode_label" for="postalCode">Postal code*</label>
-    <input class="form-postalCode_input post_ship" type="text" id="postalCode" name="postalCode" required></input>
+    <input class="form-postalCode_input post_ship postal-code" type="text" id="postalCode" name="postalCode" required></input>
     <div class="error-message"></div>
     <label class="form-country_label for="country"">Country*</label>
     <input class="form-country_input country_ship country" type="text" id="country_ship" name="country" list="countries_ship" required></input>
