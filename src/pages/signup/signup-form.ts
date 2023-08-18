@@ -83,3 +83,5 @@ export default class SignupFormView {
     return createCodeTemplate();
   }
 }
+
+export { formEmailPsw };

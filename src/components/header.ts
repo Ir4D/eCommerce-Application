@@ -4,7 +4,7 @@ export default class HeaderView {
   private container: HTMLElement;
   private HTML = `${new MenuView().render()}
     <ul class="profile_container profile_container--header list">
-      <li class="profile_container-item search-item">
+      <li class="profile_container-item search-item hidden">
         <a href="" class="profile_container-link link">
           <img src="./images/icons/search-icon.png" alt="search" class="search" width="56" height="56">
         </a>
