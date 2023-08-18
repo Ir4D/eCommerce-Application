@@ -4,6 +4,7 @@ export default abstract class Router {
     about: '#about',
     catalog: '#catalog',
     login: '#login',
+    signup: '#signup',
     notFound: '#404'
   };
 

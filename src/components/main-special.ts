@@ -1,5 +1,5 @@
-import { offers } from '../../utils';
-import GoodCartView from '../../components/good-cart';
+import { offers } from '../utils';
+import GoodCartView from './good-cart';
 
 const createCodeTemplate = (): string => {
   const offersItems: object[] = offers;

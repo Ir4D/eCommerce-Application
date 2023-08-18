@@ -5,6 +5,7 @@ import MainView from './main/main';
 import AboutView from './about/about';
 import CatalogView from './catalog/catalog';
 import LoginView from './login/login';
+import SignupView from './signup/signup';
 import NotFoundView from './404/404';
 
 export default class Layout {
@@ -16,6 +17,7 @@ export default class Layout {
   private about: AboutView;
   private catalog: CatalogView;
   private login: LoginView;
+  private signup: SignupView;
   private notFound: NotFoundView;
 
   constructor() {
@@ -25,6 +27,7 @@ export default class Layout {
     this.about = new AboutView();
     this.catalog = new CatalogView();
     this.login = new LoginView();
+    this.signup = new SignupView();
     this.notFound = new NotFoundView();
     this.slot = document.createElement('main');
     this.handleRouteChange();
@@ -49,6 +52,10 @@ export default class Layout {
         }
         case Router.pages.login: {
           pageHTML = this.login.render;
+          break;
+        }
+        case Router.pages.signup: {
+          pageHTML = this.signup.render;
           break;
         }
         default: {

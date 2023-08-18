@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { createApiBuilderFromCtpClient } from '@commercetools/platform-sdk';
 import { apiData } from './apiData';
-import { ctpClientCredentials } from './BuildClients';
+import { createCtpClient } from './BuildClients';
 
-const apiRoot = createApiBuilderFromCtpClient(
-  ctpClientCredentials
-).withProjectKey({
-  projectKey: apiData.PROJECT_KEY
-});
+const apiRoot = createApiBuilderFromCtpClient(createCtpClient()).withProjectKey(
+  {
+    projectKey: apiData.PROJECT_KEY
+  }
+);
 
 // Get info about the project - needs Admin Client API with the scope "manage_project:rss-ecom-app"
 export function GetProjectInfo(): void {
