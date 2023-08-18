@@ -1,4 +1,4 @@
-@import url("../src/pages/404/404.scss");
+@import url('../src/pages/404/404.scss');
 
 $blue: #274c5b;
 $green: #7eb693;
@@ -392,8 +392,8 @@ h6 {
     width: 100%;
     padding-top: 23.47%;
     background:
-      url("./assets/images/patterns_signup.png") no-repeat,
-      url("./assets/images/banner_signup.png") no-repeat;
+      url('./assets/images/patterns_signup.png') no-repeat,
+      url('./assets/images/banner_signup.png') no-repeat;
     background-size: contain;
     text-align: center;
   }
@@ -457,7 +457,7 @@ h6 {
     margin-top: 26px;
 
     &::after {
-      content: url("./assets/images/icons/arrow-to-right.svg");
+      content: url('./assets/images/icons/arrow-to-right.svg');
       margin-left: 2rem;
       width: 19px;
       height: 19px;
@@ -467,7 +467,7 @@ h6 {
   label {
     font-size: 18px;
     color: $blue;
-    font-family: "Roboto", sans-serif;
+    font-family: 'Roboto', sans-serif;
     font-weight: 800;
     margin-bottom: 0.3em;
   }

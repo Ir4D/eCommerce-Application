@@ -9,6 +9,10 @@ export default abstract class Router {
   };
 
   public static navigate(location: string): void {
-    window.location.hash = location;
+    if (Object.values(Router.pages).includes(location)) {
+      window.location.hash = location;
+    } else {
+      window.location.hash = Router.pages.notFound;
+    }
   }
 }

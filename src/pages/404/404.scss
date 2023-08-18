@@ -7,7 +7,7 @@
 }
 
 .not-found-image {
-  content: url("../../assets/images/404-image-frame.png");
+  content: url('../../assets/images/404-image-frame.png');
   width: 45vw;
   margin: 3vw 0;
 }
@@ -49,7 +49,7 @@
 @media (max-width: 900px) {
   .not-found {
     flex-direction: column;
-    background: #bbc9c9 url("../../assets/images/404-image-frame.png") no-repeat
+    background: #bbc9c9 url('../../assets/images/404-image-frame.png') no-repeat
       center/contain;
   }
   .not-found-image {
