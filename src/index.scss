@@ -409,7 +409,6 @@ h6 {
 }
 
 .form {
-  // max-width: 1440px;
   padding: 4em 10em;
   padding: 0;
   margin: 4em auto;
@@ -528,6 +527,12 @@ h6 {
   #setDefaultShipping {
     width: 20px;
     height: 20px;
+  }
+
+  &-has-login {
+    font-size: 14px;
+    margin: 0 auto;
+    margin-top: -20px;
   }
 }
 

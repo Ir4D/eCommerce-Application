@@ -124,6 +124,10 @@ const modalWindow = `
   </div>
 `;
 
+const hasLogin = `
+  <p>Already have an account? Log in <a href="/#login">here</a></p>
+`;
+
 const createCodeTemplate = (): string => {
   return `
   <section class="form form-container">
@@ -136,6 +140,7 @@ const createCodeTemplate = (): string => {
       </div>
       <button class="form-button btn btn--blue" id="form-button">Sign up</button>
       ${modalWindow}
+      <div class="form-has-login">${hasLogin}</div>
     </div>
   </section>
   `;
