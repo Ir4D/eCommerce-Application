@@ -587,9 +587,10 @@ h6 {
   row-gap: 15px;
 }
 
-/* Modal Window */
+/* Modal Window start */
 
 .sign-in-modal[open] {
+  width: 40vw;
   padding: 3vw;
   display: flex;
   align-items: center;
@@ -606,8 +607,56 @@ h6 {
 
 .modal-fail-img {
   content: url('../src/assets/images/modal-fail.png');
-  width: 10vw;
+  width: 20vw;
 }
+
+.modal-message {
+  font-size: 3vw;
+  text-align: center;
+}
+
+@media only screen and (max-width: 1000px) {
+  .sign-in-modal[open] {
+    width: 50vw;
+  }
+  .modal-succes-img,
+  .modal-fail-img {
+    width: 20vw;
+  }
+}
+
+@media only screen and (max-width: 700px) {
+  .sign-in-modal[open] {
+    flex-direction: column;
+    width: 90vw;
+    height: 60vw;
+  }
+  .modal-succes-img,
+  .modal-fail-img {
+    width: 40vw;
+  }
+  .modal-message {
+    font-size: 5vw;
+    text-align: center;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .sign-in-modal[open] {
+    width: 90vw;
+    height: 110vw;
+  }
+  .modal-succes-img,
+  .modal-fail-img {
+    width: 50vw;
+  }
+  .modal-message {
+    font-size: 8vw;
+    text-align: center;
+  }
+}
+
+/* Modal Window end */
 
 @media only screen and (max-width: 1850px) {
   .about {

@@ -1,3 +1,5 @@
+import Router from '../../services/router/router';
+
 type ModalStatusType = 'success' | 'user exists' | 'form error';
 type ModalArgsType = {
   status: ModalStatusType;
@@ -27,7 +29,7 @@ export default class SignUnModal {
         this.container.classList.add('fail');
         this.container.innerHTML = `
                                     <div class="modal-fail-img"></div>
-                                    <h3 class="modal-message">Sorry. Check if the form is filled out correctly</h3>
+                                    <h3 class="modal-message">Sorry. Check if the form is filled out correctly!</h3>
                                     `;
         break;
       }
@@ -43,6 +45,9 @@ export default class SignUnModal {
     document.body.style.overflow = 'hidden';
     this.container?.addEventListener('click', () => {
       this.hide();
+      if (status === 'success') {
+        Router.navigate('#main');
+      }
     });
   }
 

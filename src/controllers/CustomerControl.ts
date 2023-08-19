@@ -68,7 +68,7 @@ export class Customer {
         })
         .execute();
     };
-    const createCustomerResponse = createCustomer()
+    createCustomer()
       .then((resp) => {
         console.log('created', resp.statusCode);
         this.signupModal.show({
@@ -87,7 +87,6 @@ export class Customer {
           this.signupModal.show({ status: 'user exists', email: EMAIL });
         }
       });
-    console.log('resp', createCustomerResponse);
   }
 
   public async loginCustomer(EMAIL: string, PASSWORD: string): Promise<void> {
