@@ -1,5 +1,19 @@
+/* eslint-disable no-alert */
 /* eslint-disable max-lines-per-function */
 import { Customer } from '../../controllers/CustomerControl';
+import { countries } from './countries';
+
+let selectedAlpha2Code = '';
+
+function getAlpha2Code(inputCountry: string): string | undefined {
+  const input = inputCountry.trim().toUpperCase();
+  const matchingCountry = countries.find((country) => country.name === input);
+  if (matchingCountry) {
+    selectedAlpha2Code = matchingCountry.alpha2Code;
+    return selectedAlpha2Code;
+  }
+  return '';
+}
 
 export const signupCreate = (): void => {
   const email = (document.querySelector('.email') as HTMLInputElement)?.value;
@@ -9,7 +23,7 @@ export const signupCreate = (): void => {
   const lastName = (document.querySelector('.last-name') as HTMLInputElement)
     ?.value;
   const dob = (document.querySelector('.dob') as HTMLInputElement)?.value;
-  const countryBill = (
+  const countryBillInput = (
     document.querySelector('.country_bill') as HTMLInputElement
   )?.value;
   const streetBill = (
@@ -19,7 +33,7 @@ export const signupCreate = (): void => {
     ?.value;
   const cityBill = (document.querySelector('.city_bill') as HTMLInputElement)
     ?.value;
-  const countryShip = (
+  const countryShipInput = (
     document.querySelector('.country_ship') as HTMLInputElement
   )?.value;
   const streeShip = (document.querySelector('.street_ship') as HTMLInputElement)
@@ -28,6 +42,9 @@ export const signupCreate = (): void => {
     ?.value;
   const cityShip = (document.querySelector('.city_ship') as HTMLInputElement)
     ?.value;
+
+  const countryBill = getAlpha2Code(countryBillInput);
+  const countryShip = getAlpha2Code(countryShipInput);
 
   let billingDef;
   const billigCheckbox = document.querySelector(
@@ -49,6 +66,25 @@ export const signupCreate = (): void => {
     shippingDef = 1;
   } else {
     shippingDef = undefined;
+  }
+
+  if (
+    !email ||
+    !password ||
+    !firstName ||
+    !lastName ||
+    !dob ||
+    !countryBill ||
+    !streetBill ||
+    !postBill ||
+    !cityBill ||
+    !countryShip ||
+    !streeShip ||
+    !postShip ||
+    !cityShip
+  ) {
+    alert('Пожалуйста, заполните все поля');
+    return;
   }
 
   const customer = new Customer();
