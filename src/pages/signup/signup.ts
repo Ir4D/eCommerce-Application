@@ -21,7 +21,23 @@ const createCodeTemplate = (): string => {
   document.addEventListener('click', (event: MouseEvent) => {
     const target = event.target as HTMLElement;
     if (target && target.classList.contains('form-button')) {
-      signupCreate();
+      const inputElements = document.querySelectorAll('input');
+      let hasError = false;
+      inputElements.forEach((input) => {
+        if (input.classList.contains('error')) {
+          hasError = true;
+        }
+      });
+      if (hasError) {
+        const modal = document.getElementById('errorModal') as HTMLElement;
+        const closeModal = modal.querySelector('.modal-close') as HTMLElement;
+        modal.style.display = 'block';
+        closeModal.addEventListener('click', () => {
+          modal.style.display = 'none';
+        });
+      } else {
+        signupCreate();
+      }
     }
   });
 

@@ -111,6 +111,15 @@ const formShippinAddress = `
   </div>
 `;
 
+const modalWindow = `
+  <div id="errorModal" class="modal">
+    <div class="modal-content">
+      <span class="modal-close">&times;</span>
+      <p class="modal-text">One or more sign up fields are not filled in correctly.</p>
+    </div>
+  </div>
+`;
+
 const createCodeTemplate = (): string => {
   return `
   <section class="form form-container">
@@ -121,7 +130,8 @@ const createCodeTemplate = (): string => {
         ${formBillingAddress}
         ${formShippinAddress}
       </div>
-      <button class="form-button btn btn--blue">Sign up</button>
+      <button class="form-button btn btn--blue" id="form-button">Sign up</button>
+      ${modalWindow}
     </div>
   </section>
   `;
