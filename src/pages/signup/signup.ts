@@ -37,6 +37,7 @@ const createCodeTemplate = (): string => {
         });
       } else {
         signupCreate();
+        window.location.hash = 'main';
       }
     }
   });

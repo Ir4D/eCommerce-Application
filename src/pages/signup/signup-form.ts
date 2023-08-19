@@ -68,19 +68,23 @@ const countriesList = `
 const formBillingAddress = `
   <div class="form-billing-address">
     <h5 class="form-billing_title">Billing Address</h5>
-    <label class="form-street_label" for="street">Street*</label>
-    <input class="form-street_input street_bill street" type="text" id="street" name="street" minlength="1" required></input>
-    <div class="error-message"></div>
-    <label class="form-city_label" for="city">City*</label>
-    <input class="form-city_input city_bill city" type="text" id="city" name="city" minlength="1" required></input>
-    <div class="error-message"></div>
-    <label class="form-postalCode_label" for="postalCode">Postal code*</label>
-    <input class="form-postalCode_input post_bill postal-code" type="text" id="postalCode" name="postalCode" required></input>
-    <div class="error-message"></div>
     <label class="form-country_label for="country"">Country*</label>
     <input class="form-country_input country_bill country" type="text" id="country_bill" name="country" list="countries_bill" required></input>
     <div class="error-message"></div>
     <datalist id="countries_bill">${countriesList}</datalist>
+    
+    <label class="form-city_label" for="city">City*</label>
+    <input class="form-city_input city_bill city" type="text" id="city" name="city" minlength="1" required></input>
+    <div class="error-message"></div>
+
+    <label class="form-street_label" for="street">Street*</label>
+    <input class="form-street_input street_bill street" type="text" id="street" name="street" minlength="1" required></input>
+    <div class="error-message"></div>
+
+    <label class="form-postalCode_label" for="postalCode">Postal code*</label>
+    <input class="form-postalCode_input post_bill postal-code" type="text" id="postalCode" name="postalCode" required></input>
+    <div class="error-message"></div>
+
     <div class="form-default_checkbox">
       <input class="form-default_input bill_default" type="checkbox" id="setDefaultBilling" name="setDefaultBilling">
       <label class="form-default_label" for="setDefaultBilling">Set deafult</label>
@@ -91,17 +95,17 @@ const formBillingAddress = `
 const formShippinAddress = `
   <div class="form-shipping-address">
     <h5 class="form-shipping_title">Shippin Address</h5>
-    <label class="form-street_label" for="street">Street*</label>
-    <input class="form-street_input street_ship street" type="text" id="street" name="street" minlength="1" required></input>
+    <label class="form-country_label for="country"">Country*</label>
+    <input class="form-country_input country_ship country" type="text" id="country_ship" name="country" list="countries_ship" required></input>
     <div class="error-message"></div>
     <label class="form-city_label" for="city">City*</label>
     <input class="form-city_input city_ship city" type="text" id="city" name="city" minlength="1" required></input>
     <div class="error-message"></div>
+    <label class="form-street_label" for="street">Street*</label>
+    <input class="form-street_input street_ship street" type="text" id="street" name="street" minlength="1" required></input>
+    <div class="error-message"></div>
     <label class="form-postalCode_label" for="postalCode">Postal code*</label>
     <input class="form-postalCode_input post_ship postal-code" type="text" id="postalCode" name="postalCode" required></input>
-    <div class="error-message"></div>
-    <label class="form-country_label for="country"">Country*</label>
-    <input class="form-country_input country_ship country" type="text" id="country_ship" name="country" list="countries_ship" required></input>
     <div class="error-message"></div>
     <datalist id="countries_ship">${countriesList}</datalist>
     <div class="form-default_checkbox">

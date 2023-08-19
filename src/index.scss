@@ -409,8 +409,10 @@ h6 {
 }
 
 .form {
-  max-width: 1440px;
+  // max-width: 1440px;
   padding: 4em 10em;
+  padding: 0;
+  margin: 4em auto;
 
   &-content_wrapper {
     display: flex;
@@ -420,7 +422,8 @@ h6 {
 
   &-email-psw {
     display: flex;
-    justify-content: space-evenly;
+    gap: 5em;
+    margin: 0 auto;
   }
 
   &-email,
@@ -432,7 +435,8 @@ h6 {
 
   &-name-dob {
     display: flex;
-    justify-content: space-evenly;
+    gap: 5em;
+    margin: 0 auto;
   }
 
   &-name {
@@ -442,7 +446,8 @@ h6 {
 
   &-addresses {
     display: flex;
-    justify-content: space-evenly;
+    gap: 5em;
+    margin: 0 auto;
   }
 
   &-billing-address,
@@ -493,7 +498,7 @@ h6 {
   }
 
   input {
-    width: 350px;
+    width: 300px;
     height: 40px;
     border: 1px solid $green;
     border-radius: 12px;
@@ -733,6 +738,16 @@ h6 {
     padding: 50px;
   }
 
+  .form {
+    input {
+      width: 250px;
+    }
+
+    .error-message {
+      width: 250px;
+    }
+  }
+
   .footer {
     flex-wrap: wrap;
     justify-content: center;
@@ -741,6 +756,48 @@ h6 {
     &-contacts,
     &-additional {
       order: 1;
+    }
+  }
+}
+
+@media only screen and (max-width: 850px) {
+  .form {
+    max-width: 250px;
+    padding: 0;
+    margin: 4em auto;
+
+    &-content_wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 1.8em;
+    }
+
+    &-email-psw {
+      flex-direction: column;
+      gap: 0.2em;
+    }
+
+    &-name-dob {
+      flex-direction: column;
+      gap: 0.2em;
+    }
+
+    &-name {
+      display: flex;
+      flex-direction: column;
+    }
+
+    &-addresses {
+      flex-direction: column;
+      gap: 0.2em;
+    }
+
+    &-billing-address {
+      margin-bottom: 30px;
+    }
+
+    .error-message {
+      width: 250px;
     }
   }
 }
