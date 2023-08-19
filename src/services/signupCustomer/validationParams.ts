@@ -15,7 +15,7 @@ function isValidEmail(email: string): boolean {
 }
 
 function isValidPassword(password: string): boolean {
-  const pswPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+  const pswPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=\S+$).{8,}$/;
   return pswPattern.test(password);
 }
 
@@ -69,13 +69,13 @@ function isValidPostalCodeShip(code: string): boolean {
 const emailValidator = createInputValidator(
   'email',
   isValidEmail,
-  'Please enter a valid email address.'
+  'Please enter a properly formatted email address (e.g., user@example.com)'
 );
 
 const passwordValidator = createInputValidator(
   'psw',
   isValidPassword,
-  'Password must contain minimum 8 characters, at least 1 uppercase letter, 1 lowercase letter, and 1 number'
+  'Password must contain minimum 8 characters, at least 1 uppercase letter, 1 lowercase letter, and 1 number, whitespaces are not allowed'
 );
 
 const firstNameValidator = createInputValidator(
@@ -123,7 +123,7 @@ const postalCodeShipValidator = createInputValidator(
 const countyValidator = createInputValidator(
   'country',
   isValidCountry,
-  'Country must be chosen from the list'
+  'Country must be chosen from the given list'
 );
 
 export const validators: Record<string, (input: string) => boolean> = {
