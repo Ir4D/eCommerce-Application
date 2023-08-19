@@ -7,7 +7,7 @@ const createCodeTemplate = (): string => {
   const signupFormView = new SignupFormView().render;
   const signUpModal = new SignUpModal();
 
-  return `${signupTitleView}${signUpModal.render(true)}${signupFormView}`;
+  return `${signupTitleView}${signUpModal.render()}${signupFormView}`;
 };
 
 export default class SignupView {

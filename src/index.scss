@@ -7,6 +7,7 @@ $gray: #d4d4d4;
 $dark-gray: #525c60;
 $light-gray: #eff6f1;
 $bg-dark: #f9f8f8;
+$bg-green: #8fa8a8;
 
 @mixin title {
   margin: 0;
@@ -589,13 +590,23 @@ h6 {
 /* Modal Window */
 
 .sign-in-modal[open] {
-  width: 30vw;
-  height: 20vw;
-  transform: translateY(-10vw);
+  padding: 3vw;
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 3vw;
   border: 1px solid $green;
+  border-radius: 12px;
+}
+
+.modal-succes-img {
+  content: url('../src/assets/images/modal-success.png');
+  width: 10vw;
+}
+
+.modal-fail-img {
+  content: url('../src/assets/images/modal-fail.png');
+  width: 10vw;
 }
 
 @media only screen and (max-width: 1850px) {

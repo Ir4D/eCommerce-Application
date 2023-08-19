@@ -68,12 +68,26 @@ export class Customer {
         })
         .execute();
     };
-    createCustomer()
-      .then(({ body }) => {
-        console.log('created', body);
+    const createCustomerResponse = createCustomer()
+      .then((resp) => {
+        console.log('created', resp.statusCode);
+        this.signupModal.show({
+          status: 'success',
+          firstName: resp.body.customer.firstName,
+          lastName: resp.body.customer.lastName
+        });
       })
-      .catch(console.error);
-    this.signupModal.show();
+      .catch((error) => {
+        console.log('error', error.body.message);
+        if (
+          error.body.message === 'Request body does not contain valid JSON.'
+        ) {
+          this.signupModal.show({ status: 'form error' });
+        } else {
+          this.signupModal.show({ status: 'user exists', email: EMAIL });
+        }
+      });
+    console.log('resp', createCustomerResponse);
   }
 
   public async loginCustomer(EMAIL: string, PASSWORD: string): Promise<void> {

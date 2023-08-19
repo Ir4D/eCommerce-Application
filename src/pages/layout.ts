@@ -82,6 +82,5 @@ export default class Layout {
     container.append(this.slot);
     container.append(this.footer.render());
     this.renderPage(window.location.hash);
-    console.log('layout', document.querySelector('dialog'));
   }
 }
