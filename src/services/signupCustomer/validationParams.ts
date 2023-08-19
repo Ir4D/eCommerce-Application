@@ -69,25 +69,25 @@ function isValidPostalCodeShip(code: string): boolean {
 const emailValidator = createInputValidator(
   'email',
   isValidEmail,
-  'Please enter a properly formatted email address (e.g., user@example.com)'
+  'Please enter a properly formatted email address (e.g., user@example.com) in Latin'
 );
 
 const passwordValidator = createInputValidator(
   'psw',
   isValidPassword,
-  'Password must contain minimum 8 characters, at least 1 uppercase letter, 1 lowercase letter, and 1 number, whitespaces are not allowed'
+  'Password must contain minimum 8 Latin characters, at least 1 uppercase letter, 1 lowercase letter, and 1 number, whitespaces are not allowed'
 );
 
 const firstNameValidator = createInputValidator(
   'first-name',
   isValidText,
-  'First name must contain at least one character and no special characters or numbers'
+  'First name must contain at least one Latin character and no special characters or numbers'
 );
 
 const lastNameValidator = createInputValidator(
   'last-name',
   isValidText,
-  'Last name must contain at least one character and no special characters or numbers'
+  'Last name must contain at least one Latin character and no special characters or numbers'
 );
 
 const dobValidator = createInputValidator(
@@ -99,13 +99,13 @@ const dobValidator = createInputValidator(
 const streetValidator = createInputValidator(
   'street',
   isValidText,
-  'Street must contain at least one character and no special characters or numbers'
+  'Street must contain at least one Latin character and no special characters or numbers'
 );
 
 const cityValidator = createInputValidator(
   'city',
   isValidCity,
-  'City must contain at least one character'
+  'City must contain at least one Latin character'
 );
 
 const postalCodeBillValidator = createInputValidator(
