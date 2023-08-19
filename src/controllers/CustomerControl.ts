@@ -9,7 +9,10 @@ import {
   createCtpClientWithScopes
 } from '../api/BuildClients';
 
+import SignUnModal from '../pages/signup/sign-up-modal';
+
 export class Customer {
+  private signupModal = new SignUnModal();
   public async createCustomer(
     EMAIL: string,
     PASSWORD: string,
@@ -67,9 +70,10 @@ export class Customer {
     };
     createCustomer()
       .then(({ body }) => {
-        console.log(body.customer.id);
+        console.log('created', body);
       })
       .catch(console.error);
+    this.signupModal.show();
   }
 
   public async loginCustomer(EMAIL: string, PASSWORD: string): Promise<void> {

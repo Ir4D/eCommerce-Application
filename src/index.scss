@@ -586,6 +586,18 @@ h6 {
   row-gap: 15px;
 }
 
+/* Modal Window */
+
+.sign-in-modal[open] {
+  width: 30vw;
+  height: 20vw;
+  transform: translateY(-10vw);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid $green;
+}
+
 @media only screen and (max-width: 1850px) {
   .about {
     background: url('./assets/images/background-about_transparent.png')
