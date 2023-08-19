@@ -36,15 +36,15 @@ export const signupCreate = (): void => {
   const countryShipInput = (
     document.querySelector('.country_ship') as HTMLInputElement
   )?.value;
-  const streeShip = (document.querySelector('.street_ship') as HTMLInputElement)
+  let streeShip = (document.querySelector('.street_ship') as HTMLInputElement)
     ?.value;
-  const postShip = (document.querySelector('.post_ship') as HTMLInputElement)
+  let postShip = (document.querySelector('.post_ship') as HTMLInputElement)
     ?.value;
-  const cityShip = (document.querySelector('.city_ship') as HTMLInputElement)
+  let cityShip = (document.querySelector('.city_ship') as HTMLInputElement)
     ?.value;
 
   const countryBill = getAlpha2Code(countryBillInput);
-  const countryShip = getAlpha2Code(countryShipInput);
+  let countryShip = getAlpha2Code(countryShipInput);
 
   let billingDef;
   const billigCheckbox = document.querySelector(
@@ -66,6 +66,20 @@ export const signupCreate = (): void => {
     shippingDef = 1;
   } else {
     shippingDef = undefined;
+  }
+
+  const copyAddrCheckbox = document.querySelector(
+    '.copy_address'
+  ) as HTMLInputElement;
+
+  if (copyAddrCheckbox.checked) {
+    countryShip = countryBill;
+    cityShip = cityBill;
+    streeShip = streetBill;
+    postShip = postBill;
+    if (billigCheckbox.checked) {
+      shippingDef = 1;
+    }
   }
 
   if (

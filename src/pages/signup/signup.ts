@@ -42,6 +42,25 @@ const createCodeTemplate = (): string => {
     }
   });
 
+  document.addEventListener('change', (event) => {
+    const target = event.target as HTMLInputElement;
+    const shipAddress = document.querySelector(
+      '.form-shipping-address'
+    ) as HTMLElement;
+    const shipTitle = document.querySelector(
+      '.form-shipping_title'
+    ) as HTMLElement;
+    if (target && target.classList.contains('copy_address')) {
+      if (target.checked) {
+        shipAddress.classList.add('hidden');
+        shipTitle.classList.add('hidden');
+      } else {
+        shipAddress.classList.remove('hidden');
+        shipTitle.classList.remove('hidden');
+      }
+    }
+  });
+
   return `${signupTitleView}${signupFormView}`;
 };
 

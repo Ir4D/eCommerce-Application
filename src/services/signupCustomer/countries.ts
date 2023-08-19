@@ -15,11 +15,6 @@ export const countries = [
     postalCode: /^\d{4}$/
   },
   {
-    name: 'CANADA',
-    alpha2Code: 'CA',
-    postalCode: /^[A-Z0-9]{1}[A-Z] \d{1}[A-Z0-9]{1} \d{1}[A-Z0-9]{1}$/
-  },
-  {
     name: 'CROATIA',
     alpha2Code: 'HR',
     postalCode: /^\d{5}$/
@@ -65,11 +60,6 @@ export const countries = [
     postalCode: /^\d{3} \d{2}$/
   },
   {
-    name: 'ICELAND',
-    alpha2Code: 'IS',
-    postalCode: /^\d{3}$/
-  },
-  {
     name: 'ITALY',
     alpha2Code: 'IT',
     postalCode: /^\d{4}$/
@@ -80,11 +70,6 @@ export const countries = [
     postalCode: /^[A-Z]{2}-\d{4}$/
   },
   {
-    name: 'LIECHTENSTEIN',
-    alpha2Code: 'LI',
-    postalCode: /^\d{4}$/
-  },
-  {
     name: 'LITHUANIA',
     alpha2Code: 'LT',
     postalCode: /^[A-Z]{2}-\d{5}$/
@@ -93,16 +78,6 @@ export const countries = [
     name: 'LUXEMBOURG',
     alpha2Code: 'LU',
     postalCode: /^\d{4}$/
-  },
-  {
-    name: 'MALTA',
-    alpha2Code: 'MT',
-    postalCode: /^[A-Z]{3} \d{4}$/
-  },
-  {
-    name: 'MONACO',
-    alpha2Code: 'MC',
-    postalCode: /^980\d{2}$/
   },
   {
     name: 'MONTENEGRO',
@@ -125,16 +100,6 @@ export const countries = [
     postalCode: /^\d{4}-\d{3}$/
   },
   {
-    name: 'ROMANIA',
-    alpha2Code: 'RO',
-    postalCode: /^\d{6}$/
-  },
-  {
-    name: 'SLOVAKIA',
-    alpha2Code: 'SK',
-    postalCode: /^\d{3} \d{2}$/
-  },
-  {
     name: 'SPAIN',
     alpha2Code: 'ES',
     postalCode: /^\d{5}$/
@@ -148,11 +113,6 @@ export const countries = [
     name: 'SWITZERLAND',
     alpha2Code: 'CH',
     postalCode: /^\d{4}$/
-  },
-  {
-    name: 'UNITED KINGDOM',
-    alpha2Code: 'GB',
-    postalCode: /^[A-Z][A-Z]?[0-9][A-Z0-9]$/
   },
   {
     name: 'UNITED STATES',

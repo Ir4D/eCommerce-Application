@@ -427,7 +427,11 @@ h6 {
 
   &-email,
   &-psw,
-  &-dob {
+  &-dob,
+  &-country,
+  &-city,
+  &-street,
+  &-post {
     display: flex;
     flex-direction: column;
   }
@@ -445,20 +449,34 @@ h6 {
 
   &-addresses {
     display: flex;
-    gap: 5em;
+    flex-direction: column;
     margin: 0 auto;
   }
 
   &-billing-address,
   &-shipping-address {
+    max-width: 780px;
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
+    column-gap: 5em;
+    margin: 0 auto;
+  }
+
+  &-billing-address {
+    margin-bottom: 30px;
+  }
+
+  &-shipping_title.hidden {
+    display: none;
+  }
+
+  &-shipping-address.hidden {
+    display: none;
   }
 
   &-button {
     width: 220px;
     margin: 0 auto;
-    margin-top: 26px;
 
     &::after {
       content: url('./assets/images/icons/arrow-to-right.svg');
@@ -470,11 +488,11 @@ h6 {
 
   &-button.disabled {
     cursor: auto;
-    background-color: $blue;
+    background-color: $yellow;
     color: #fff;
 
     &:hover {
-      background-color: $blue;
+      background-color: $yellow;
     }
   }
 
@@ -525,7 +543,8 @@ h6 {
   }
 
   #setDefaultBilling,
-  #setDefaultShipping {
+  #setDefaultShipping,
+  #copy_address {
     width: 20px;
     height: 20px;
   }
@@ -557,7 +576,7 @@ h6 {
     border-radius: 8px;
     width: 300px;
     text-align: center;
-    max-height: 80vh; /* Ограничивает высоту контента модального окна */
+    max-height: 80vh;
     overflow-y: auto;
   }
 
@@ -749,6 +768,15 @@ h6 {
       width: 250px;
     }
 
+    &-addresses {
+      max-width: 580px;
+    }
+
+    &-billing-address,
+    &-shipping-address {
+      max-width: 580px;
+    }
+
     .error-message {
       width: 250px;
     }
@@ -791,15 +819,6 @@ h6 {
     &-name {
       display: flex;
       flex-direction: column;
-    }
-
-    &-addresses {
-      flex-direction: column;
-      gap: 0.2em;
-    }
-
-    &-billing-address {
-      margin-bottom: 30px;
     }
 
     .error-message {
