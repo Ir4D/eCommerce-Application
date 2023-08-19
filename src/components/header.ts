@@ -1,3 +1,4 @@
+import Router from '../services/router/router';
 import MenuView from './menu';
 
 export default class HeaderView {
