@@ -1,3 +1,5 @@
+import { signupCreate } from '../../services/signupCustomer/signupCustomer';
+
 const formEmailPsw = `
   <div class="form-email-psw">
     <div class="form-email">

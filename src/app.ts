@@ -6,12 +6,14 @@ import {
 import { createCtpClient } from './api/BuildClients';
 import { apiData } from './api/apiData';
 import Layout from './pages/layout';
+import SignUpModal from './pages/signup/sign-up-modal';
 
 export default class App {
   public appContainer = document.querySelector<HTMLElement>('body');
   public menuIcon = this.appContainer?.querySelector('.nav-mobile');
   public nav = this.appContainer?.querySelector('.nav');
   public menuItems = this.appContainer?.querySelectorAll('.nav-item');
+  private signUpModal = new SignUpModal();
 
   public init(): void {
     if (!this.appContainer) throw new Error('error');
@@ -27,6 +29,23 @@ export default class App {
     this.menuItems.forEach((el) =>
       el.addEventListener('click', (): void => this.toggleMenu())
     );
+
+    window.addEventListener('user-registration-success', (event) => {
+      console.log('on register success', event);
+      this.signUpModal.show({
+        status: (<CustomEvent>event).detail.status,
+        firstName: (<CustomEvent>event).detail.firstName,
+        secondName: (<CustomEvent>event).detail.secondName
+      });
+    });
+
+    window.addEventListener('user-registration-fail', (event) => {
+      console.log('on register fail', (<CustomEvent>event).detail);
+      this.signUpModal.show({
+        status: (<CustomEvent>event).detail.status,
+        email: (<CustomEvent>event).detail.email
+      });
+    });
   }
 
   private toggleMenu(): void {

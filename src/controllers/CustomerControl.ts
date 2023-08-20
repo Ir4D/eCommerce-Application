@@ -9,10 +9,10 @@ import {
   createCtpClientWithScopes
 } from '../api/BuildClients';
 
-import SignUnModal from '../pages/signup/sign-up-modal';
+// import SignUpModal from '../pages/signup/sign-up-modal';
 
 export class Customer {
-  private signupModal = new SignUnModal();
+  // private signupModal = new SignUpModal();
   public async createCustomer(
     EMAIL: string,
     PASSWORD: string,
@@ -71,21 +71,27 @@ export class Customer {
     createCustomer()
       .then((resp) => {
         console.log('created', resp.statusCode);
-        this.signupModal.show({
-          status: 'success',
-          firstName: resp.body.customer.firstName,
-          lastName: resp.body.customer.lastName
-        });
+        const registerSuccessEvent = new CustomEvent(
+          'user-registration-success',
+          {
+            detail: {
+              status: 'success',
+              firstName: resp.body.customer.firstName,
+              lastName: resp.body.customer.lastName
+            }
+          }
+        );
+        window.dispatchEvent(registerSuccessEvent);
       })
       .catch((error) => {
         console.log('error', error.body.message);
-        if (
-          error.body.message === 'Request body does not contain valid JSON.'
-        ) {
-          this.signupModal.show({ status: 'form error' });
-        } else {
-          this.signupModal.show({ status: 'user exists', email: EMAIL });
-        }
+        const registerRejectEvent = new CustomEvent('user-registration-fail', {
+          detail: {
+            status: 'user exists',
+            email: EMAIL
+          }
+        });
+        window.dispatchEvent(registerRejectEvent);
       });
   }
 

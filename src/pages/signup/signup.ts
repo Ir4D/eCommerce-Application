@@ -7,14 +7,10 @@ import SignUpModal from './sign-up-modal';
 import { signupCreate } from '../../services/signupCustomer/signupCustomer';
 import { validators } from '../../services/signupCustomer/validationParams';
 
-
 const createCodeTemplate = (): string => {
   const signupTitleView = new SignupTitleView().render;
   const signupFormView = new SignupFormView().render;
   const signUpModal = new SignUpModal();
-
-
-  return `${signupTitleView}${signUpModal.render()}${signupFormView}`;
 
   document.addEventListener('input', (event) => {
     const target = event.target as HTMLInputElement;
@@ -37,20 +33,19 @@ const createCodeTemplate = (): string => {
         }
       });
       if (hasError) {
-        const modal = document.getElementById('errorModal') as HTMLElement;
-        const closeModal = modal.querySelector('.modal-close') as HTMLElement;
-        modal.style.display = 'block';
-        closeModal.addEventListener('click', () => {
-          modal.style.display = 'none';
-        });
+        // const modal = document.getElementById('errorModal') as HTMLElement;
+        // const closeModal = modal.querySelector('.modal-close') as HTMLElement;
+        // modal.style.display = 'block';
+        // closeModal.addEventListener('click', () => {
+        //   modal.style.display = 'none';
+        // });
+        signUpModal.show({ status: 'form error' });
       } else {
         signupCreate();
-        window.location.hash = 'main';
       }
     }
   });
-
-  return `${signupTitleView}${signupFormView}`;
+  return `${signupTitleView}${signUpModal.render()}${signupFormView}`;
 };
 
 export default class SignupView {
