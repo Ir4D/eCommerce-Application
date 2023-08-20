@@ -3,11 +3,10 @@
  */
 
 import { validators } from '../services/signupCustomer/validationParams';
-import { countries } from '../services/signupCustomer/countries';
+import { countriesList } from '../pages/signup/signup-form';
 
-const countryNames = countries.map((countryObj) => countryObj.name);
+const countryNames = countriesList.split("'").filter((item, i) => i % 2);
 
-/*  */
 test('E-mail validation test', () => {
   expect(validators.email('mail@gmail.com')).toBe(true);
   expect(validators.email('wwwww@www.www')).toBe(true);

@@ -31,7 +31,7 @@ const formNameDob = `
   </div>
 `;
 
-const countriesList = `
+export const countriesList = `
   <option value='BELARUS'>BELARUS</option>
   <option value='BELGIUM'>BELGIUM</option>
   <option value='CANADA'>CANADA</option>
