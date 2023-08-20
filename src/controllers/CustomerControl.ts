@@ -9,10 +9,7 @@ import {
   createCtpClientWithScopes
 } from '../api/BuildClients';
 
-// import SignUpModal from '../pages/signup/sign-up-modal';
-
 export class Customer {
-  // private signupModal = new SignUpModal();
   public async createCustomer(
     EMAIL: string,
     PASSWORD: string,
