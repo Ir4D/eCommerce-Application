@@ -1,8 +1,10 @@
 import MenuView from './menu';
 
 export default class HeaderView {
-  private container: HTMLElement;
-  private HTML = `${new MenuView().render()}
+  public container: HTMLElement;
+  public logoutButton: HTMLElement;
+  private HTML = (): string => {
+    return `${new MenuView().render()}
     <ul class="profile_container profile_container--header list">
       <li class="profile_container-item search-item hidden">
         <a href="" class="profile_container-link link">
@@ -24,19 +26,27 @@ export default class HeaderView {
         localStorage.customerID
           ? `
       <li class="profile_container-item">
-        <a href="" class="profile_container-link link" id="login-icon">
           <img src="./images/logout_icon.svg" alt="logout" class="logout" width="50" height="50"">
-        </a>
       </li>
       `
           : ''
       }
     </ul>`;
+  };
 
   constructor() {
     this.container = document.createElement('header');
     this.container.classList.add('header');
-    this.container.innerHTML = this.HTML;
+    this.container.innerHTML = this.HTML();
+    this.logoutButton = this.container.querySelector('.logout') as HTMLElement;
+    console.log('header', this.logoutButton);
+    if (this.logoutButton) {
+      this.logoutButton.addEventListener('click', () => {
+        localStorage.removeItem('customerID');
+        this.container.innerHTML = '';
+        this.container.innerHTML = this.HTML();
+      });
+    }
   }
 
   public render(): HTMLElement {

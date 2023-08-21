@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 import {
   createApiBuilderFromCtpClient,
   ClientResponse,
@@ -14,10 +15,11 @@ export default class App {
   public nav = this.appContainer?.querySelector('.nav');
   public menuItems = this.appContainer?.querySelectorAll('.nav-item');
   private signUpModal = new SignUpModal();
+  private layout = new Layout();
 
   public init(): void {
     if (!this.appContainer) throw new Error('error');
-    new Layout().render(this.appContainer);
+    this.layout.render(this.appContainer);
 
     this.menuIcon =
       this.appContainer?.querySelector<HTMLElement>('.nav-mobile');
