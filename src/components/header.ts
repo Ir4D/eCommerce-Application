@@ -1,4 +1,3 @@
-import Router from '../services/router/router';
 import MenuView from './menu';
 
 export default class HeaderView {
@@ -21,6 +20,17 @@ export default class HeaderView {
           <img src="./images/avatar.png" alt="profile" class="profile" width="56" height="56"">
         </a>
       </li>
+      ${
+        localStorage.customerID
+          ? `
+      <li class="profile_container-item">
+        <a href="" class="profile_container-link link" id="login-icon">
+          <img src="./images/logout_icon.svg" alt="logout" class="logout" width="50" height="50"">
+        </a>
+      </li>
+      `
+          : ''
+      }
     </ul>`;
 
   constructor() {

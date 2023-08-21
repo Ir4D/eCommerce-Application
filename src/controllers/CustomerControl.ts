@@ -67,7 +67,7 @@ export class Customer {
     };
     createCustomer()
       .then((resp) => {
-        console.log('create', resp);
+        localStorage.setItem('customerID', resp.body.customer.id);
         const registerSuccessEvent = new CustomEvent(
           'user-registration-success',
           {

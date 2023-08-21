@@ -35,7 +35,6 @@ export function GetProductsPublished(): void {
 
 // Create a new customer
 export function CreateCustomer(EMAIL: string, PASSWORD: string): void {
-  console.log('CreateCustomer function');
   const createCustomer = () => {
     return apiRoot
       .me()
@@ -50,7 +49,7 @@ export function CreateCustomer(EMAIL: string, PASSWORD: string): void {
   };
   createCustomer()
     .then(({ body }) => {
-      console.log(body.customer.id);
+      console.log('create customer from methods', body.customer.id);
       console.log(body.customer.email);
     })
     .catch(console.error);
