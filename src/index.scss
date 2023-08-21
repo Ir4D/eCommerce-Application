@@ -8,6 +8,7 @@ $gray: #d4d4d4;
 $dark-gray: #525c60;
 $light-gray: #eff6f1;
 $bg-dark: #f9f8f8;
+$bg-green: #8fa8a8;
 
 @mixin title {
   margin: 0;
@@ -702,6 +703,76 @@ h6 {
   flex-direction: column;
   row-gap: 15px;
 }
+
+/* Modal Window start */
+
+.sign-up-modal[open] {
+  padding: 3vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3vw;
+  border: 1px solid $green;
+  border-radius: 12px;
+}
+
+.modal-succes-img {
+  content: url('../src/assets/images/modal-success.png');
+  width: 16vw;
+}
+
+.modal-fail-img {
+  content: url('../src/assets/images/modal-fail.png');
+  width: 16vw;
+}
+
+.modal-message {
+  font-size: 2vw;
+  text-align: center;
+}
+
+@media only screen and (max-width: 1000px) {
+  .sign-up-modal[open] {
+    width: 60vw;
+  }
+  .modal-succes-img,
+  .modal-fail-img {
+    width: 20vw;
+  }
+}
+
+@media only screen and (max-width: 700px) {
+  .sign-up-modal[open] {
+    flex-direction: column;
+    width: 90vw;
+    height: 60vw;
+  }
+  .modal-succes-img,
+  .modal-fail-img {
+    width: 40vw;
+  }
+  .modal-message {
+    font-size: 5vw;
+    text-align: center;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .sign-up-modal[open] {
+    width: 90vw;
+    height: 110vw;
+  }
+  .modal-succes-img,
+  .modal-fail-img {
+    width: 50vw;
+  }
+  .modal-message {
+    font-size: 5vw;
+    text-align: center;
+  }
+}
+
+/* Modal Window end */
 
 @media only screen and (max-width: 1850px) {
   .about {

@@ -8,6 +8,8 @@ import LoginView from './login/login';
 import SignupView from './signup/signup';
 import NotFoundView from './404/404';
 
+import { signupCreate } from '../services/signupCustomer/signupCustomer';
+
 export default class Layout {
   private header: HeaderView;
   private footer: FooterView;

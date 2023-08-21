@@ -1,12 +1,16 @@
 /* eslint-disable max-lines-per-function */
 import SignupTitleView from './signup-title';
 import SignupFormView from './signup-form';
+
+import SignUpModal from './sign-up-modal';
+
 import { signupCreate } from '../../services/signupCustomer/signupCustomer';
 import { validators } from '../../services/signupCustomer/validationParams';
 
 const createCodeTemplate = (): string => {
   const signupTitleView = new SignupTitleView().render;
   const signupFormView = new SignupFormView().render;
+  const signUpModal = new SignUpModal();
 
   document.addEventListener('input', (event) => {
     const target = event.target as HTMLInputElement;
@@ -36,6 +40,7 @@ const createCodeTemplate = (): string => {
 
   document.addEventListener('click', (event: MouseEvent) => {
     const target = event.target as HTMLElement;
+    event.stopImmediatePropagation();
     if (target && target.classList.contains('form-button')) {
       const inputElements = document.querySelectorAll('input');
       let hasError = false;
@@ -57,7 +62,6 @@ const createCodeTemplate = (): string => {
         });
       } else {
         signupCreate();
-        window.location.hash = 'main';
       }
     }
   });
@@ -99,7 +103,8 @@ const createCodeTemplate = (): string => {
     }
   });
 
-  return `${signupTitleView}${signupFormView}`;
+  return `${signupTitleView}${signUpModal.render()}${signupFormView}`;
+
 };
 
 export default class SignupView {

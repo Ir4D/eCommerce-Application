@@ -1,3 +1,5 @@
+import { signupCreate } from '../../services/signupCustomer/signupCustomer';
+
 const formEmailPsw = `
   <div class="form-email-psw">
     <div class="form-email">
@@ -32,7 +34,7 @@ const formNameDob = `
   </div>
 `;
 
-const countriesList = `
+export const countriesList = `
   <option value='BELARUS'>BELARUS</option>
   <option value='CYPRUS'>CYPRUS</option>
   <option value='CZECH REPUBLIC'>CZECH REPUBLIC</option>
