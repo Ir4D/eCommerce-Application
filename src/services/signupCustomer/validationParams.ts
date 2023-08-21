@@ -10,7 +10,7 @@ function createInputValidator(
 }
 
 function isValidEmail(email: string): boolean {
-  const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  const emailPattern = /^[^\s]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   return emailPattern.test(email);
 }
 
@@ -25,7 +25,8 @@ function isValidText(text: string): boolean {
 }
 
 function isValidCity(city: string): boolean {
-  const cityPattern = /^.+$/;
+  const cityPattern =
+    /^(?=.*[a-zA-Z])[a-zA-Z0-9\s!@#$%^&*()-_+=<>?/|{}[\]`~]*$/;
   return cityPattern.test(city);
 }
 
@@ -69,7 +70,7 @@ function isValidPostalCodeShip(code: string): boolean {
 const emailValidator = createInputValidator(
   'email',
   isValidEmail,
-  'Please enter a properly formatted email address (e.g., user@example.com) in Latin'
+  'Please enter a properly formatted email address (e.g., user@example.com) in Latin, whitespaces are not allowed'
 );
 
 const passwordValidator = createInputValidator(
@@ -111,13 +112,13 @@ const cityValidator = createInputValidator(
 const postalCodeBillValidator = createInputValidator(
   'post_bill',
   isValidPostalCodeBill,
-  'The Postal code format does not correspond to the submittd country'
+  'The Postal code format does not correspond to the submitted country'
 );
 
 const postalCodeShipValidator = createInputValidator(
   'post_ship',
   isValidPostalCodeShip,
-  'The Postal code format does not correspond to the submittd country'
+  'The Postal code format does not correspond to the submitted country'
 );
 
 const countyValidator = createInputValidator(

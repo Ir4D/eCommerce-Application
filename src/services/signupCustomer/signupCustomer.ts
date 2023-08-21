@@ -1,11 +1,10 @@
-/* eslint-disable no-alert */
 /* eslint-disable max-lines-per-function */
 import { Customer } from '../../controllers/CustomerControl';
 import { countries } from './countries';
 
 let selectedAlpha2Code = '';
 
-function getAlpha2Code(inputCountry: string): string | undefined {
+function getAlpha2Code(inputCountry: string): string {
   const input = inputCountry.trim().toUpperCase();
   const matchingCountry = countries.find((country) => country.name === input);
   if (matchingCountry) {
@@ -36,15 +35,15 @@ export const signupCreate = (): void => {
   const countryShipInput = (
     document.querySelector('.country_ship') as HTMLInputElement
   )?.value;
-  const streeShip = (document.querySelector('.street_ship') as HTMLInputElement)
+  let streeShip = (document.querySelector('.street_ship') as HTMLInputElement)
     ?.value;
-  const postShip = (document.querySelector('.post_ship') as HTMLInputElement)
+  let postShip = (document.querySelector('.post_ship') as HTMLInputElement)
     ?.value;
-  const cityShip = (document.querySelector('.city_ship') as HTMLInputElement)
+  let cityShip = (document.querySelector('.city_ship') as HTMLInputElement)
     ?.value;
 
   const countryBill = getAlpha2Code(countryBillInput);
-  const countryShip = getAlpha2Code(countryShipInput);
+  let countryShip = getAlpha2Code(countryShipInput);
 
   let billingDef;
   const billigCheckbox = document.querySelector(
@@ -68,23 +67,18 @@ export const signupCreate = (): void => {
     shippingDef = undefined;
   }
 
-  if (
-    !email ||
-    !password ||
-    !firstName ||
-    !lastName ||
-    !dob ||
-    !countryBill ||
-    !streetBill ||
-    !postBill ||
-    !cityBill ||
-    !countryShip ||
-    !streeShip ||
-    !postShip ||
-    !cityShip
-  ) {
-    alert('Пожалуйста, заполните все поля');
-    return;
+  const copyAddrCheckbox = document.querySelector(
+    '.copy_address'
+  ) as HTMLInputElement;
+
+  if (copyAddrCheckbox.checked) {
+    countryShip = countryBill;
+    cityShip = cityBill;
+    streeShip = streetBill;
+    postShip = postBill;
+    if (billigCheckbox.checked) {
+      shippingDef = 1;
+    }
   }
 
   const customer = new Customer();
