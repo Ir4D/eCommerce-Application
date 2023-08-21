@@ -116,7 +116,7 @@ export class Customer {
         console.log(body.customer.email); */
       })
       .catch(() => {
-        this.createMsg('Pleace, be sure your login and password are correct');
+        this.createMsg('Please, be sure your login and password are correct');
       });
   }
 }
