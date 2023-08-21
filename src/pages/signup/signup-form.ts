@@ -33,27 +33,14 @@ const formNameDob = `
 
 const countriesList = `
   <option value='BELARUS'>BELARUS</option>
-  <option value='BELGIUM'>BELGIUM</option>
-  <option value='CROATIA'>CROATIA</option>
   <option value='CYPRUS'>CYPRUS</option>
   <option value='CZECH REPUBLIC'>CZECH REPUBLIC</option>
-  <option value='DENMARK'>DENMARK</option>
-  <option value='ESTONIA'>ESTONIA</option>
-  <option value='FINLAND'>FINLAND</option>
   <option value='FRANCE'>FRANCE</option>
   <option value='GERMANY'>GERMANY</option>
   <option value='GREECE'>GREECE</option>
   <option value='ITALY'>ITALY</option>
-  <option value='LATVIA'>LATVIA</option>
-  <option value='LITHUANIA'>LITHUANIA</option>
-  <option value='LUXEMBOURG'>LUXEMBOURG</option>
-  <option value='MONTENEGRO'>MONTENEGRO</option>
-  <option value='NORWAY'>NORWAY</option>
   <option value='POLAND'>POLAND</option>
-  <option value='PORTUGAL'>PORTUGAL</option>
   <option value='SPAIN'>SPAIN</option>
-  <option value='SWEDEN'>SWEDEN</option>
-  <option value='SWITZERLAND'>SWITZERLAND</option>
   <option value='UNITED STATES'>UNITED STATES</option>
 `;
 

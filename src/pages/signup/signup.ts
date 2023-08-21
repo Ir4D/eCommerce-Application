@@ -16,6 +16,22 @@ const createCodeTemplate = (): string => {
     if (targetClass) {
       validators[targetClass](target.value);
     }
+    if (target.classList.contains('country_bill')) {
+      const postalCodeInput = document.querySelector(
+        '.post_bill'
+      ) as HTMLInputElement;
+      if (postalCodeInput) {
+        postalCodeInput.value = '';
+      }
+    }
+    if (target.classList.contains('country_ship')) {
+      const postalCodeInput = document.querySelector(
+        '.post_ship'
+      ) as HTMLInputElement;
+      if (postalCodeInput) {
+        postalCodeInput.value = '';
+      }
+    }
   });
 
   document.addEventListener('click', (event: MouseEvent) => {
@@ -23,12 +39,16 @@ const createCodeTemplate = (): string => {
     if (target && target.classList.contains('form-button')) {
       const inputElements = document.querySelectorAll('input');
       let hasError = false;
+      let allInputsEmpty = true;
       inputElements.forEach((input) => {
         if (input.classList.contains('error')) {
           hasError = true;
         }
+        if (input.value !== '') {
+          allInputsEmpty = false;
+        }
       });
-      if (hasError) {
+      if (hasError || allInputsEmpty) {
         const modal = document.getElementById('errorModal') as HTMLElement;
         const closeModal = modal.querySelector('.modal-close') as HTMLElement;
         modal.style.display = 'block';

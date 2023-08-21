@@ -1,11 +1,10 @@
-/* eslint-disable no-alert */
 /* eslint-disable max-lines-per-function */
 import { Customer } from '../../controllers/CustomerControl';
 import { countries } from './countries';
 
 let selectedAlpha2Code = '';
 
-function getAlpha2Code(inputCountry: string): string | undefined {
+function getAlpha2Code(inputCountry: string): string {
   const input = inputCountry.trim().toUpperCase();
   const matchingCountry = countries.find((country) => country.name === input);
   if (matchingCountry) {
@@ -80,25 +79,6 @@ export const signupCreate = (): void => {
     if (billigCheckbox.checked) {
       shippingDef = 1;
     }
-  }
-
-  if (
-    !email ||
-    !password ||
-    !firstName ||
-    !lastName ||
-    !dob ||
-    !countryBill ||
-    !streetBill ||
-    !postBill ||
-    !cityBill ||
-    !countryShip ||
-    !streeShip ||
-    !postShip ||
-    !cityShip
-  ) {
-    alert('Пожалуйста, заполните все поля');
-    return;
   }
 
   const customer = new Customer();

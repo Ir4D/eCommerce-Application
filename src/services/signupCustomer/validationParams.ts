@@ -111,13 +111,13 @@ const cityValidator = createInputValidator(
 const postalCodeBillValidator = createInputValidator(
   'post_bill',
   isValidPostalCodeBill,
-  'The Postal code format does not correspond to the submittd country'
+  'The Postal code format does not correspond to the submitted country'
 );
 
 const postalCodeShipValidator = createInputValidator(
   'post_ship',
   isValidPostalCodeShip,
-  'The Postal code format does not correspond to the submittd country'
+  'The Postal code format does not correspond to the submitted country'
 );
 
 const countyValidator = createInputValidator(
