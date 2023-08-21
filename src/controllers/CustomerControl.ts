@@ -10,6 +10,22 @@ import {
 } from '../api/BuildClients';
 
 export class Customer {
+  public createMsg(msg = '') {
+    document.querySelector<HTMLElement>('.msg')?.remove();
+    const insertAfter = (newNode: HTMLElement, referenceNode: HTMLElement) => {
+      referenceNode?.parentNode?.insertBefore(
+        newNode,
+        referenceNode.nextSibling
+      );
+    };
+    const container = document.createElement('div');
+    const form = document.querySelector<HTMLElement>('.login-form');
+    container.className = 'msg';
+    container.textContent = msg;
+    if (!form) throw TypeError('smth went wrong...');
+    insertAfter(container, form);
+  }
+
   public async createCustomer(
     EMAIL: string,
     PASSWORD: string,
@@ -110,10 +126,16 @@ export class Customer {
         .execute();
     };
     authenticateCustomer()
-      .then(({ body }) => {
-        console.log(body.customer.id);
-        console.log(body.customer.email);
+      .then((/*  { body } */) => {
+        window.location.hash = 'main';
+        document
+          .querySelector('.profile_container-item.hidden')
+          ?.classList.remove('hidden');
+        /*    console.log(body.customer.id);
+        console.log(body.customer.email); */
       })
-      .catch(console.error);
+      .catch(() => {
+        this.createMsg('Please, be sure your login and password are correct');
+      });
   }
 }

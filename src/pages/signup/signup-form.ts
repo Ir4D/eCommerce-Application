@@ -96,7 +96,7 @@ const formBillingAddress = `
 
 const formShippinAddress = `
   <div class="form-shipping-address">
-    <h5 class="form-shipping_title">Shippin Address</h5>
+    <h5 class="form-shipping_title">Shipping Address</h5>
     <label class="form-country_label for="country"">Country*</label>
     <input class="form-country_input country_ship country" type="text" id="country_ship" name="country" list="countries_ship" required></input>
     <div class="error-message"></div>
