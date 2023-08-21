@@ -1,3 +1,5 @@
+import Router from '../services/router/router';
+
 const createCodeTemplate = (): string => {
   return `
   <section class="about about--main_page">
@@ -17,7 +19,7 @@ const createCodeTemplate = (): string => {
           <p class="feature-text about-text">Simply dummy text of the printing and typesetting industry. Lorem Ipsum</p>
         </li>
       </ul>
-      <button class="about-btn btn btn--blue">Learn more</button>
+      <a href="${Router.pages.about}" class="about-btn btn btn--blue link">Learn more</a>
     </div>
   </section>`;
 };
