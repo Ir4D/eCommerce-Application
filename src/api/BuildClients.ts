@@ -4,7 +4,11 @@ import {
   type AuthMiddlewareOptions,
   type AnonymousAuthMiddlewareOptions,
   type PasswordAuthMiddlewareOptions,
-  type HttpMiddlewareOptions
+  type HttpMiddlewareOptions,
+  TokenCache,
+  TokenCacheOptions,
+  TokenStore,
+  TokenInfo
 } from '@commercetools/sdk-client-v2';
 
 import {

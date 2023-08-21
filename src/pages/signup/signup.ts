@@ -81,6 +81,23 @@ const createCodeTemplate = (): string => {
     }
   });
 
+  document.addEventListener('click', (event) => {
+    const target = event.target as HTMLInputElement;
+    if (target && target.classList.contains('form-psw_toggle')) {
+      const passwordInput = document.querySelector(
+        '.form-psw_input'
+      ) as HTMLElement;
+      const type = passwordInput.getAttribute('type');
+      if (type === 'password') {
+        passwordInput.setAttribute('type', 'text');
+        target.innerHTML = '&#9899;';
+      } else {
+        passwordInput.setAttribute('type', 'password');
+        target.innerHTML = '&#9898;';
+      }
+    }
+  });
+
   return `${signupTitleView}${signupFormView}`;
 };
 

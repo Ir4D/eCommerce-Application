@@ -436,6 +436,20 @@ h6 {
     flex-direction: column;
   }
 
+  &-psw {
+    position: relative;
+  }
+
+  &-psw_toggle {
+    content: '';
+    font-size: 14px;
+    position: absolute;
+    top: 35px;
+    right: 60px;
+    color: $dark-gray;
+    cursor: pointer;
+  }
+
   &-name-dob {
     display: flex;
     gap: 5em;
@@ -775,6 +789,10 @@ h6 {
     &-billing-address,
     &-shipping-address {
       max-width: 580px;
+    }
+
+    &-psw_toggle {
+      right: 13px;
     }
 
     .error-message {

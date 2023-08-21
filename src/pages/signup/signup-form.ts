@@ -7,6 +7,7 @@ const formEmailPsw = `
     </div>
     <div class="form-psw">
       <label class="form-psw_label" for="psw">Password*</label>
+      <span class="form-psw_toggle">&#9898;</span>
       <input class="form-psw_input psw" type="password" id="psw" name="psw" minlength="8" required></input>
       <div class="error-message"></div>
     </div>
