@@ -28,7 +28,7 @@ const createCodeTemplate = (): string => {
       </form> 
       <button type="submit" for="login" class="btn login-btn btn--yellow">Let me in</button>
       <div class="login-make-acc">
-            <p>Don't have an account? <a href="/#signup">Create one now</a></p>
+            <p>Don't have an account? <a href="#signup">Create one now</a></p>
       </div>
     </div>
   </section>`;

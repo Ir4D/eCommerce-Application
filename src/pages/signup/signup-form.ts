@@ -123,7 +123,7 @@ const modalWindow = `
 `;
 
 const hasLogin = `
-  <p>Already have an account? Log in <a href="/#login">here</a></p>
+  <p>Already have an account? Log in <a href="#login">here</a></p>
 `;
 
 const createCodeTemplate = (): string => {
