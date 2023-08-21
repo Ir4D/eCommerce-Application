@@ -189,6 +189,15 @@ h6 {
   &-title {
     margin-bottom: 1.5rem;
   }
+
+  &-link_signup {
+    text-decoration: none;
+  }
+
+  &-link_login {
+    font-size: 16px;
+    margin-left: 12px;
+  }
 }
 
 .subtitle {
