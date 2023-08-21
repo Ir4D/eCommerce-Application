@@ -1,4 +1,5 @@
 import { goods } from '../utils';
+import Router from '../services/router/router';
 import GoodCartView from './good-cart';
 
 const createCodeTemplate = (): string => {
@@ -11,7 +12,9 @@ const createCodeTemplate = (): string => {
     <ul class="catalog-list list">
       ${goodItems.map((el) => new GoodCartView(el).render).join('')} 
     </ul>
-    <button class="catalog-btn btn btn--blue">Load More</button>
+    <a href="${
+      Router.pages.catalog
+    }" class="catalog-btn btn btn--blue link">Load More</a>
   </section>`;
 };
 
