@@ -24,6 +24,7 @@ const createCodeTemplate = (): string => {
 
   document.addEventListener('click', (event: MouseEvent) => {
     const target = event.target as HTMLElement;
+    event.stopImmediatePropagation();
     if (target && target.classList.contains('form-button')) {
       const inputElements = document.querySelectorAll('input');
       let hasError = false;
@@ -33,12 +34,6 @@ const createCodeTemplate = (): string => {
         }
       });
       if (hasError) {
-        // const modal = document.getElementById('errorModal') as HTMLElement;
-        // const closeModal = modal.querySelector('.modal-close') as HTMLElement;
-        // modal.style.display = 'block';
-        // closeModal.addEventListener('click', () => {
-        //   modal.style.display = 'none';
-        // });
         signUpModal.show({ status: 'form error' });
       } else {
         signupCreate();

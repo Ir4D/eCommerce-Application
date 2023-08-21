@@ -5,7 +5,6 @@ type ModalStatusType = 'success' | 'user exists' | 'form error';
 type ModalArgsType = {
   status: ModalStatusType;
   firstName?: string;
-  secondName?: string;
   lastName?: string;
   email?: string;
 };
@@ -22,7 +21,6 @@ export default class SignUpModal {
                                     <div class="modal-fail-img"></div>
                                     <h3 class="modal-message">Sorry. User with e-mail <br> ${email} <br> already exists!</h3>
                                     `;
-        console.log('user exists modal');
         break;
       }
       case 'form error': {
@@ -30,7 +28,6 @@ export default class SignUpModal {
                                     <div class="modal-fail-img"></div>
                                     <h3 class="modal-message">Sorry. <br> Check if the form is filled out correctly!</h3>
                                     `;
-        console.log('form error modal');
         break;
       }
 
@@ -39,7 +36,6 @@ export default class SignUpModal {
                                   <div class="modal-succes-img"></div>
                                   <h3 class="modal-message">User <br> ${firstName} ${lastName} <br> succesfully registered!</h3>
                                   `;
-        console.log('success modal');
       }
     }
     container.showModal();

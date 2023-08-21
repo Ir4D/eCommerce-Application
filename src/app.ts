@@ -31,16 +31,14 @@ export default class App {
     );
 
     window.addEventListener('user-registration-success', (event) => {
-      console.log('on register success', event);
       this.signUpModal.show({
         status: (<CustomEvent>event).detail.status,
         firstName: (<CustomEvent>event).detail.firstName,
-        secondName: (<CustomEvent>event).detail.secondName
+        lastName: (<CustomEvent>event).detail.lastName
       });
     });
 
     window.addEventListener('user-registration-fail', (event) => {
-      console.log('on register fail', (<CustomEvent>event).detail);
       this.signUpModal.show({
         status: (<CustomEvent>event).detail.status,
         email: (<CustomEvent>event).detail.email

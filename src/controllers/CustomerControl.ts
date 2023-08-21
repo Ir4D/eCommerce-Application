@@ -67,7 +67,7 @@ export class Customer {
     };
     createCustomer()
       .then((resp) => {
-        console.log('created', resp.statusCode);
+        console.log('create', resp);
         const registerSuccessEvent = new CustomEvent(
           'user-registration-success',
           {
@@ -80,8 +80,7 @@ export class Customer {
         );
         window.dispatchEvent(registerSuccessEvent);
       })
-      .catch((error) => {
-        console.log('error', error.body.message);
+      .catch((/* error */) => {
         const registerRejectEvent = new CustomEvent('user-registration-fail', {
           detail: {
             status: 'user exists',
