@@ -1,5 +1,6 @@
 import { offers } from '../utils';
 import GoodCartView from './good-cart';
+import Router from '../services/router/router';
 
 const createCodeTemplate = (): string => {
   const offersItems: object[] = offers;
@@ -12,7 +13,9 @@ const createCodeTemplate = (): string => {
           <p class="subtitle subtitle--green">For You</p>
           <h3 class="special_offer-title">Special Offer</h3>
         </div>  
-        <button class="special_offer-btn btn btn--yellow">View All Products</button>
+        <a href="${
+          Router.pages.catalog
+        }" class="btn special_offer-btn link btn--yellow">View All Products</a>
       </div>
       <ul class="special_offer-list list">
         ${offersItems.map((el) => new GoodCartView(el).render).join('')} 

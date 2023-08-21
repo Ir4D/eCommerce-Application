@@ -6,9 +6,8 @@ const createCodeTemplate = (): string => {
       <button class="nav-mobile"><span></span><span></span></button>
       <ul class="nav nav--header list ">
         <li class="nav-item header-logo logo">
-        <a class="nav-link link" href=${Router.pages.main}>
-          <img src="./images/Logo.png" alt="logo" class="logo-img" width="37" height="54"
-            />
+          <a href="#main">
+            <img src="./images/Logo.png" alt="logo" class="logo-img" width="37" height="54"/>
             <h4 class="logo-text">Organick</h4>
             </a>
         </li>
