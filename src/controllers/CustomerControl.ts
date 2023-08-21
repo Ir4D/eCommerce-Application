@@ -66,10 +66,29 @@ export class Customer {
         .execute();
     };
     createCustomer()
-      .then(({ body }) => {
-        console.log(body.customer.id);
+      .then((resp) => {
+        console.log('create', resp);
+        const registerSuccessEvent = new CustomEvent(
+          'user-registration-success',
+          {
+            detail: {
+              status: 'success',
+              firstName: resp.body.customer.firstName,
+              lastName: resp.body.customer.lastName
+            }
+          }
+        );
+        window.dispatchEvent(registerSuccessEvent);
       })
-      .catch(console.error);
+      .catch((/* error */) => {
+        const registerRejectEvent = new CustomEvent('user-registration-fail', {
+          detail: {
+            status: 'user exists',
+            email: EMAIL
+          }
+        });
+        window.dispatchEvent(registerRejectEvent);
+      });
   }
 
   public async loginCustomer(EMAIL: string, PASSWORD: string): Promise<void> {
