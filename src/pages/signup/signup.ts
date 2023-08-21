@@ -82,6 +82,7 @@ const createCodeTemplate = (): string => {
   });
 
   document.addEventListener('click', (event) => {
+    event.stopImmediatePropagation();
     const target = event.target as HTMLInputElement;
     if (target && target.classList.contains('form-psw_toggle')) {
       const passwordInput = document.querySelector(

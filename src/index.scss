@@ -141,7 +141,7 @@ h6 {
 
 .nav,
 .profile_container,
-.logo,
+.logo a,
 .profile_container-link--cart {
   display: flex;
   justify-content: space-between;
@@ -153,6 +153,13 @@ h6 {
 .profile_container {
   gap: 2rem;
   height: auto;
+}
+
+.logo a {
+  text-decoration: none;
+  outline: none;
+  transition: none;
+  cursor: pointer;
 }
 
 .logo-text {
