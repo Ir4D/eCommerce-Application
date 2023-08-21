@@ -2,7 +2,7 @@ const formEmailPsw = `
   <div class="form-email-psw">
     <div class="form-email">
       <label class="form-email_label" for="email">E-mail*</label>
-      <input class="form-email_input email" type="email" id="email" name="email" minlength="5" required></input>
+      <input class="form-email_input email" type="text" id="email" name="email" minlength="5" required></input>
       <div class="error-message" id="emailError"></div>
     </div>
     <div class="form-psw">
