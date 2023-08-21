@@ -43,8 +43,12 @@ const createCodeTemplate = (): string => {
     event.stopImmediatePropagation();
     if (target && target.classList.contains('form-button')) {
       const inputElements = document.querySelectorAll('input');
+      const inputElemsCopiedAddr = document.querySelectorAll(
+        '.input-copy'
+      ) as NodeListOf<HTMLInputElement>;
       let hasError = false;
       let allInputsEmpty = true;
+      let isEmpty = false;
       inputElements.forEach((input) => {
         if (input.classList.contains('error')) {
           hasError = true;
@@ -53,13 +57,13 @@ const createCodeTemplate = (): string => {
           allInputsEmpty = false;
         }
       });
+      inputElemsCopiedAddr.forEach((inputCopy) => {
+        if (inputCopy.value === '') {
+          isEmpty = true;
+        }
+      });
       if (hasError || allInputsEmpty) {
-        const modal = document.getElementById('errorModal') as HTMLElement;
-        const closeModal = modal.querySelector('.modal-close') as HTMLElement;
-        modal.style.display = 'block';
-        closeModal.addEventListener('click', () => {
-          modal.style.display = 'none';
-        });
+        signUpModal.show({ status: 'form error' });
       } else {
         signupCreate();
       }
