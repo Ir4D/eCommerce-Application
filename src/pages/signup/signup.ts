@@ -1,9 +1,7 @@
 /* eslint-disable max-lines-per-function */
 import SignupTitleView from './signup-title';
 import SignupFormView from './signup-form';
-
 import SignUpModal from './sign-up-modal';
-
 import { signupCreate } from '../../services/signupCustomer/signupCustomer';
 import { validators } from '../../services/signupCustomer/validationParams';
 
@@ -68,6 +66,24 @@ const createCodeTemplate = (): string => {
         signupCreate();
       }
     }
+
+    const targetHideShow = event.target as HTMLElement;
+    if (
+      targetHideShow &&
+      targetHideShow.classList.contains('form-psw_toggle')
+    ) {
+      const passwordInput = document.querySelector(
+        '.form-psw_input'
+      ) as HTMLInputElement;
+      const type = passwordInput.getAttribute('type');
+      if (type === 'password') {
+        passwordInput.setAttribute('type', 'text');
+        targetHideShow.innerHTML = '&#9899;';
+      } else {
+        passwordInput.setAttribute('type', 'password');
+        targetHideShow.innerHTML = '&#9898;';
+      }
+    }
   });
 
   document.addEventListener('change', (event) => {
@@ -89,26 +105,7 @@ const createCodeTemplate = (): string => {
     }
   });
 
-  document.addEventListener('click', (event) => {
-    event.stopImmediatePropagation();
-    const target = event.target as HTMLInputElement;
-    if (target && target.classList.contains('form-psw_toggle')) {
-      const passwordInput = document.querySelector(
-        '.form-psw_input'
-      ) as HTMLElement;
-      const type = passwordInput.getAttribute('type');
-      if (type === 'password') {
-        passwordInput.setAttribute('type', 'text');
-        target.innerHTML = '&#9899;';
-      } else {
-        passwordInput.setAttribute('type', 'password');
-        target.innerHTML = '&#9898;';
-      }
-    }
-  });
-
   return `${signupTitleView}${signUpModal.render()}${signupFormView}`;
-
 };
 
 export default class SignupView {
