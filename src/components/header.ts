@@ -1,4 +1,5 @@
 import MenuView from './menu';
+import Router from '../services/router/router';
 
 export default class HeaderView {
   public container: HTMLElement;
@@ -34,7 +35,6 @@ export default class HeaderView {
       `
           : ''
       }
-
       <a href="" class="profile_container-link link">
         <img src="./images/avatar.png" alt="profile" class="profile" width="56" height="56"">
       </a>
