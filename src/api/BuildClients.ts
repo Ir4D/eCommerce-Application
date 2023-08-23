@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/naming-convention */
+/* eslint-disable no-underscore-dangle */
 import {
   ClientBuilder,
   Client,
@@ -17,12 +20,15 @@ import {
   apiDataAnonymous,
   apiDataPassManageCustomers
 } from './apiData';
+import MyTokenCache from '../services/token/token';
 
 const projectKey = apiData.PROJECT_KEY || '';
 const httpMiddlewareOptions: HttpMiddlewareOptions = {
   host: apiData.API_URL || '',
   fetch
 };
+
+const tokenCache = new MyTokenCache();
 
 // Client Credentials Flow (for application run)
 export function createCtpClient(): Client {
@@ -55,6 +61,7 @@ export function createCtpClientWithScopes(): Client {
       clientSecret: apiDataPassManageCustomers.CLIENT_SECRET || ''
     },
     scopes: [apiDataPassManageCustomers.SCOPES || ''],
+    tokenCache,
     fetch
   };
 
@@ -104,6 +111,7 @@ export function createCtpClientWithCredentials(
       }
     },
     scopes: [apiDataPassManageCustomers.SCOPES || ''],
+    tokenCache,
     fetch
   };
 
