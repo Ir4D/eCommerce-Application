@@ -95,6 +95,9 @@ export class Customer {
           }
         );
         window.dispatchEvent(registerSuccessEvent);
+        document
+          .querySelector('.profile_container-item.hidden')
+          ?.classList.remove('hidden');
       })
       .catch((/* error */) => {
         const registerRejectEvent = new CustomEvent('user-registration-fail', {
@@ -126,7 +129,8 @@ export class Customer {
         .execute();
     };
     authenticateCustomer()
-      .then((/*  { body } */) => {
+      .then(({ body }) => {
+        localStorage.setItem('customerID', body.customer.id);
         window.location.hash = 'main';
         document
           .querySelector('.profile_container-item.hidden')

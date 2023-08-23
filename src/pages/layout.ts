@@ -89,6 +89,9 @@ export default class Layout {
       this.header.container.remove();
       this.header = new HeaderView();
       document.body.prepend(this.header.render());
+      document
+        .querySelector('.profile_container-item.hidden')
+        ?.classList.remove('hidden');
     });
   }
 

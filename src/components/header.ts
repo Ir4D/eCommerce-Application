@@ -21,24 +21,20 @@ export default class HeaderView {
         </a>
       </li>
       <li class="profile_container-item hidden">
-
-        <a href="" class="profile_container-link link">
-          <img src="./images/avatar.png" alt="profile" class="profile" width="56" height="56"">
-        </a>
-      </li>
-      ${
-        localStorage.customerID
-          ? `
-      <li class="profile_container-item">
-          <img src="./images/logout_icon.svg" alt="logout" class="logout" width="50" height="50"">
-      </li>
-      `
-          : ''
-      }
       <a href="" class="profile_container-link link">
         <img src="./images/avatar.png" alt="profile" class="profile" width="56" height="56"">
       </a>
     </li>
+    </li>
+    ${
+      localStorage.customerID
+        ? `
+    <li class="profile_container-item">
+        <img src="./images/logout_icon.svg" alt="logout" class="logout" width="50" height="50"">
+    </li>
+    `
+        : ''
+    }
     </ul>`;
   };
 
@@ -47,12 +43,15 @@ export default class HeaderView {
     this.container.classList.add('header');
     this.container.innerHTML = this.HTML();
     this.logoutButton = this.container.querySelector('.logout') as HTMLElement;
-    console.log('header', this.logoutButton);
+    // console.log('header', this.logoutButton);
     if (this.logoutButton) {
       this.logoutButton.addEventListener('click', () => {
         localStorage.removeItem('customerID');
         this.container.innerHTML = '';
         this.container.innerHTML = this.HTML();
+        document
+          .querySelector('.profile_container-item.hidden')
+          ?.classList.remove('hidden');
       });
     }
   }
