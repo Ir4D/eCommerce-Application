@@ -57,13 +57,13 @@ export function createCtpClientWithScopes(): Client {
     scopes: [apiDataPassManageCustomers.SCOPES || ''],
     fetch
   };
-
-  return new ClientBuilder()
+  const builder = new ClientBuilder()
     .withProjectKey(projectKey)
     .withClientCredentialsFlow(authMiddlewareOptionsScopes)
     .withHttpMiddleware(httpMiddlewareOptions)
     .withLoggerMiddleware()
     .build();
+  return builder;
 }
 
 // Client Anonymous Flow

@@ -9,8 +9,6 @@ import SignupView from './signup/signup';
 import NotFoundView from './404/404';
 import CartView from './cart/cart';
 
-import { signupCreate } from '../services/signupCustomer/signupCustomer';
-
 export default class Layout {
   private header: HeaderView;
   private footer: FooterView;
@@ -36,6 +34,7 @@ export default class Layout {
     this.cart = new CartView();
     this.slot = document.createElement('main');
     this.handleRouteChange();
+    this.handleLogin();
   }
 
   private renderPage(route: string): void {
@@ -68,7 +67,6 @@ export default class Layout {
           break;
         }
         default: {
-          Router.navigate(Router.pages.notFound);
           pageHTML = this.notFound.render;
         }
       }
@@ -83,6 +81,17 @@ export default class Layout {
     window.addEventListener('hashchange', () => {
       const { hash } = window.location;
       this.renderPage(hash);
+    });
+  }
+
+  private handleLogin(): void {
+    window.addEventListener('user-registration-success', () => {
+      this.header.container.remove();
+      this.header = new HeaderView();
+      document.body.prepend(this.header.render());
+      document
+        .querySelector('.profile_container-item.hidden')
+        ?.classList.remove('hidden');
     });
   }
 

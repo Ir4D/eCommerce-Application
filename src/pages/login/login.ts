@@ -5,7 +5,6 @@ const createCodeTemplate = (): string => {
   const loginFunc = (): void => {
     const email = (document.querySelector('#email') as HTMLInputElement)?.value;
     const psw = (document.querySelector('#psw') as HTMLInputElement)?.value;
-    // console.log(email, psw);
 
     const customer = new Customer();
     customer.loginCustomer(email, psw);
