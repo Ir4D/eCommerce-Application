@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 import Router from '../services/router/router';
 import HeaderView from '../components/header';
 import FooterView from '../components/footer';
@@ -8,8 +9,6 @@ import LoginView from './login/login';
 import SignupView from './signup/signup';
 import NotFoundView from './404/404';
 import CartView from './cart/cart';
-
-import { signupCreate } from '../services/signupCustomer/signupCustomer';
 
 export default class Layout {
   private header: HeaderView;
@@ -52,7 +51,7 @@ export default class Layout {
           break;
         }
         case Router.pages.catalog: {
-          pageHTML = this.catalog.render;
+          pageHTML = '';
           break;
         }
         case Router.pages.login: {
@@ -76,7 +75,11 @@ export default class Layout {
       Router.navigate(Router.pages.main);
       pageHTML = this.main.render;
     }
-    this.slot.innerHTML = pageHTML;
+    if (route === Router.pages.catalog) {
+      this.slot.append(this.catalog.render());
+    } else {
+      this.slot.innerHTML = pageHTML;
+    }
   }
 
   private handleRouteChange(): void {
