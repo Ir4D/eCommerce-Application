@@ -7,11 +7,7 @@ import {
   type AuthMiddlewareOptions,
   type AnonymousAuthMiddlewareOptions,
   type PasswordAuthMiddlewareOptions,
-  type HttpMiddlewareOptions,
-  TokenCache,
-  TokenCacheOptions,
-  TokenStore,
-  TokenInfo
+  type HttpMiddlewareOptions
 } from '@commercetools/sdk-client-v2';
 
 import {
@@ -20,7 +16,7 @@ import {
   apiDataAnonymous,
   apiDataPassManageCustomers
 } from './apiData';
-import MyTokenCache from '../services/token/token';
+import TokenHandle from '../services/token/token';
 
 const projectKey = apiData.PROJECT_KEY || '';
 const httpMiddlewareOptions: HttpMiddlewareOptions = {
@@ -28,9 +24,9 @@ const httpMiddlewareOptions: HttpMiddlewareOptions = {
   fetch
 };
 
-const tokenCache = new MyTokenCache();
+const tokenCache = new TokenHandle();
 
-// Client Credentials Flow (for application run)
+// Client Credentials Flow
 export function createCtpClient(): Client {
   const authMiddlewareOptionsNew: AuthMiddlewareOptions = {
     host: apiData.AUTH_URL || '',

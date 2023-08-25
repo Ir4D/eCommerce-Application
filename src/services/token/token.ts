@@ -4,23 +4,39 @@ import {
   TokenCacheOptions
 } from '@commercetools/sdk-client-v2';
 
-export default class MyTokenCache implements TokenCache {
+export default class TokenHandle implements TokenCache {
   public myCache: TokenStore = {
     token: '',
     expirationTime: -1
   };
+
   public set(newCache: TokenStore): TokenStore {
     this.myCache = newCache;
-    localStorage.setItem('token', JSON.stringify(newCache.token));
-    console.log('set token:', newCache.token);
+    try {
+      localStorage.setItem('access_token', JSON.stringify(newCache));
+    } catch (error) {
+      console.error('Error while setting token:', error);
+    }
     return newCache;
   }
+
   public get(tokenCacheOptions?: TokenCacheOptions): TokenStore {
-    const storedToken = localStorage.getItem('token');
-    if (storedToken) {
-      return JSON.parse(storedToken);
+    try {
+      const storedToken = localStorage.getItem('access_token');
+      if (storedToken) {
+        return JSON.parse(storedToken);
+      }
+    } catch (error) {
+      console.error('Error while getting token:', error);
     }
-    console.log('get token:', this.myCache.token);
     return this.myCache;
+  }
+
+  public removeToken(): void {
+    try {
+      localStorage.removeItem('access_token');
+    } catch (error) {
+      console.error('Error while removing token:', error);
+    }
   }
 }
