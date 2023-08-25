@@ -1,8 +1,5 @@
-import {
-  TokenCache,
-  TokenStore,
-  TokenCacheOptions
-} from '@commercetools/sdk-client-v2';
+/* eslint-disable no-console */
+import { TokenCache, TokenStore } from '@commercetools/sdk-client-v2';
 
 export default class TokenHandle implements TokenCache {
   public myCache: TokenStore = {
@@ -20,7 +17,7 @@ export default class TokenHandle implements TokenCache {
     return newCache;
   }
 
-  public get(tokenCacheOptions?: TokenCacheOptions): TokenStore {
+  public get(): TokenStore {
     try {
       const storedToken = localStorage.getItem('access_token');
       if (storedToken) {

@@ -7,7 +7,8 @@ import {
   type AuthMiddlewareOptions,
   type AnonymousAuthMiddlewareOptions,
   type PasswordAuthMiddlewareOptions,
-  type HttpMiddlewareOptions
+  type HttpMiddlewareOptions,
+  type ExistingTokenMiddlewareOptions
 } from '@commercetools/sdk-client-v2';
 
 import {
@@ -25,6 +26,23 @@ const httpMiddlewareOptions: HttpMiddlewareOptions = {
 };
 
 const tokenCache = new TokenHandle();
+
+// Client with existing Token Flow:
+export function createCtpClientExistingFlow(): Client {
+  const existingTokenMiddlewareOptions: ExistingTokenMiddlewareOptions = {
+    force: true
+  };
+
+  return new ClientBuilder()
+    .withProjectKey(projectKey)
+    .withExistingTokenFlow(
+      `Bearer ${tokenCache.get().token}`,
+      existingTokenMiddlewareOptions
+    )
+    .withHttpMiddleware(httpMiddlewareOptions)
+    .withLoggerMiddleware()
+    .build();
+}
 
 // Client Credentials Flow
 export function createCtpClient(): Client {
@@ -61,12 +79,14 @@ export function createCtpClientWithScopes(): Client {
     fetch
   };
 
-  return new ClientBuilder()
+  const builder = new ClientBuilder()
     .withProjectKey(projectKey)
     .withClientCredentialsFlow(authMiddlewareOptionsScopes)
     .withHttpMiddleware(httpMiddlewareOptions)
     .withLoggerMiddleware()
     .build();
+
+  return builder;
 }
 
 // Client Anonymous Flow

@@ -83,7 +83,7 @@ export class Customer {
     };
     createCustomer()
       .then((resp) => {
-        console.log('create', resp);
+        localStorage.setItem('customerID', resp.body.customer.id);
         const registerSuccessEvent = new CustomEvent(
           'user-registration-success',
           {
@@ -95,6 +95,9 @@ export class Customer {
           }
         );
         window.dispatchEvent(registerSuccessEvent);
+        document
+          .querySelector('.profile_container-item.hidden')
+          ?.classList.remove('hidden');
       })
       .catch((/* error */) => {
         const registerRejectEvent = new CustomEvent('user-registration-fail', {
@@ -125,14 +128,14 @@ export class Customer {
         })
         .execute();
     };
+
     authenticateCustomer()
-      .then((/*  { body } */) => {
+      .then(({ body }) => {
+        localStorage.setItem('customerID', body.customer.id);
         window.location.hash = 'main';
         document
           .querySelector('.profile_container-item.hidden')
           ?.classList.remove('hidden');
-        /*    console.log(body.customer.id);
-        console.log(body.customer.email); */
       })
       .catch(() => {
         this.createMsg('Please, be sure your login and password are correct');
