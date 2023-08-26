@@ -9,6 +9,7 @@ import LoginView from './login/login';
 import SignupView from './signup/signup';
 import NotFoundView from './404/404';
 import CartView from './cart/cart';
+import ProfileView from './profile/profile';
 
 export default class Layout {
   private header: HeaderView;
@@ -22,6 +23,7 @@ export default class Layout {
   private signup: SignupView;
   private notFound: NotFoundView;
   private cart: CartView;
+  private profile: ProfileView;
 
   constructor() {
     this.header = new HeaderView();
@@ -33,6 +35,7 @@ export default class Layout {
     this.signup = new SignupView();
     this.notFound = new NotFoundView();
     this.cart = new CartView();
+    this.profile = new ProfileView();
     this.slot = document.createElement('main');
     this.handleRouteChange();
     this.handleLogin();
@@ -48,7 +51,7 @@ export default class Layout {
           break;
         }
         case Router.pages.about: {
-          pageHTML = '';
+          pageHTML = this.about.render;
           break;
         }
         case Router.pages.catalog: {
@@ -61,6 +64,10 @@ export default class Layout {
         }
         case Router.pages.signup: {
           pageHTML = this.signup.render;
+          break;
+        }
+        case Router.pages.profile: {
+          pageHTML = '';
           break;
         }
         case Router.pages.cart: {
@@ -77,8 +84,8 @@ export default class Layout {
     }
     if (route === Router.pages.catalog) {
       this.slot.append(this.catalog.render());
-    } else if (route === Router.pages.about) {
-      this.slot.append(this.about.render());
+    } else if (route === Router.pages.profile) {
+      this.slot.append(this.profile.render());
     } else {
       this.slot.innerHTML = pageHTML;
     }

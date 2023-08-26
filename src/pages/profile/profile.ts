@@ -1,6 +1,5 @@
-/* eslint-disable no-console */
-import { ClientResponse, MyCustomerDraft } from '@commercetools/platform-sdk';
-import { QueryCustomer } from '../../api/apiMethods';
+import { Customer } from '@commercetools/platform-sdk';
+import { QueryCustomerById } from '../../api/apiMethods';
 import Component from '../../components/abstract/component';
 
 export default class ProfileView extends Component {
@@ -13,27 +12,30 @@ export default class ProfileView extends Component {
     this.refreshProfile();
   }
 
+  private customerId: string | null = localStorage.getItem('customerID');
+
   public refreshProfile(): void {
-    QueryCustomer()
-      .then(({ body }) => {
-        this.renderProfile(body);
-        console.log('refreshProfile:', body.email);
-      })
-      .catch((error) => {
-        this.errorModal.innerText = error;
-        this.errorModal.showModal();
-      });
+    if (this.customerId) {
+      QueryCustomerById(this.customerId)
+        .then(({ body }) => {
+          this.renderProfile(body);
+        })
+        .catch((error) => {
+          this.errorModal.innerText = error;
+          this.errorModal.showModal();
+        });
+    }
   }
 
-  private renderProfile(content: ClientResponse): void {
-    console.log('renderProfile:', content.body.results);
-    this.container.append(content.body.results);
-    // content.body.results.forEach((catalogItem) => {
-    //   const catalogItemCard = document.createElement('div');
-    //   catalogItemCard.classList.add('catalog-card');
-    //   catalogItemCard.innerHTML = `<h2>${catalogItem.name.en}</h2>`;
-    //   this.container.append(catalogItemCard);
-    // });
+  private renderProfile(content: Customer): void {
+    const emailItem = document.createElement('div');
+    emailItem.classList.add('item-email');
+    emailItem.innerHTML = `<p>${content.email}</p>`;
+    this.container.append(emailItem);
+    const nameItem = document.createElement('div');
+    nameItem.classList.add('item-name');
+    nameItem.innerHTML = `<p>${content.firstName} ${content.lastName}</p>`;
+    this.container.append(nameItem);
   }
 
   public render(): HTMLElement {
