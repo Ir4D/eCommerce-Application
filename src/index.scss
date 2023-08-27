@@ -172,6 +172,10 @@ h6 {
   @include bold-text;
 }
 
+.logout {
+  cursor: pointer;
+}
+
 .hero {
   background-color: $bg-dark;
 

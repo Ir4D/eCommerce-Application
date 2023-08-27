@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/naming-convention */
+/* eslint-disable no-underscore-dangle */
 import {
   ClientBuilder,
   Client,
@@ -5,10 +8,7 @@ import {
   type AnonymousAuthMiddlewareOptions,
   type PasswordAuthMiddlewareOptions,
   type HttpMiddlewareOptions,
-  TokenCache,
-  TokenCacheOptions,
-  TokenStore,
-  TokenInfo
+  type ExistingTokenMiddlewareOptions
 } from '@commercetools/sdk-client-v2';
 
 import {
@@ -17,6 +17,7 @@ import {
   apiDataAnonymous,
   apiDataPassManageCustomers
 } from './apiData';
+import TokenHandle from '../services/token/token';
 
 const projectKey = apiData.PROJECT_KEY || '';
 const httpMiddlewareOptions: HttpMiddlewareOptions = {
@@ -24,7 +25,26 @@ const httpMiddlewareOptions: HttpMiddlewareOptions = {
   fetch
 };
 
-// Client Credentials Flow (for application run)
+const tokenCache = new TokenHandle();
+
+// Client with existing Token Flow:
+export function createCtpClientExistingFlow(): Client {
+  const existingTokenMiddlewareOptions: ExistingTokenMiddlewareOptions = {
+    force: true
+  };
+
+  return new ClientBuilder()
+    .withProjectKey(projectKey)
+    .withExistingTokenFlow(
+      `Bearer ${tokenCache.get().token}`,
+      existingTokenMiddlewareOptions
+    )
+    .withHttpMiddleware(httpMiddlewareOptions)
+    .withLoggerMiddleware()
+    .build();
+}
+
+// Client Credentials Flow
 export function createCtpClient(): Client {
   const authMiddlewareOptionsNew: AuthMiddlewareOptions = {
     host: apiData.AUTH_URL || '',
@@ -55,15 +75,18 @@ export function createCtpClientWithScopes(): Client {
       clientSecret: apiDataPassManageCustomers.CLIENT_SECRET || ''
     },
     scopes: [apiDataPassManageCustomers.SCOPES || ''],
+    tokenCache,
     fetch
   };
 
-  return new ClientBuilder()
+  const builder = new ClientBuilder()
     .withProjectKey(projectKey)
     .withClientCredentialsFlow(authMiddlewareOptionsScopes)
     .withHttpMiddleware(httpMiddlewareOptions)
     .withLoggerMiddleware()
     .build();
+
+  return builder;
 }
 
 // Client Anonymous Flow
@@ -104,6 +127,7 @@ export function createCtpClientWithCredentials(
       }
     },
     scopes: [apiDataPassManageCustomers.SCOPES || ''],
+    tokenCache,
     fetch
   };
 

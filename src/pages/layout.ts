@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 import Router from '../services/router/router';
 import HeaderView from '../components/header';
 import FooterView from '../components/footer';
@@ -8,8 +9,7 @@ import LoginView from './login/login';
 import SignupView from './signup/signup';
 import NotFoundView from './404/404';
 import CartView from './cart/cart';
-
-import { signupCreate } from '../services/signupCustomer/signupCustomer';
+import ProfileView from './profile/profile';
 
 export default class Layout {
   private header: HeaderView;
@@ -23,6 +23,7 @@ export default class Layout {
   private signup: SignupView;
   private notFound: NotFoundView;
   private cart: CartView;
+  private profile: ProfileView;
 
   constructor() {
     this.header = new HeaderView();
@@ -34,8 +35,10 @@ export default class Layout {
     this.signup = new SignupView();
     this.notFound = new NotFoundView();
     this.cart = new CartView();
+    this.profile = new ProfileView();
     this.slot = document.createElement('main');
     this.handleRouteChange();
+    this.handleLogin();
   }
 
   private renderPage(route: string): void {
@@ -52,7 +55,7 @@ export default class Layout {
           break;
         }
         case Router.pages.catalog: {
-          pageHTML = this.catalog.render;
+          pageHTML = '';
           break;
         }
         case Router.pages.login: {
@@ -63,12 +66,15 @@ export default class Layout {
           pageHTML = this.signup.render;
           break;
         }
+        case Router.pages.profile: {
+          pageHTML = '';
+          break;
+        }
         case Router.pages.cart: {
           pageHTML = this.cart.render;
           break;
         }
         default: {
-          Router.navigate(Router.pages.notFound);
           pageHTML = this.notFound.render;
         }
       }
@@ -76,13 +82,30 @@ export default class Layout {
       Router.navigate(Router.pages.main);
       pageHTML = this.main.render;
     }
-    this.slot.innerHTML = pageHTML;
+    if (route === Router.pages.catalog) {
+      this.slot.append(this.catalog.render());
+    } else if (route === Router.pages.profile) {
+      this.slot.append(this.profile.render());
+    } else {
+      this.slot.innerHTML = pageHTML;
+    }
   }
 
   private handleRouteChange(): void {
     window.addEventListener('hashchange', () => {
       const { hash } = window.location;
       this.renderPage(hash);
+    });
+  }
+
+  private handleLogin(): void {
+    window.addEventListener('user-registration-success', () => {
+      this.header.container.remove();
+      this.header = new HeaderView();
+      document.body.prepend(this.header.render());
+      document
+        .querySelector('.profile_container-item.hidden')
+        ?.classList.remove('hidden');
     });
   }
 
