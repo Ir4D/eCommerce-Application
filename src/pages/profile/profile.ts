@@ -1,6 +1,8 @@
 import { Customer } from '@commercetools/platform-sdk';
 import { QueryCustomerById } from '../../api/apiMethods';
 import Component from '../../components/abstract/component';
+import Address from './address';
+import PersonalInfo from './personalInfo';
 
 export default class ProfileView extends Component {
   private errorModal: HTMLDialogElement;
@@ -28,14 +30,44 @@ export default class ProfileView extends Component {
   }
 
   private renderProfile(content: Customer): void {
-    const emailItem = document.createElement('div');
-    emailItem.classList.add('item-email');
-    emailItem.innerHTML = `<p>${content.email}</p>`;
-    this.container.append(emailItem);
-    const nameItem = document.createElement('div');
-    nameItem.classList.add('item-name');
-    nameItem.innerHTML = `<p>${content.firstName} ${content.lastName}</p>`;
-    this.container.append(nameItem);
+    const createDivWithClass = (className: string): HTMLDivElement =>
+      Object.assign(document.createElement('div'), { className });
+    const createAddressDiv = (address: Address): HTMLDivElement =>
+      Object.assign(document.createElement('div'), {
+        innerHTML: `<p>Address: ${address.getFormattedAddress()}${
+          address.isDefaultShipping ? ' / Default Shipping Address' : ''
+        }${address.isDefaultBilling ? ' / Default Billing Address' : ''}${
+          address.isShippingAddress ? ' / Shipping Address' : ''
+        }${address.isBillingAddress ? ' / Billing Address' : ''}</p>`
+      });
+    const profileInfo = createDivWithClass('personal-info');
+    profileInfo.innerHTML = `<div>${new PersonalInfo(
+      content.id,
+      content.firstName,
+      content.lastName,
+      content.dateOfBirth,
+      content.email
+    ).getFormattedPersonalInfo()}</div>`;
+    content.addresses.forEach(
+      (addressData) =>
+        addressData.id &&
+        profileInfo.appendChild(
+          createAddressDiv(
+            new Address(
+              addressData.id,
+              addressData.streetName,
+              addressData.streetNumber,
+              addressData.city,
+              addressData.country,
+              content.defaultShippingAddressId === addressData.id,
+              content.defaultBillingAddressId === addressData.id,
+              content.shippingAddressIds?.includes(addressData.id) || false,
+              content.billingAddressIds?.includes(addressData.id) || false
+            )
+          )
+        )
+    );
+    this.container.append(profileInfo);
   }
 
   public render(): HTMLElement {
