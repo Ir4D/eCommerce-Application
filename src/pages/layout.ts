@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 import Router from '../services/router/router';
 import HeaderView from '../components/header';
 import FooterView from '../components/footer';
@@ -34,11 +35,10 @@ export default class Layout {
     this.cart = new CartView();
     this.slot = document.createElement('main');
     this.handleRouteChange();
-    this.handleLogin();
   }
 
-  private renderPage(route: string): void {
-    this.slot.innerHTML = '';
+  private async renderPage(route: string): Promise<void> {
+    // this.slot.innerHTML = '';
     let pageHTML: string;
     if (route) {
       switch (route) {
@@ -51,7 +51,10 @@ export default class Layout {
           break;
         }
         case Router.pages.catalog: {
-          pageHTML = this.catalog.render;
+          pageHTML = '';
+          this.slot.innerHTML = '';
+          this.slot.append(await this.catalog.render());
+          console.log('catalog', route);
           break;
         }
         case Router.pages.login: {
@@ -67,33 +70,32 @@ export default class Layout {
           break;
         }
         default: {
-          pageHTML = this.notFound.render;
+          console.log('default', route);
+          if (route.includes('catalog/')) {
+            pageHTML = '';
+            this.slot.append(this.catalog.renderItemPage(route));
+          } else {
+            pageHTML = this.notFound.render;
+          }
         }
       }
     } else {
       Router.navigate(Router.pages.main);
       pageHTML = this.main.render;
     }
-    this.slot.innerHTML = pageHTML;
+    if (!route.includes(Router.pages.catalog)) {
+      this.slot.innerHTML = pageHTML;
+    }
   }
 
   private handleRouteChange(): void {
-    window.addEventListener('hashchange', () => {
-      const { hash } = window.location;
-      this.renderPage(hash);
-    });
+    window.addEventListener('hashchange', this.routeChange);
   }
 
-  private handleLogin(): void {
-    window.addEventListener('user-registration-success', () => {
-      this.header.container.remove();
-      this.header = new HeaderView();
-      document.body.prepend(this.header.render());
-      document
-        .querySelector('.profile_container-item.hidden')
-        ?.classList.remove('hidden');
-    });
-  }
+  private routeChange = (): void => {
+    const { hash } = window.location;
+    this.renderPage(hash);
+  };
 
   public render(container: HTMLElement): void {
     container.append(this.header.render());

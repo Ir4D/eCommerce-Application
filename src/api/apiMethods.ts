@@ -1,5 +1,9 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import { createApiBuilderFromCtpClient } from '@commercetools/platform-sdk';
+import {
+  ClientResponse,
+  ProductProjectionPagedQueryResponse,
+  createApiBuilderFromCtpClient
+} from '@commercetools/platform-sdk';
 import { apiData } from './apiData';
 import { createCtpClient } from './BuildClients';
 
@@ -22,15 +26,17 @@ export function GetProjectInfo(): void {
 }
 
 // Get info about published products
-export function GetProductsPublished(): void {
+export function GetProductsPublished(): Promise<
+  ClientResponse<ProductProjectionPagedQueryResponse>
+> {
   const getProducts = () => {
     return apiRoot.productProjections().get().execute();
   };
-  getProducts()
-    .then(({ body }) => {
-      console.log(body);
-    })
-    .catch(console.error);
+  return getProducts();
+  // .then(({ body }) => {
+  //   console.log(body);
+  // })
+  // .catch(console.error);
 }
 
 // Create a new customer
