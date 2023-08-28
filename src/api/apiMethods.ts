@@ -2,7 +2,8 @@
 import {
   ClientResponse,
   ProductProjectionPagedQueryResponse,
-  createApiBuilderFromCtpClient
+  createApiBuilderFromCtpClient,
+  Project
 } from '@commercetools/platform-sdk';
 import { apiData } from './apiData';
 import { createCtpClient } from './BuildClients';

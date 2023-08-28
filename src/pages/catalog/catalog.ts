@@ -1,13 +1,14 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 import {
   ClientResponse,
+  ProductProjection,
   ProductProjectionPagedQueryResponse
 } from '@commercetools/platform-sdk';
 import { GetProductsPublished } from '../../api/apiMethods';
-import Page from '../../components/abstract/page';
+import AsyncPage from '../../components/abstract/asyncPage';
 import Router from '../../services/router/router';
 
-export default class CatalogView extends Page {
-  // private container: HTMLElement;
+export default class CatalogView extends AsyncPage {
   private errorModal: HTMLDialogElement;
   private catalog:
     | ClientResponse<ProductProjectionPagedQueryResponse>
@@ -17,70 +18,111 @@ export default class CatalogView extends Page {
     super();
     this.container.classList.add('catalog-container');
     this.errorModal = document.createElement('dialog');
-    // this.getCatalog();
     this.container.append(this.errorModal);
     this.errorModal.addEventListener('click', () => {
       this.errorModal.close();
     });
   }
 
-  private async getCatalog(): Promise<void> {
-    GetProductsPublished()
-      .then((body) => {
-        this.catalog = body;
-        this.renderCatalog(body);
-        console.log('catalog', this.catalog);
-      })
-      .catch((error) => {
-        // this.catalog = undefined;
+  public async setCatalog(): Promise<void> {
+    try {
+      this.catalog = await GetProductsPublished();
+      this.renderCatalog();
+    } catch {
+      (error: string): void => {
         this.errorModal.innerText = error;
         this.errorModal.showModal();
-      });
+      };
+    }
   }
 
-  private renderCatalog(
-    content: ClientResponse<ProductProjectionPagedQueryResponse>
-  ): void {
-    content.body.results.forEach((catalogItem) => {
-      const catalogItemLink = document.createElement('a');
-      catalogItemLink.classList.add('card-item-link');
-      const catalogItemCard = document.createElement('div');
-      catalogItemCard.classList.add('catalog-card');
-      catalogItemLink.href = `${Router.pages.catalog}/${catalogItem.id}`;
-      catalogItemCard.setAttribute('data-id', catalogItem.id);
-      const cardHeader = document.createElement('h6');
-      cardHeader.innerText = catalogItem.name.en;
+  public getCatalog():
+    | ClientResponse<ProductProjectionPagedQueryResponse>
+    | undefined {
+    return this.catalog;
+  }
 
-      catalogItemCard.append(cardHeader);
-      catalogItemLink.append(catalogItemCard);
-
+  private renderCatalog(): void {
+    this.container.classList.remove('item-page');
+    this.catalog?.body.results.forEach((catalogItem) => {
+      const catalogItemLink = this.renderCatalogItemCard(catalogItem);
       this.container.append(catalogItemLink);
     });
   }
 
+  private renderCatalogItemCard(catalogItem: ProductProjection): HTMLElement {
+    const catalogItemLink = document.createElement('a');
+    catalogItemLink.classList.add('card-item-link');
+    catalogItemLink.href = `${Router.pages.catalog}/${catalogItem.id}`;
+
+    const catalogItemCard = document.createElement('div');
+    catalogItemCard.classList.add('catalog-card');
+    catalogItemCard.setAttribute('data-id', catalogItem.id);
+
+    const cardImage = document.createElement('div');
+    cardImage.classList.add('catalog-card-image');
+    if (catalogItem.masterVariant.images) {
+      cardImage.style.background = `center / contain no-repeat url('${catalogItem.masterVariant.images[0].url}')`;
+    }
+
+    const cardName = document.createElement('h6');
+    cardName.innerText = catalogItem.name.en;
+
+    catalogItemCard.append(cardImage);
+    catalogItemCard.append(cardName);
+    catalogItemLink.append(catalogItemCard);
+
+    return catalogItemLink;
+  }
+
   public renderItemPage(route: string): HTMLElement {
     // this.container.innerHTML = '';
-    const catalogIds = this.catalog?.body.results.map((catalogItem) => {
-      return catalogItem.id;
-    });
+    this.container.classList.add('item-page');
     const cardId = route.slice(9);
     console.log('id', cardId);
-    if (catalogIds?.includes(cardId)) {
-      this.container.innerHTML = cardId;
+    if (this.verifiCardId(route, this.catalog)) {
+      const chosenItem = this.catalog?.body.results.find(
+        (catalogItem) => catalogItem.id === cardId
+      );
+      console.log('chosen', chosenItem);
+      const itemPageImageContainer = document.createElement('div');
+      itemPageImageContainer.classList.add('item-page-image-container');
+      chosenItem?.masterVariant.images?.forEach((image) => {
+        const itemPageImage = document.createElement('img');
+        itemPageImage.classList.add('item-page-image');
+        itemPageImage.src = `${image.url}`;
+        itemPageImageContainer.append(itemPageImage);
+      });
+
+      const descriptionBlock = document.createElement('div');
+      descriptionBlock.classList.add('item-page-description');
+
+      this.container.innerHTML = '';
+      this.container.append(itemPageImageContainer);
     } else {
       Router.navigate(Router.pages.notFound);
     }
-    console.log('render itemPage', route);
-    // console.log('render itemPage container', this.container);
-    console.log('render itemPage catalog', this.catalog);
-
     return this.container;
+  }
+
+  public verifiCardId(
+    route: string,
+    catalog: ClientResponse<ProductProjectionPagedQueryResponse> | undefined
+  ): boolean {
+    if (!catalog) {
+      return false;
+    }
+    const catalogIds = catalog?.body.results.map(
+      (catalogItem) => catalogItem.id
+    );
+    const cardId = route.slice(9);
+    return catalogIds?.includes(cardId);
   }
 
   public async render(): Promise<HTMLElement> {
     this.container.innerHTML = '';
-    await this.getCatalog();
-    console.log('render catalog container', this.container);
+    await this.setCatalog();
+    console.log('render catalog container', this.catalog);
     return this.container;
   }
 }

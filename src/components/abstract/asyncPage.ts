@@ -1,4 +1,4 @@
-export default abstract class Page {
+export default abstract class AsyncPage {
   protected container: HTMLElement;
 
   constructor() {

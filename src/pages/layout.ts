@@ -1,4 +1,8 @@
 /* eslint-disable max-lines-per-function */
+import {
+  ClientResponse,
+  ProductProjectionPagedQueryResponse
+} from '@commercetools/platform-sdk';
 import Router from '../services/router/router';
 import HeaderView from '../components/header';
 import FooterView from '../components/footer';
@@ -9,11 +13,15 @@ import LoginView from './login/login';
 import SignupView from './signup/signup';
 import NotFoundView from './404/404';
 import CartView from './cart/cart';
+import { GetProductsPublished } from '../api/apiMethods';
 
 export default class Layout {
   private header: HeaderView;
   private footer: FooterView;
   private slot: HTMLElement;
+  private catalogBase:
+    | ClientResponse<ProductProjectionPagedQueryResponse>
+    | undefined;
 
   private main: MainView;
   private about: AboutView;
@@ -34,6 +42,7 @@ export default class Layout {
     this.notFound = new NotFoundView();
     this.cart = new CartView();
     this.slot = document.createElement('main');
+    // this.catalogBase = this.catalog.getCatalog();
     this.handleRouteChange();
   }
 
@@ -72,8 +81,20 @@ export default class Layout {
         default: {
           console.log('default', route);
           if (route.includes('catalog/')) {
-            pageHTML = '';
-            this.slot.append(this.catalog.renderItemPage(route));
+            const cardId = route.slice(9);
+            const catalogBase = await GetProductsPublished();
+            console.log(
+              'from layout',
+              this.catalogBase,
+              cardId,
+              this.catalog.verifiCardId(route, this.catalog.getCatalog())
+            );
+            if (this.catalog.verifiCardId(route, catalogBase)) {
+              pageHTML = '';
+              this.slot.append(this.catalog.renderItemPage(route));
+            } else {
+              pageHTML = this.notFound.render;
+            }
           } else {
             pageHTML = this.notFound.render;
           }
