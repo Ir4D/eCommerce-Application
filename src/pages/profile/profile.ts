@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 import { Customer } from '@commercetools/platform-sdk';
 import { QueryCustomerById } from '../../api/apiMethods';
 import Component from '../../components/abstract/component';
@@ -9,12 +10,26 @@ export default class ProfileView extends Component {
 
   constructor() {
     super();
-    this.container.classList.add('profile-container');
+    this.container.classList.add('profile');
     this.errorModal = document.createElement('dialog');
+    this.renderHeading();
     this.refreshProfile();
   }
 
   private customerId: string | null = localStorage.getItem('customerID');
+
+  public renderHeading(): void {
+    const profileWrapper = document.createElement('div');
+    profileWrapper.classList.add('profile-title_wrapper');
+    const profileBg = document.createElement('div');
+    profileBg.classList.add('profile-background-image');
+    const profileTitle = document.createElement('h1');
+    profileTitle.classList.add('profile-title');
+    profileTitle.innerText = 'Your profile';
+    profileWrapper.appendChild(profileBg);
+    profileBg.appendChild(profileTitle);
+    this.container.appendChild(profileWrapper);
+  }
 
   public refreshProfile(): void {
     if (this.customerId) {
@@ -30,41 +45,28 @@ export default class ProfileView extends Component {
   }
 
   private renderProfile(content: Customer): void {
-    const createDivWithClass = (className: string): HTMLDivElement =>
-      Object.assign(document.createElement('div'), { className });
-    const createAddressDiv = (address: Address): HTMLDivElement =>
-      Object.assign(document.createElement('div'), {
-        innerHTML: `<p>Address: ${address.getFormattedAddress()}${
-          address.isDefaultShipping ? ' / Default Shipping Address' : ''
-        }${address.isDefaultBilling ? ' / Default Billing Address' : ''}${
-          address.isShippingAddress ? ' / Shipping Address' : ''
-        }${address.isBillingAddress ? ' / Billing Address' : ''}</p>`
-      });
-    const profileInfo = createDivWithClass('personal-info');
-    profileInfo.innerHTML = `<div>${new PersonalInfo(
+    const profileInfo = new PersonalInfo(
       content.id,
       content.firstName,
       content.lastName,
       content.dateOfBirth,
       content.email
-    ).getFormattedPersonalInfo()}</div>`;
+    ).render();
     content.addresses.forEach(
       (addressData) =>
         addressData.id &&
         profileInfo.appendChild(
-          createAddressDiv(
-            new Address(
-              addressData.id,
-              addressData.streetName,
-              addressData.streetNumber,
-              addressData.city,
-              addressData.country,
-              content.defaultShippingAddressId === addressData.id,
-              content.defaultBillingAddressId === addressData.id,
-              content.shippingAddressIds?.includes(addressData.id) || false,
-              content.billingAddressIds?.includes(addressData.id) || false
-            )
-          )
+          new Address(
+            addressData.id,
+            addressData.streetName,
+            addressData.streetNumber,
+            addressData.city,
+            addressData.country,
+            content.defaultShippingAddressId === addressData.id,
+            content.defaultBillingAddressId === addressData.id,
+            content.shippingAddressIds?.includes(addressData.id) || false,
+            content.billingAddressIds?.includes(addressData.id) || false
+          ).render()
         )
     );
     this.container.append(profileInfo);
