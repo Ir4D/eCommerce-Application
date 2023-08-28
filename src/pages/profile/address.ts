@@ -10,6 +10,7 @@ export default class Address {
   public streetName: string | undefined;
   public streetNumber: string | undefined;
   public city: string | undefined;
+  public state: string | undefined;
   public country: string | undefined;
   public postalCode: string | undefined;
   public isDefaultShipping: boolean;
@@ -23,6 +24,7 @@ export default class Address {
     streetName: string | undefined,
     streetNumber: string | undefined,
     city: string | undefined,
+    state: string | undefined,
     country: string | undefined,
     postalCode: string | undefined,
     isDefaultShipping: boolean,
@@ -34,6 +36,7 @@ export default class Address {
     this.streetName = streetName;
     this.streetNumber = streetNumber;
     this.city = city;
+    this.state = state;
     this.country = country;
     this.postalCode = postalCode;
     this.isDefaultShipping = isDefaultShipping;
@@ -71,6 +74,11 @@ export default class Address {
       'City:',
       `${this.city}`
     ).render();
+    const adrState = new InfoElem(
+      'address-state',
+      'State:',
+      `${this.state ? this.state : '-'}`
+    ).render();
     const adrCountry = new InfoElem(
       'address-country',
       'Country:',
@@ -89,7 +97,14 @@ export default class Address {
         adrTitle.appendChild(label);
       }
     }
-    addressItem.append(adrTitle, adrStreet, adrCity, adrCountry, adrPostalCode);
+    addressItem.append(
+      adrTitle,
+      adrStreet,
+      adrCity,
+      adrState,
+      adrCountry,
+      adrPostalCode
+    );
     this.container.append(addressItem);
   }
 

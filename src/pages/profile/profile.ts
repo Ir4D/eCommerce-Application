@@ -60,6 +60,7 @@ export default class ProfileView extends Component {
             addressData.streetName,
             addressData.streetNumber,
             addressData.city,
+            addressData.state,
             addressData.country,
             addressData.postalCode,
             content.defaultShippingAddressId === addressData.id,
