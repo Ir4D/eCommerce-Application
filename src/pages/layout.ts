@@ -14,6 +14,7 @@ import SignupView from './signup/signup';
 import NotFoundView from './404/404';
 import CartView from './cart/cart';
 import { GetProductsPublished } from '../api/apiMethods';
+import ProfileView from './profile/profile';
 
 export default class Layout {
   private header: HeaderView;
@@ -30,6 +31,7 @@ export default class Layout {
   private signup: SignupView;
   private notFound: NotFoundView;
   private cart: CartView;
+  private profile: ProfileView;
 
   constructor() {
     this.header = new HeaderView();
@@ -41,9 +43,11 @@ export default class Layout {
     this.signup = new SignupView();
     this.notFound = new NotFoundView();
     this.cart = new CartView();
+    this.profile = new ProfileView();
     this.slot = document.createElement('main');
     // this.catalogBase = this.catalog.getCatalog();
     this.handleRouteChange();
+    // this.handleLogin();
   }
 
   private async renderPage(route: string): Promise<void> {
@@ -72,6 +76,10 @@ export default class Layout {
         }
         case Router.pages.signup: {
           pageHTML = this.signup.render;
+          break;
+        }
+        case Router.pages.profile: {
+          pageHTML = '';
           break;
         }
         case Router.pages.cart: {
@@ -104,7 +112,11 @@ export default class Layout {
       Router.navigate(Router.pages.main);
       pageHTML = this.main.render;
     }
-    if (!route.includes(Router.pages.catalog)) {
+    if (route === Router.pages.catalog) {
+      this.slot.append(await this.catalog.render());
+    } else if (route === Router.pages.profile) {
+      this.slot.append(this.profile.render());
+    } else {
       this.slot.innerHTML = pageHTML;
     }
   }

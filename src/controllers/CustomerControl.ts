@@ -1,7 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable max-lines-per-function */
-/* eslint-disable no-console */
-
 import { createApiBuilderFromCtpClient } from '@commercetools/platform-sdk';
 import { apiData } from '../api/apiData';
 import {
@@ -95,9 +93,9 @@ export class Customer {
           }
         );
         window.dispatchEvent(registerSuccessEvent);
-        document
-          .querySelector('.profile_container-item.hidden')
-          ?.classList.remove('hidden');
+        document.querySelector('.logged-item')?.classList.remove('hidden');
+        document.querySelector('.nav-item_login')?.classList.add('hidden');
+        document.querySelector('.nav-item_signup')?.classList.add('hidden');
       })
       .catch((/* error */) => {
         const registerRejectEvent = new CustomEvent('user-registration-fail', {
@@ -128,15 +126,14 @@ export class Customer {
         })
         .execute();
     };
+
     authenticateCustomer()
       .then(({ body }) => {
         localStorage.setItem('customerID', body.customer.id);
+        document.querySelector('.logged-item')?.classList.remove('hidden');
+        document.querySelector('.nav-item_login')?.classList.add('hidden');
+        document.querySelector('.nav-item_signup')?.classList.add('hidden');
         window.location.hash = 'main';
-        document
-          .querySelector('.profile_container-item.hidden')
-          ?.classList.remove('hidden');
-        /*    console.log(body.customer.id);
-        console.log(body.customer.email); */
       })
       .catch(() => {
         this.createMsg('Please, be sure your login and password are correct');

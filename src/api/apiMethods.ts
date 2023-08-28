@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import {
   ClientResponse,
@@ -6,13 +7,19 @@ import {
   Project
 } from '@commercetools/platform-sdk';
 import { apiData } from './apiData';
-import { createCtpClient } from './BuildClients';
+import { createCtpClient, createCtpClientExistingFlow } from './BuildClients';
 
 const apiRoot = createApiBuilderFromCtpClient(createCtpClient()).withProjectKey(
   {
     projectKey: apiData.PROJECT_KEY
   }
 );
+
+const apiRootProfile = createApiBuilderFromCtpClient(
+  createCtpClientExistingFlow()
+).withProjectKey({
+  projectKey: apiData.PROJECT_KEY
+});
 
 // Get info about the project - needs Admin Client API with the scope "manage_project:rss-ecom-app"
 export function GetProjectInfo(): void {
@@ -27,6 +34,7 @@ export function GetProjectInfo(): void {
 }
 
 // Get info about published products
+
 export function GetProductsPublished(): Promise<
   ClientResponse<ProductProjectionPagedQueryResponse>
 > {
@@ -57,24 +65,33 @@ export function CreateCustomer(EMAIL: string, PASSWORD: string): void {
   createCustomer()
     .then(({ body }) => {
       console.log('create customer from methods', body.customer.id);
+      console.log('create customer from methods', body.customer.id);
       console.log(body.customer.email);
     })
     .catch(console.error);
 }
 
-// Request info about a customer by its ID
-export function QueryCustomerById(CUSTOMER_ID: string): void {
-  const queryCustomer = (customerID: string) => {
-    return apiRoot.customers().withId({ ID: customerID }).get().execute();
-  };
-  queryCustomer(CUSTOMER_ID)
-    .then(({ body }) => {
-      console.log(body.email);
-    })
-    .catch(console.error);
+// Request info about a customer using existing Token Flow
+export function QueryCustomer(): Promise<ClientResponse> {
+  return apiRootProfile.me().get().execute();
 }
 
 // Request info about a customer by its ID
+export function QueryCustomerById(
+  CUSTOMER_ID: string
+): Promise<ClientResponse> {
+  return apiRootProfile.customers().withId({ ID: CUSTOMER_ID }).get().execute();
+  // const queryCustomer = (customerID: string) => {
+  //   return apiRoot.customers().withId({ ID: customerID }).get().execute();
+  // };
+  // queryCustomer(CUSTOMER_ID)
+  //   .then(({ body }) => {
+  //     console.log(body.email);
+  //   })
+  //   .catch(console.error);
+}
+
+// Request info about a customer by its EMAIL
 export function QueryCustomerByEmail(EMAIL: string): void {
   const returnCustomerByEmail = (customerEmail: string) => {
     return apiRoot
