@@ -1,3 +1,7 @@
+/* eslint-disable max-lines-per-function */
+/* eslint-disable no-restricted-syntax */
+import InfoElem from './profileElem';
+
 const createDivElem = (className: string): HTMLElement =>
   Object.assign(document.createElement('div'), { className });
 
@@ -7,6 +11,7 @@ export default class Address {
   public streetNumber: string | undefined;
   public city: string | undefined;
   public country: string | undefined;
+  public postalCode: string | undefined;
   public isDefaultShipping: boolean;
   public isDefaultBilling: boolean;
   public isShippingAddress: boolean;
@@ -19,6 +24,7 @@ export default class Address {
     streetNumber: string | undefined,
     city: string | undefined,
     country: string | undefined,
+    postalCode: string | undefined,
     isDefaultShipping: boolean,
     isDefaultBilling: boolean,
     isShippingAddress: boolean,
@@ -29,6 +35,7 @@ export default class Address {
     this.streetNumber = streetNumber;
     this.city = city;
     this.country = country;
+    this.postalCode = postalCode;
     this.isDefaultShipping = isDefaultShipping;
     this.isDefaultBilling = isDefaultBilling;
     this.isShippingAddress = isShippingAddress;
@@ -40,19 +47,49 @@ export default class Address {
 
   public createAddressElem(): void {
     const addressItem = createDivElem('address-item');
-    addressItem.innerHTML = `
-      <div class="address-title">${
-        this.isBillingAddress ? 'Billing Address' : ''
-      } ${this.isDefaultBilling ? '/ Default Billing Address' : ''}</div>
-      <div class="address-title">${
-        this.isShippingAddress ? 'Shipping Address' : ''
-      } ${this.isDefaultShipping ? '/ Default Shipping Address' : ''}</div>
-      <div class="address-street">Street: ${
-        this.streetNumber ? this.streetNumber : ''
-      } ${this.streetName}</div>
-      <div class="address-city">City: ${this.city}</div>
-      <div class="address-country">Country: ${this.country}</div>
-    `;
+    const adrTitle = createDivElem('address-title');
+    if (this.isBillingAddress) {
+      adrTitle.classList.add('adr-billing');
+    }
+    if (this.isShippingAddress) {
+      adrTitle.classList.add('adr-shipping');
+    }
+    if (this.isDefaultBilling) {
+      adrTitle.classList.add('adr-billing_deafult');
+    }
+    if (this.isDefaultShipping) {
+      adrTitle.classList.add('adr-shipping_deafult');
+    }
+    adrTitle.innerHTML = 'Address:';
+    const adrStreet = new InfoElem(
+      'address-street',
+      'Street:',
+      `${this.streetName} ${this.streetNumber ? this.streetNumber : ''}`
+    ).render();
+    const adrCity = new InfoElem(
+      'address-city',
+      'City:',
+      `${this.city}`
+    ).render();
+    const adrCountry = new InfoElem(
+      'address-country',
+      'Country:',
+      `${this.country}`
+    ).render();
+    const adrPostalCode = new InfoElem(
+      'address-post',
+      'Postal Code:',
+      `${this.postalCode}`
+    ).render();
+    const { classList } = adrTitle;
+    for (const className of classList) {
+      if (className.startsWith('adr-')) {
+        const label = document.createElement('div');
+        label.textContent = className.replace('adr-', '').replace('_', ' ');
+        adrTitle.appendChild(label);
+      }
+    }
+    addressItem.append(adrTitle, adrStreet, adrCity, adrCountry, adrPostalCode);
     this.container.append(addressItem);
   }
 

@@ -38,17 +38,30 @@
   border-radius: 10px;
 }
 
-.profile-person * {
+.profile-person *,
+.address-item * {
   display: flex;
   max-width: 550px;
   padding: 0.25em;
   padding-left: 1em;
 }
 
+.profile-info,
+.address-title {
+  width: 22em;
+  color: #274c5b;
+  font-size: 22px;
+  font-weight: 700;
+}
+
 .first-name-title,
 .last-name-title,
 .dob-title,
-.email-title {
+.email-title,
+.address-street-title,
+.address-city-title,
+.address-country-title,
+.address-post-title {
   width: 8em;
   color: #274c5b;
   font-size: 22px;
@@ -58,7 +71,24 @@
 .first-name-data,
 .last-name-data,
 .dob-data,
-.email-data {
+.email-data,
+.address-street-data,
+.address-city-data,
+.address-country-data,
+.address-post-data {
   margin-left: 3em;
   font-size: 22px;
+}
+
+.adr-billing *,
+.adr-shipping *,
+.adr-billing_deafult *,
+.adr-shipping_deafult * {
+  display: block;
+  border-radius: 4px;
+  margin-left: 4px;
+  padding: 4px 8px;
+  font-size: 14px;
+  background-color: #dcf2e3;
+  color: #274c5b;
 }

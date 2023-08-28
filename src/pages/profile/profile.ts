@@ -1,4 +1,3 @@
-/* eslint-disable max-lines-per-function */
 import { Customer } from '@commercetools/platform-sdk';
 import { QueryCustomerById } from '../../api/apiMethods';
 import Component from '../../components/abstract/component';
@@ -62,6 +61,7 @@ export default class ProfileView extends Component {
             addressData.streetNumber,
             addressData.city,
             addressData.country,
+            addressData.postalCode,
             content.defaultShippingAddressId === addressData.id,
             content.defaultBillingAddressId === addressData.id,
             content.shippingAddressIds?.includes(addressData.id) || false,

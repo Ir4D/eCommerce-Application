@@ -30,23 +30,31 @@ export default class PersonalInfo {
 
   public createElement(): void {
     const profilePerson = createDivElem('profile-person');
+    const profileInfo = createDivElem('profile-info');
+    profileInfo.innerHTML = 'Personal information:';
     const elemFirstName = new InfoElem(
       'first-name',
-      'First name',
+      'First name:',
       `${this.firstName}`
     ).render();
     const elemLastName = new InfoElem(
       'last-name',
-      'Last name',
+      'Last name:',
       `${this.lastName}`
     ).render();
     const elemDOB = new InfoElem(
       'dob',
-      'Date of birth',
+      'Date of birth:',
       `${this.dateOfBirth}`
     ).render();
-    const elemEmail = new InfoElem('email', 'Email', `${this.email}`).render();
-    profilePerson.append(elemFirstName, elemLastName, elemDOB, elemEmail);
+    const elemEmail = new InfoElem('email', 'Email:', `${this.email}`).render();
+    profilePerson.append(
+      profileInfo,
+      elemFirstName,
+      elemLastName,
+      elemDOB,
+      elemEmail
+    );
     this.container.appendChild(profilePerson);
   }
 
