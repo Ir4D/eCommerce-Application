@@ -1,4 +1,5 @@
 .catalog-container {
+  max-width: 1920px;
   display: grid;
   gap: 1vw;
   grid-template-columns: 1fr 1fr 1fr 1fr;
@@ -25,7 +26,7 @@
 
 .catalog-card-image {
   height: 30vw;
-  width: 20vw;
+  width: 18vw;
 }
 
 .item-page-image-container {
