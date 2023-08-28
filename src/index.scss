@@ -745,36 +745,6 @@ h6 {
   text-align: center;
 }
 
-// .profile-container {
-//   background-color: $bg-dark;
-//   position: relative;
-
-//   &-content_wrapper {
-//     position: relative;
-//     text-align: center;
-//   }
-
-//   &-background-image {
-//     position: relative;
-//     width: 100%;
-//     padding-top: 23.47%;
-//     background:
-//       url('../src/assets/images/patterns_profile.png') no-repeat,
-//       url('../src/assets/images/banner_profile.png') no-repeat;
-//     background-size: contain;
-//     text-align: center;
-//   }
-
-//   &-title {
-//     position: absolute;
-//     top: 50%;
-//     left: 50%;
-//     transform: translate(-50%, -50%);
-//     margin: 0;
-//     padding: 0;
-//   }
-// }
-
 @media only screen and (max-width: 1000px) {
   .sign-up-modal[open] {
     width: 60vw;
