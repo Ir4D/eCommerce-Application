@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 import {
   CategoryPagedQueryResponse,
@@ -14,7 +15,7 @@ export default class CatalogView extends Component {
   private errorModal: HTMLDialogElement;
   private currentCategory: string;
   private cardContainer: HTMLElement;
-  private controls: HTMLElement;
+  private controls: HTMLFormElement;
 
   constructor() {
     super();
@@ -22,7 +23,7 @@ export default class CatalogView extends Component {
     this.errorModal = document.createElement('dialog');
     this.cardContainer = document.createElement('div');
     this.cardContainer.classList.add('catalog-card-container');
-    this.controls = document.createElement('div');
+    this.controls = document.createElement('form');
     this.controls.classList.add('catalog-controls');
     this.container.append(this.errorModal);
     this.errorModal.addEventListener('click', () => {
@@ -47,7 +48,34 @@ export default class CatalogView extends Component {
       this.currentCategory = target.value;
       this.fillCardContainer();
     });
+
+    const searchInput = document.createElement('input');
+    searchInput.placeholder = 'Search...';
+    searchInput.classList.add('catalog-search-input');
+    searchInput.addEventListener('input', (e) => {
+      const target = e.target as HTMLInputElement;
+      this.fillCardContainer(target.value);
+    });
+
+    const searchButton = document.createElement('button');
+    searchButton.type = 'submit';
+    searchButton.classList.add('catalog-search-button');
+
+    const abcSortButton = document.createElement('button');
+    const priceSortButton = document.createElement('button');
+    const sortButtons = [abcSortButton, priceSortButton];
+    sortButtons.forEach((button) => {
+      button.classList.add('catalog-sort-button');
+    });
+    abcSortButton.classList.add('abc');
+    priceSortButton.classList.add('price');
+
     this.controls.append(categorySelect);
+    this.controls.append(searchInput);
+    this.controls.append(searchButton);
+    sortButtons.forEach((button) => {
+      this.controls.append(button);
+    });
     this.container.append(this.controls);
 
     /* cards container */
@@ -83,22 +111,29 @@ export default class CatalogView extends Component {
     return catalogItemLink;
   }
 
-  private fillCardContainer(): void {
+  private fillCardContainer(searchPattern?: string): void {
+    const catalog = State.catalog?.body.results;
+    const categories = State.categories?.body.results;
     this.cardContainer.innerHTML = '';
     const categoryMap: Map<string, string> = new Map();
-    State.categories?.body.results.forEach((category) => {
+    categories?.forEach((category) => {
       categoryMap.set(`${category.name.en}`, `${category.id}`);
     });
     let outputArr: ProductProjection[] | undefined;
-    if (this.currentCategory === 'All categories') {
-      outputArr = State.catalog?.body.results;
+    if (searchPattern) {
+      outputArr = catalog?.filter((item) =>
+        item.name.en.toLowerCase().includes(searchPattern.toLowerCase())
+      );
+    } else if (this.currentCategory === 'All categories') {
+      outputArr = catalog;
     } else {
-      outputArr = State.catalog?.body.results.filter((item) => {
+      outputArr = catalog?.filter((item) => {
         return item.categories.some(
-          (cat) => cat.id === categoryMap.get(this.currentCategory)
+          (category) => category.id === categoryMap.get(this.currentCategory)
         );
       });
     }
+
     outputArr?.forEach((catalogItem) => {
       const catalogItemLink = this.renderCatalogItemCard(catalogItem);
       this.cardContainer.append(catalogItemLink);
@@ -133,7 +168,7 @@ export default class CatalogView extends Component {
     return this.container;
   }
 
-  public verifiCardId(
+  private verifiCardId(
     route: string,
     catalog: ClientResponse<ProductProjectionPagedQueryResponse> | undefined
   ): boolean {
