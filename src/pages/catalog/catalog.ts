@@ -11,6 +11,7 @@ import {
 } from '../../api/apiMethods';
 import AsyncPage from '../../components/abstract/asyncPage';
 import Router from '../../services/router/router';
+import State from '../../services/state';
 
 export default class CatalogView extends AsyncPage {
   private errorModal: HTMLDialogElement;
@@ -21,8 +22,8 @@ export default class CatalogView extends AsyncPage {
 
   constructor() {
     super();
-    this.setCatalog();
-    this.setCategories();
+    // this.setCatalog();
+    // this.setCategories();
     this.container.classList.add('catalog-container');
     this.errorModal = document.createElement('dialog');
     this.container.append(this.errorModal);
@@ -43,22 +44,22 @@ export default class CatalogView extends AsyncPage {
     }
   }
 
-  private async setCategories(): Promise<void> {
-    try {
-      this.categories = await getProductCategories();
-    } catch {
-      (error: string): void => {
-        this.errorModal.innerText = error;
-        this.errorModal.showModal();
-      };
-    }
-  }
+  // private async setCategories(): Promise<void> {
+  //   try {
+  //     this.categories = await getProductCategories();
+  //   } catch {
+  //     (error: string): void => {
+  //       this.errorModal.innerText = error;
+  //       this.errorModal.showModal();
+  //     };
+  //   }
+  // }
 
-  public getCatalog():
-    | ClientResponse<ProductProjectionPagedQueryResponse>
-    | undefined {
-    return this.catalog;
-  }
+  // public getCatalog():
+  //   | ClientResponse<ProductProjectionPagedQueryResponse>
+  //   | undefined {
+  //   return this.catalog;
+  // }
 
   private renderCatalog(): void {
     this.container.classList.remove('item-page');
@@ -69,8 +70,9 @@ export default class CatalogView extends AsyncPage {
     const categorySelect = document.createElement('select');
     categorySelect.classList.add('catalog-category-select');
     console.log('categories', this.categories);
-    this.categories?.body.results.forEach((category) => {
-      categorySelect.innerHTML += `<option>${category.name.en}</option>`;
+    categorySelect.innerHTML = `<option data-id="all">All categories</option>`;
+    State.categories?.body.results.forEach((category) => {
+      categorySelect.innerHTML += `<option data-id="${category.id}">${category.name.en}</option>`;
     });
     catalogControls.append(categorySelect);
     this.container.append(catalogControls);
@@ -81,7 +83,7 @@ export default class CatalogView extends AsyncPage {
     this.container.append(cardContainer);
 
     /* fill cards container */
-    this.catalog?.body.results.forEach((catalogItem) => {
+    State.catalog?.body.results.forEach((catalogItem) => {
       const catalogItemLink = this.renderCatalogItemCard(catalogItem);
       cardContainer.append(catalogItemLink);
     });
@@ -98,7 +100,8 @@ export default class CatalogView extends AsyncPage {
 
     const cardImage = document.createElement('div');
     cardImage.classList.add('catalog-card-image');
-    if (catalogItem.masterVariant.images) {
+    // console.log('each', catalogItem.masterVariant.images);
+    if (catalogItem.masterVariant.images?.length) {
       cardImage.style.background = `center / contain no-repeat url('${catalogItem.masterVariant.images[0].url}')`;
     }
 
@@ -116,10 +119,13 @@ export default class CatalogView extends AsyncPage {
     this.container.innerHTML = '';
     this.container.classList.add('item-page');
     const cardId = route.slice(9);
-    if (this.verifiCardId(route, this.catalog)) {
-      const chosenItem = this.catalog?.body.results.find(
+    if (this.verifiCardId(route, State.catalog)) {
+      console.log('verified');
+      const chosenItem = State.catalog?.body.results.find(
         (catalogItem) => catalogItem.id === cardId
       );
+      console.log('chosen', chosenItem);
+
       const itemPageImageContainer = document.createElement('div');
       itemPageImageContainer.classList.add('item-page-image-container');
       chosenItem?.masterVariant.images?.forEach((image) => {
@@ -154,8 +160,10 @@ export default class CatalogView extends AsyncPage {
   }
 
   public async render(): Promise<HTMLElement> {
+    console.log('component state', State.catalog);
     this.container.innerHTML = '';
-    await this.setCatalog();
+    this.renderCatalog();
+    // await this.setCatalog();
     // await this.setCategories();
     return this.container;
   }

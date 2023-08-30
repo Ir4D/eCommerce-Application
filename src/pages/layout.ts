@@ -13,6 +13,7 @@ import LoginView from './login/login';
 import SignupView from './signup/signup';
 import NotFoundView from './404/404';
 import CartView from './cart/cart';
+import State from '../services/state';
 import { GetProductsPublished } from '../api/apiMethods';
 import ProfileView from './profile/profile';
 
@@ -20,9 +21,9 @@ export default class Layout {
   private header: HeaderView;
   private footer: FooterView;
   private slot: HTMLElement;
-  private catalogBase:
-    | ClientResponse<ProductProjectionPagedQueryResponse>
-    | undefined;
+  // private catalogBase:
+  //   | ClientResponse<ProductProjectionPagedQueryResponse>
+  //   | undefined;
 
   private main: MainView;
   private about: AboutView;
