@@ -29,18 +29,6 @@ export default abstract class State {
     }
   }
 
-  //   public getCatalog():
-  //     | ClientResponse<ProductProjectionPagedQueryResponse>
-  //     | undefined {
-  //     return this.catalog;
-  //   }
-
-  //   public getCategories():
-  //     | ClientResponse<CategoryPagedQueryResponse>
-  //     | undefined {
-  //     return this.categories;
-  //   }
-
   public static async init(
     handleCatalogError: () => void,
     handleCategoriesError: () => void

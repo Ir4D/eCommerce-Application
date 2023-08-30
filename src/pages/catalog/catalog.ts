@@ -5,88 +5,57 @@ import {
   ProductProjection,
   ProductProjectionPagedQueryResponse
 } from '@commercetools/platform-sdk';
-import {
-  GetProductsPublished,
-  getProductCategories
-} from '../../api/apiMethods';
-import AsyncPage from '../../components/abstract/asyncPage';
+
 import Router from '../../services/router/router';
 import State from '../../services/state';
+import Component from '../../components/abstract/component';
 
-export default class CatalogView extends AsyncPage {
+export default class CatalogView extends Component {
   private errorModal: HTMLDialogElement;
-  private catalog:
-    | ClientResponse<ProductProjectionPagedQueryResponse>
-    | undefined;
-  private categories: ClientResponse<CategoryPagedQueryResponse> | undefined;
+  private currentCategory: string;
+  private cardContainer: HTMLElement;
+  private controls: HTMLElement;
 
   constructor() {
     super();
-    // this.setCatalog();
-    // this.setCategories();
     this.container.classList.add('catalog-container');
     this.errorModal = document.createElement('dialog');
+    this.cardContainer = document.createElement('div');
+    this.cardContainer.classList.add('catalog-card-container');
+    this.controls = document.createElement('div');
+    this.controls.classList.add('catalog-controls');
     this.container.append(this.errorModal);
     this.errorModal.addEventListener('click', () => {
       this.errorModal.close();
     });
+    this.currentCategory = 'All categories';
   }
-
-  private async setCatalog(): Promise<void> {
-    try {
-      this.catalog = await GetProductsPublished();
-      this.renderCatalog();
-    } catch {
-      (error: string): void => {
-        this.errorModal.innerText = error;
-        this.errorModal.showModal();
-      };
-    }
-  }
-
-  // private async setCategories(): Promise<void> {
-  //   try {
-  //     this.categories = await getProductCategories();
-  //   } catch {
-  //     (error: string): void => {
-  //       this.errorModal.innerText = error;
-  //       this.errorModal.showModal();
-  //     };
-  //   }
-  // }
-
-  // public getCatalog():
-  //   | ClientResponse<ProductProjectionPagedQueryResponse>
-  //   | undefined {
-  //   return this.catalog;
-  // }
 
   private renderCatalog(): void {
     this.container.classList.remove('item-page');
 
     /* catalog controls */
-    const catalogControls = document.createElement('div');
-    catalogControls.classList.add('catalog-controls');
+    this.controls.innerHTML = '';
     const categorySelect = document.createElement('select');
     categorySelect.classList.add('catalog-category-select');
-    console.log('categories', this.categories);
     categorySelect.innerHTML = `<option data-id="all">All categories</option>`;
     State.categories?.body.results.forEach((category) => {
       categorySelect.innerHTML += `<option data-id="${category.id}">${category.name.en}</option>`;
     });
-    catalogControls.append(categorySelect);
-    this.container.append(catalogControls);
+    categorySelect.addEventListener('change', (e) => {
+      const target = e.target as HTMLSelectElement;
+      this.currentCategory = target.value;
+      this.fillCardContainer();
+    });
+    this.controls.append(categorySelect);
+    this.container.append(this.controls);
 
     /* cards container */
-    const cardContainer = document.createElement('div');
-    cardContainer.classList.add('catalog-card-container');
-    this.container.append(cardContainer);
+    this.container.append(this.cardContainer);
+    this.cardContainer.innerHTML = '';
 
     /* fill cards container */
-    State.catalog?.body.results.forEach((catalogItem) => {
-      const catalogItemLink = this.renderCatalogItemCard(catalogItem);
-      cardContainer.append(catalogItemLink);
-    });
+    this.fillCardContainer();
   }
 
   private renderCatalogItemCard(catalogItem: ProductProjection): HTMLElement {
@@ -100,7 +69,6 @@ export default class CatalogView extends AsyncPage {
 
     const cardImage = document.createElement('div');
     cardImage.classList.add('catalog-card-image');
-    // console.log('each', catalogItem.masterVariant.images);
     if (catalogItem.masterVariant.images?.length) {
       cardImage.style.background = `center / contain no-repeat url('${catalogItem.masterVariant.images[0].url}')`;
     }
@@ -115,16 +83,36 @@ export default class CatalogView extends AsyncPage {
     return catalogItemLink;
   }
 
+  private fillCardContainer(): void {
+    this.cardContainer.innerHTML = '';
+    const categoryMap: Map<string, string> = new Map();
+    State.categories?.body.results.forEach((category) => {
+      categoryMap.set(`${category.name.en}`, `${category.id}`);
+    });
+    let outputArr: ProductProjection[] | undefined;
+    if (this.currentCategory === 'All categories') {
+      outputArr = State.catalog?.body.results;
+    } else {
+      outputArr = State.catalog?.body.results.filter((item) => {
+        return item.categories.some(
+          (cat) => cat.id === categoryMap.get(this.currentCategory)
+        );
+      });
+    }
+    outputArr?.forEach((catalogItem) => {
+      const catalogItemLink = this.renderCatalogItemCard(catalogItem);
+      this.cardContainer.append(catalogItemLink);
+    });
+  }
+
   public renderItemPage(route: string): HTMLElement {
     this.container.innerHTML = '';
     this.container.classList.add('item-page');
     const cardId = route.slice(9);
     if (this.verifiCardId(route, State.catalog)) {
-      console.log('verified');
       const chosenItem = State.catalog?.body.results.find(
         (catalogItem) => catalogItem.id === cardId
       );
-      console.log('chosen', chosenItem);
 
       const itemPageImageContainer = document.createElement('div');
       itemPageImageContainer.classList.add('item-page-image-container');
@@ -159,12 +147,10 @@ export default class CatalogView extends AsyncPage {
     return catalogIds?.includes(cardId);
   }
 
-  public async render(): Promise<HTMLElement> {
+  public render(): HTMLElement {
     console.log('component state', State.catalog);
     this.container.innerHTML = '';
     this.renderCatalog();
-    // await this.setCatalog();
-    // await this.setCategories();
     return this.container;
   }
 }
