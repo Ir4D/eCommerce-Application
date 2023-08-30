@@ -1,0 +1,43 @@
+.catalog-container {
+  max-width: 1920px;
+  display: grid;
+  gap: 1vw;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  padding: 2vw;
+}
+
+.catalog-container.item-page {
+  display: flex;
+  flex-direction: column;
+}
+
+.card-item-link {
+  text-decoration: none;
+}
+
+.catalog-card {
+  display: flex;
+  background-color: #f9f8f8;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 30px;
+  padding: 2vw 2vw;
+}
+
+.catalog-card-image {
+  height: 30vw;
+  width: 18vw;
+}
+
+.item-page-image-container {
+  display: flex;
+}
+
+.item-page-image {
+  width: 30vw;
+}
+
+.item-page-description {
+  display: flex;
+  flex-direction: column;
+}
