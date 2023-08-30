@@ -148,8 +148,8 @@ export default class CatalogView extends Component {
   }
 
   public render(): HTMLElement {
-    console.log('component state', State.catalog);
     this.container.innerHTML = '';
+    this.currentCategory = 'All categories';
     this.renderCatalog();
     return this.container;
   }
