@@ -1,10 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 import {
+  CategoryPagedQueryResponse,
   ClientResponse,
   ProductProjection,
   ProductProjectionPagedQueryResponse
 } from '@commercetools/platform-sdk';
-import { GetProductsPublished } from '../../api/apiMethods';
+import {
+  GetProductsPublished,
+  getProductCategories
+} from '../../api/apiMethods';
 import AsyncPage from '../../components/abstract/asyncPage';
 import Router from '../../services/router/router';
 
@@ -13,9 +17,12 @@ export default class CatalogView extends AsyncPage {
   private catalog:
     | ClientResponse<ProductProjectionPagedQueryResponse>
     | undefined;
+  private categories: ClientResponse<CategoryPagedQueryResponse> | undefined;
 
   constructor() {
     super();
+    this.setCatalog();
+    this.setCategories();
     this.container.classList.add('catalog-container');
     this.errorModal = document.createElement('dialog');
     this.container.append(this.errorModal);
@@ -24,10 +31,21 @@ export default class CatalogView extends AsyncPage {
     });
   }
 
-  public async setCatalog(): Promise<void> {
+  private async setCatalog(): Promise<void> {
     try {
       this.catalog = await GetProductsPublished();
       this.renderCatalog();
+    } catch {
+      (error: string): void => {
+        this.errorModal.innerText = error;
+        this.errorModal.showModal();
+      };
+    }
+  }
+
+  private async setCategories(): Promise<void> {
+    try {
+      this.categories = await getProductCategories();
     } catch {
       (error: string): void => {
         this.errorModal.innerText = error;
@@ -44,9 +62,28 @@ export default class CatalogView extends AsyncPage {
 
   private renderCatalog(): void {
     this.container.classList.remove('item-page');
+
+    /* catalog controls */
+    const catalogControls = document.createElement('div');
+    catalogControls.classList.add('catalog-controls');
+    const categorySelect = document.createElement('select');
+    categorySelect.classList.add('catalog-category-select');
+    console.log('categories', this.categories);
+    this.categories?.body.results.forEach((category) => {
+      categorySelect.innerHTML += `<option>${category.name.en}</option>`;
+    });
+    catalogControls.append(categorySelect);
+    this.container.append(catalogControls);
+
+    /* cards container */
+    const cardContainer = document.createElement('div');
+    cardContainer.classList.add('catalog-card-container');
+    this.container.append(cardContainer);
+
+    /* fill cards container */
     this.catalog?.body.results.forEach((catalogItem) => {
       const catalogItemLink = this.renderCatalogItemCard(catalogItem);
-      this.container.append(catalogItemLink);
+      cardContainer.append(catalogItemLink);
     });
   }
 
@@ -119,6 +156,7 @@ export default class CatalogView extends AsyncPage {
   public async render(): Promise<HTMLElement> {
     this.container.innerHTML = '';
     await this.setCatalog();
+    // await this.setCategories();
     return this.container;
   }
 }

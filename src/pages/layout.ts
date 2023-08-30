@@ -64,7 +64,7 @@ export default class Layout {
         case Router.pages.catalog: {
           pageHTML = '';
           this.slot.innerHTML = '';
-          this.slot.append(await this.catalog.render());
+          // this.slot.append(await this.catalog.render());
           break;
         }
         case Router.pages.login: {

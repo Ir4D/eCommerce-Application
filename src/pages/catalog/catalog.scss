@@ -1,14 +1,25 @@
 .catalog-container {
   max-width: 1920px;
+}
+
+.catalog-container.item-page {
+  display: flex;
+  flex-direction: column;
+}
+
+.catalog-card-container {
   display: grid;
   gap: 1vw;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   padding: 2vw;
 }
 
-.catalog-container.item-page {
+.catalog-controls {
   display: flex;
-  flex-direction: column;
+  padding: 2vw;
+}
+
+.catalog-category-select {
 }
 
 .card-item-link {
