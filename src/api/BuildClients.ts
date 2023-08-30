@@ -78,14 +78,12 @@ export function createCtpClientWithScopes(): Client {
     tokenCache,
     fetch
   };
-
   const builder = new ClientBuilder()
     .withProjectKey(projectKey)
     .withClientCredentialsFlow(authMiddlewareOptionsScopes)
     .withHttpMiddleware(httpMiddlewareOptions)
     .withLoggerMiddleware()
     .build();
-
   return builder;
 }
 

@@ -12,6 +12,10 @@ export default class ProfileView extends Component {
     this.container.classList.add('profile');
     this.errorModal = document.createElement('dialog');
     this.renderHeading();
+    this.container.append(this.errorModal);
+    this.errorModal.addEventListener('click', () => {
+      this.errorModal.close();
+    });
     this.refreshProfile();
   }
 
@@ -74,6 +78,7 @@ export default class ProfileView extends Component {
   }
 
   public render(): HTMLElement {
+    // this.refreshProfile();
     return this.container;
   }
 }

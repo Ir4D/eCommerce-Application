@@ -1,10 +1,10 @@
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import {
-  createApiBuilderFromCtpClient,
   ClientResponse,
   ProductProjectionPagedQueryResponse,
-  Customer
+  createApiBuilderFromCtpClient,
+  Project
 } from '@commercetools/platform-sdk';
 import { apiData } from './apiData';
 import { createCtpClient, createCtpClientExistingFlow } from './BuildClients';
@@ -34,6 +34,7 @@ export function GetProjectInfo(): void {
 }
 
 // Get info about published products
+
 export function GetProductsPublished(): Promise<
   ClientResponse<ProductProjectionPagedQueryResponse>
 > {
@@ -41,6 +42,10 @@ export function GetProductsPublished(): Promise<
     return apiRoot.productProjections().get().execute();
   };
   return getProducts();
+  // .then(({ body }) => {
+  //   console.log(body);
+  // })
+  // .catch(console.error);
 }
 
 // Create a new customer
@@ -59,6 +64,7 @@ export function CreateCustomer(EMAIL: string, PASSWORD: string): void {
   };
   createCustomer()
     .then(({ body }) => {
+      console.log('create customer from methods', body.customer.id);
       console.log('create customer from methods', body.customer.id);
       console.log(body.customer.email);
     })
