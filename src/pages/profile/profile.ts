@@ -1,14 +1,17 @@
 import { Customer } from '@commercetools/platform-sdk';
 import { QueryCustomerById } from '../../api/apiMethods';
 import Component from '../../components/abstract/component';
+import Address from './address';
+import PersonalInfo from './personalInfo';
 
 export default class ProfileView extends Component {
   private errorModal: HTMLDialogElement;
 
   constructor() {
     super();
-    this.container.classList.add('profile-container');
+    this.container.classList.add('profile');
     this.errorModal = document.createElement('dialog');
+    this.renderHeading();
     this.container.append(this.errorModal);
     this.errorModal.addEventListener('click', () => {
       this.errorModal.close();
@@ -17,6 +20,19 @@ export default class ProfileView extends Component {
   }
 
   private customerId: string | null = localStorage.getItem('customerID');
+
+  public renderHeading(): void {
+    const profileWrapper = document.createElement('div');
+    profileWrapper.classList.add('profile-title_wrapper');
+    const profileBg = document.createElement('div');
+    profileBg.classList.add('profile-background-image');
+    const profileTitle = document.createElement('h1');
+    profileTitle.classList.add('profile-title');
+    profileTitle.innerText = 'Your profile';
+    profileWrapper.appendChild(profileBg);
+    profileBg.appendChild(profileTitle);
+    this.container.appendChild(profileWrapper);
+  }
 
   public refreshProfile(): void {
     if (this.customerId) {
@@ -32,14 +48,33 @@ export default class ProfileView extends Component {
   }
 
   private renderProfile(content: Customer): void {
-    const emailItem = document.createElement('div');
-    emailItem.classList.add('item-email');
-    emailItem.innerHTML = `<p>${content.email}</p>`;
-    this.container.append(emailItem);
-    const nameItem = document.createElement('div');
-    nameItem.classList.add('item-name');
-    nameItem.innerHTML = `<p>${content.firstName} ${content.lastName}</p>`;
-    this.container.append(nameItem);
+    const profileInfo = new PersonalInfo(
+      content.id,
+      content.firstName,
+      content.lastName,
+      content.dateOfBirth,
+      content.email
+    ).render();
+    content.addresses.forEach(
+      (addressData) =>
+        addressData.id &&
+        profileInfo.appendChild(
+          new Address(
+            addressData.id,
+            addressData.streetName,
+            addressData.streetNumber,
+            addressData.city,
+            addressData.state,
+            addressData.country,
+            addressData.postalCode,
+            content.defaultShippingAddressId === addressData.id,
+            content.defaultBillingAddressId === addressData.id,
+            content.shippingAddressIds?.includes(addressData.id) || false,
+            content.billingAddressIds?.includes(addressData.id) || false
+          ).render()
+        )
+    );
+    this.container.append(profileInfo);
   }
 
   public render(): HTMLElement {
