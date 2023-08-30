@@ -69,7 +69,7 @@ export default class CatalogView extends AsyncPage {
     cardName.innerText = catalogItem.name.en;
 
     catalogItemCard.append(cardImage);
-    catalogItemCard.append(cardName);
+    catalogItemCard.append(cardImage, cardName);
     catalogItemLink.append(catalogItemCard);
 
     return catalogItemLink;
