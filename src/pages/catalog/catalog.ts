@@ -76,15 +76,13 @@ export default class CatalogView extends AsyncPage {
   }
 
   public renderItemPage(route: string): HTMLElement {
-    // this.container.innerHTML = '';
+    this.container.innerHTML = '';
     this.container.classList.add('item-page');
     const cardId = route.slice(9);
-    console.log('id', cardId);
     if (this.verifiCardId(route, this.catalog)) {
       const chosenItem = this.catalog?.body.results.find(
         (catalogItem) => catalogItem.id === cardId
       );
-      console.log('chosen', chosenItem);
       const itemPageImageContainer = document.createElement('div');
       itemPageImageContainer.classList.add('item-page-image-container');
       chosenItem?.masterVariant.images?.forEach((image) => {
@@ -97,7 +95,6 @@ export default class CatalogView extends AsyncPage {
       const descriptionBlock = document.createElement('div');
       descriptionBlock.classList.add('item-page-description');
 
-      this.container.innerHTML = '';
       this.container.append(itemPageImageContainer);
     } else {
       Router.navigate(Router.pages.notFound);
@@ -122,7 +119,6 @@ export default class CatalogView extends AsyncPage {
   public async render(): Promise<HTMLElement> {
     this.container.innerHTML = '';
     await this.setCatalog();
-    console.log('render catalog container', this.catalog);
     return this.container;
   }
 }

@@ -47,11 +47,9 @@ export default class Layout {
     this.slot = document.createElement('main');
     // this.catalogBase = this.catalog.getCatalog();
     this.handleRouteChange();
-    // this.handleLogin();
   }
 
   private async renderPage(route: string): Promise<void> {
-    // this.slot.innerHTML = '';
     let pageHTML: string;
     if (route) {
       switch (route) {
@@ -67,7 +65,6 @@ export default class Layout {
           pageHTML = '';
           this.slot.innerHTML = '';
           this.slot.append(await this.catalog.render());
-          console.log('catalog', route);
           break;
         }
         case Router.pages.login: {
@@ -87,22 +84,8 @@ export default class Layout {
           break;
         }
         default: {
-          console.log('default', route);
           if (route.includes('catalog/')) {
-            const cardId = route.slice(9);
-            const catalogBase = await GetProductsPublished();
-            console.log(
-              'from layout',
-              this.catalogBase,
-              cardId,
-              this.catalog.verifiCardId(route, this.catalog.getCatalog())
-            );
-            if (this.catalog.verifiCardId(route, catalogBase)) {
-              pageHTML = '';
-              this.slot.append(this.catalog.renderItemPage(route));
-            } else {
-              pageHTML = this.notFound.render;
-            }
+            pageHTML = '';
           } else {
             pageHTML = this.notFound.render;
           }
@@ -115,7 +98,11 @@ export default class Layout {
     if (route === Router.pages.catalog) {
       this.slot.append(await this.catalog.render());
     } else if (route === Router.pages.profile) {
+      this.slot.innerHTML = '';
       this.slot.append(this.profile.render());
+    } else if (route.includes('catalog/')) {
+      pageHTML = '';
+      this.slot.append(this.catalog.renderItemPage(route));
     } else {
       this.slot.innerHTML = pageHTML;
     }
