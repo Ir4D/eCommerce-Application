@@ -13,6 +13,7 @@ import LoginView from './login/login';
 import SignupView from './signup/signup';
 import NotFoundView from './404/404';
 import CartView from './cart/cart';
+import State from '../services/state';
 import { GetProductsPublished } from '../api/apiMethods';
 import ProfileView from './profile/profile';
 
@@ -20,9 +21,6 @@ export default class Layout {
   private header: HeaderView;
   private footer: FooterView;
   private slot: HTMLElement;
-  private catalogBase:
-    | ClientResponse<ProductProjectionPagedQueryResponse>
-    | undefined;
 
   private main: MainView;
   private about: AboutView;
@@ -45,7 +43,6 @@ export default class Layout {
     this.cart = new CartView();
     this.profile = new ProfileView();
     this.slot = document.createElement('main');
-    // this.catalogBase = this.catalog.getCatalog();
     this.handleRouteChange();
   }
 
@@ -64,7 +61,6 @@ export default class Layout {
         case Router.pages.catalog: {
           pageHTML = '';
           this.slot.innerHTML = '';
-          this.slot.append(await this.catalog.render());
           break;
         }
         case Router.pages.login: {
@@ -96,7 +92,8 @@ export default class Layout {
       pageHTML = this.main.render;
     }
     if (route === Router.pages.catalog) {
-      this.slot.append(await this.catalog.render());
+      await State.setCatalog(() => {} /* error handling */);
+      this.slot.append(this.catalog.render());
     } else if (route === Router.pages.profile) {
       this.slot.innerHTML = '';
       this.slot.append(this.profile.render());

@@ -1,5 +1,6 @@
 import Layout from './pages/layout';
 import SignUpModal from './pages/signup/sign-up-modal';
+import State from './services/state';
 
 export default class App {
   public appContainer = document.querySelector<HTMLElement>('body');
@@ -9,7 +10,11 @@ export default class App {
   private signUpModal = new SignUpModal();
   private layout = new Layout();
 
-  public init(): void {
+  public async init(): Promise<void> {
+    await State.init(
+      () => {},
+      () => {}
+    );
     if (!this.appContainer) throw new Error('error');
     this.layout.render(this.appContainer);
 

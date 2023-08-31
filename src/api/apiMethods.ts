@@ -48,6 +48,13 @@ export function GetProductsPublished(): Promise<
   // .catch(console.error);
 }
 
+export function getProductCategories() {
+  const getCategories = () => {
+    return apiRoot.categories().get().execute();
+  };
+  return getCategories();
+}
+
 // Create a new customer
 export function CreateCustomer(EMAIL: string, PASSWORD: string): void {
   const createCustomer = () => {

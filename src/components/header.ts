@@ -2,12 +2,12 @@ import MenuView from './menu';
 import Router from '../services/router/router';
 
 const INNER_HTML = {
-  searchItem: `<li class="profile_container-item search-item">
-      <a href="" class="profile_container-link link">
-        <img src="./images/icons/search-icon.png" alt="search" class="search" width="56" height="56">
-      </a>
-    </li>
-    `,
+  // searchItem: `<li class="profile_container-item search-item">
+  //     <a href="" class="profile_container-link link">
+  //       <img src="./images/icons/search-icon.png" alt="search" class="search" width="56" height="56">
+  //     </a>
+  //   </li>
+  //   `,
   cartItem: `<li class="profile_container-item cart-item">
       <a href="${Router.pages.cart}" class="profile_container-link link profile_container-link--cart">
         <img src="./images/icons/cart-icon.png" alt="cart" class="cart" width="56" height="56">
@@ -71,7 +71,7 @@ export default class HeaderView {
     const loggedItemList = document.createElement('li');
     loggedItemList.classList.add('profile_container-item', 'logged-item');
     loggedItemList.innerHTML = `${INNER_HTML.loggedItem}`;
-    profileContainer.innerHTML = `${INNER_HTML.searchItem}${INNER_HTML.cartItem}`;
+    profileContainer.innerHTML = `${INNER_HTML.cartItem}`;
     if (!this.customerId) {
       loggedItemList.classList.add('hidden');
     } else {
