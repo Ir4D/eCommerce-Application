@@ -1,11 +1,15 @@
 /* eslint-disable max-lines-per-function */
 import { Customer } from '@commercetools/platform-sdk';
-import { EditCustomerById, QueryCustomerById } from '../../api/apiMethods';
+import {
+  ChangePassword,
+  EditCustomerById,
+  QueryCustomerById
+} from '../../api/apiMethods';
 import Component from '../../components/abstract/component';
 import Address from './address';
 import PersonalInfo from './personalInfo';
 
-const MODAL_INFO = `
+const MODAL_CHANGE_INFO = `
   <h2>Edit Profile</h2>
   <label for="input-first-name">First Name:</label>
   <input type="text" id="input-first-name">
@@ -19,15 +23,26 @@ const MODAL_INFO = `
   <button id="cancel-btn">Cancel</button>
   `;
 
+const MODAL_CHANGE_PASS = `
+  <h2>Change password</h2>
+  <label for="input-pass-old">Current password:</label>
+  <input type="password" id="input-pass-old">
+  <label for="input-pass-new">New password:</label>
+  <input type="password" id="input-pass-new">
+  <button id="save-btn">Save</button>
+  <button id="cancel-btn">Cancel</button>
+`;
+
 export default class ProfileView extends Component {
   private errorModal: HTMLDialogElement;
-  private editInfoModal: HTMLDialogElement;
-
-  private editModal: HTMLDialogElement;
-  private inputFirstName: HTMLInputElement;
-  private inputLastName: HTMLInputElement;
-  private inputDOB: HTMLInputElement;
-  private inputEmail: HTMLInputElement;
+  private editModal!: HTMLDialogElement;
+  private changePassModal!: HTMLDialogElement;
+  private inputFirstName!: HTMLInputElement;
+  private inputLastName!: HTMLInputElement;
+  private inputDOB!: HTMLInputElement;
+  private inputEmail!: HTMLInputElement;
+  private inputPassOld!: HTMLInputElement;
+  private inputPassNew!: HTMLInputElement;
 
   constructor() {
     super();
@@ -39,11 +54,15 @@ export default class ProfileView extends Component {
       this.errorModal.close();
     });
     this.refreshProfile();
-    this.editInfoModal = document.createElement('dialog');
-    this.container.append(this.editInfoModal);
+    this.setupEditModal();
+    this.setupChangePassModal();
+  }
 
+  private customerId: string | null = localStorage.getItem('customerID');
+
+  private setupEditModal(): void {
     this.editModal = document.createElement('dialog');
-    this.editModal.innerHTML = MODAL_INFO;
+    this.editModal.innerHTML = MODAL_CHANGE_INFO;
     this.container.append(this.editModal);
 
     this.inputFirstName = this.editModal.querySelector(
@@ -61,39 +80,80 @@ export default class ProfileView extends Component {
     const saveBtn = this.editModal.querySelector('#save-btn');
     const cancelBtn = this.editModal.querySelector('#cancel-btn');
 
-    saveBtn?.addEventListener('click', () => {
-      if (this.customerId) {
-        this.getCurrentVersion(this.customerId)
-          .then((version) => {
-            this.editProfile(
-              this.inputFirstName.value,
-              this.inputLastName.value,
-              this.inputDOB.value,
-              this.inputEmail.value,
-              version
-            );
-          })
-          .catch((error) => {
-            console.error('Error getting current version:', error);
-          });
-      }
-      this.editModal.close();
-    });
-
-    cancelBtn?.addEventListener('click', () => {
-      this.editModal.close();
-    });
+    saveBtn?.addEventListener('click', () => this.handleEditSave());
+    cancelBtn?.addEventListener('click', () => this.editModal.close());
   }
 
-  private customerId: string | null = localStorage.getItem('customerID');
+  private handleEditSave(): void {
+    if (this.customerId) {
+      this.getCurrentVersion(this.customerId)
+        .then((version) => {
+          this.editProfile(
+            this.inputFirstName.value,
+            this.inputLastName.value,
+            this.inputDOB.value,
+            this.inputEmail.value,
+            version
+          );
+        })
+        .catch((error) => {
+          console.error('Error getting current version:', error);
+          this.errorModal.innerText = error;
+          this.errorModal.showModal();
+        });
+    }
+    this.editModal.close();
+  }
 
   public openEditModal(content: Customer): void {
     this.inputFirstName.value = content.firstName || '';
     this.inputLastName.value = content.lastName || '';
     this.inputDOB.value = content.dateOfBirth || '';
     this.inputEmail.value = content.email || '';
-
     this.editModal.showModal();
+  }
+
+  public openChangePassModal(): void {
+    this.inputPassOld.value = '';
+    this.inputPassNew.value = '';
+    this.changePassModal.showModal();
+  }
+
+  private setupChangePassModal(): void {
+    this.changePassModal = document.createElement('dialog');
+    this.changePassModal.innerHTML = MODAL_CHANGE_PASS;
+    this.container.append(this.changePassModal);
+
+    this.inputPassOld = this.changePassModal.querySelector(
+      '#input-pass-old'
+    ) as HTMLInputElement;
+    this.inputPassNew = this.changePassModal.querySelector(
+      '#input-pass-new'
+    ) as HTMLInputElement;
+    const saveBtn = this.changePassModal.querySelector('#save-btn');
+    const cancelBtn = this.changePassModal.querySelector('#cancel-btn');
+
+    saveBtn?.addEventListener('click', () => this.handleChangePassSave());
+    cancelBtn?.addEventListener('click', () => this.changePassModal.close());
+  }
+
+  private handleChangePassSave(): void {
+    if (this.customerId) {
+      this.getCurrentVersion(this.customerId)
+        .then((version) => {
+          this.changePass(
+            this.inputPassOld.value,
+            this.inputPassNew.value,
+            version
+          );
+        })
+        .catch((error) => {
+          console.error('Error getting current version:', error);
+          this.errorModal.innerText = error;
+          this.errorModal.showModal();
+        });
+    }
+    this.changePassModal.close();
   }
 
   public renderHeading(): void {
@@ -121,6 +181,8 @@ export default class ProfileView extends Component {
               this.errorModal.showModal();
             });
         }
+      } else if (target && target.classList.contains('change-pass-btn')) {
+        this.openChangePassModal();
       }
     });
   }
@@ -178,7 +240,6 @@ export default class ProfileView extends Component {
   public getCurrentVersion(CUSTOMER_ID: string): Promise<number> {
     return QueryCustomerById(CUSTOMER_ID)
       .then(({ body }) => {
-        console.log(body.version);
         return body.version;
       })
       .catch((error) => {
@@ -212,7 +273,24 @@ export default class ProfileView extends Component {
             '.addresses-container'
           ) as HTMLElement;
           addressesContainer.remove();
+          this.errorModal.innerText = 'Your data has been successfully changed';
+          this.errorModal.showModal();
           this.refreshProfile();
+        })
+        .catch((error) => {
+          this.errorModal.innerText = error;
+          this.errorModal.showModal();
+        });
+    }
+  }
+
+  public changePass(PASS_OLD: string, PASS_NEW: string, VERSION: number): void {
+    if (this.customerId) {
+      ChangePassword(this.customerId, PASS_OLD, PASS_NEW, VERSION)
+        .then(({ body }) => {
+          this.errorModal.innerText =
+            'Your password has been successfully changed';
+          this.errorModal.showModal();
         })
         .catch((error) => {
           this.errorModal.innerText = error;

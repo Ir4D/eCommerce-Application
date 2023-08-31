@@ -5,7 +5,8 @@ import {
   ProductProjectionPagedQueryResponse,
   createApiBuilderFromCtpClient,
   CustomerUpdate,
-  CustomerUpdateAction
+  CustomerUpdateAction,
+  CustomerChangePassword
 } from '@commercetools/platform-sdk';
 import { apiData } from './apiData';
 import { createCtpClient, createCtpClientExistingFlow } from './BuildClients';
@@ -82,24 +83,9 @@ export function QueryCustomerById(
   CUSTOMER_ID: string
 ): Promise<ClientResponse> {
   return apiRootProfile.customers().withId({ ID: CUSTOMER_ID }).get().execute();
-  // const queryCustomer = (customerID: string) => {
-  //   return apiRoot.customers().withId({ ID: customerID }).get().execute();
-  // };
-  // queryCustomer(CUSTOMER_ID)
-  //   .then(({ body }) => {
-  //     console.log(body.email);
-  //   })
-  //   .catch(console.error);
 }
 
-// export function EditCustomerById(CUSTOMER_ID: string): Promise<ClientResponse> {
-//   return apiRootProfile
-//     .customers()
-//     .withId({ ID: CUSTOMER_ID })
-//     .post({})
-//     .execute();
-// }
-
+// Edit customer's info by ID
 export function EditCustomerById(
   CUSTOMER_ID: string,
   FISRT_NAME: string,
@@ -132,6 +118,28 @@ export function EditCustomerById(
   return apiRootProfile
     .customers()
     .withId({ ID: CUSTOMER_ID })
+    .post({
+      body: updateData
+    })
+    .execute();
+}
+
+// Change password by customer ID and old password
+export function ChangePassword(
+  CUSTOMER_ID: string,
+  PASS_OLD: string,
+  PASS_NEW: string,
+  VERSION: number
+): Promise<ClientResponse> {
+  const updateData: CustomerChangePassword = {
+    id: CUSTOMER_ID,
+    version: VERSION,
+    currentPassword: PASS_OLD,
+    newPassword: PASS_NEW
+  };
+  return apiRootProfile
+    .customers()
+    .password()
     .post({
       body: updateData
     })

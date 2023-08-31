@@ -48,16 +48,21 @@ export default class PersonalInfo {
       `${this.dateOfBirth}`
     ).render();
     const elemEmail = new InfoElem('email', 'Email:', `${this.email}`).render();
+    const editBtns = createElem('div', 'edit-btns');
     const editBtn = createElem('button', 'info-edit-btn');
     editBtn.classList.add('btn', 'btn--blue');
     editBtn.innerHTML = 'Edit';
+    const changePassBtn = createElem('button', 'change-pass-btn');
+    changePassBtn.classList.add('btn', 'btn--blue');
+    changePassBtn.innerHTML = 'Change Password';
+    editBtns.append(editBtn, changePassBtn);
     profilePerson.append(
       profileInfo,
       elemFirstName,
       elemLastName,
       elemDOB,
       elemEmail,
-      editBtn
+      editBtns
     );
     this.container.appendChild(profilePerson);
   }
