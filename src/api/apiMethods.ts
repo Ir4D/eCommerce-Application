@@ -4,7 +4,8 @@ import {
   ClientResponse,
   ProductProjectionPagedQueryResponse,
   createApiBuilderFromCtpClient,
-  Project
+  CustomerUpdate,
+  CustomerUpdateAction
 } from '@commercetools/platform-sdk';
 import { apiData } from './apiData';
 import { createCtpClient, createCtpClientExistingFlow } from './BuildClients';
@@ -89,6 +90,52 @@ export function QueryCustomerById(
   //     console.log(body.email);
   //   })
   //   .catch(console.error);
+}
+
+// export function EditCustomerById(CUSTOMER_ID: string): Promise<ClientResponse> {
+//   return apiRootProfile
+//     .customers()
+//     .withId({ ID: CUSTOMER_ID })
+//     .post({})
+//     .execute();
+// }
+
+export function EditCustomerById(
+  CUSTOMER_ID: string,
+  FISRT_NAME: string,
+  LAST_NAME: string,
+  DATE_OF_BIRTH: string,
+  EMAIL: string,
+  VERSION: number
+): Promise<ClientResponse> {
+  const updateFirstName: CustomerUpdateAction = {
+    action: 'setFirstName',
+    firstName: FISRT_NAME
+  };
+  const updateLastName: CustomerUpdateAction = {
+    action: 'setLastName',
+    lastName: LAST_NAME
+  };
+  const updateDateOfBirth: CustomerUpdateAction = {
+    action: 'setDateOfBirth',
+    dateOfBirth: DATE_OF_BIRTH
+  };
+  const updateEmail: CustomerUpdateAction = {
+    action: 'changeEmail',
+    email: EMAIL
+  };
+  const updateData: CustomerUpdate = {
+    version: VERSION,
+    actions: [updateFirstName, updateLastName, updateDateOfBirth, updateEmail]
+  };
+
+  return apiRootProfile
+    .customers()
+    .withId({ ID: CUSTOMER_ID })
+    .post({
+      body: updateData
+    })
+    .execute();
 }
 
 // Request info about a customer by its EMAIL

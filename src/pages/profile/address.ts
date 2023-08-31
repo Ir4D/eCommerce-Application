@@ -44,7 +44,7 @@ export default class Address {
     this.isShippingAddress = isShippingAddress;
     this.isBillingAddress = isBillingAddress;
     this.container = document.createElement('div');
-    this.container.className = 'profile-address';
+    this.container.className = 'address';
     this.createAddressElem();
   }
 
@@ -98,10 +98,10 @@ export default class Address {
       }
     }
     const editBtns = createElem('div', 'edit-btns');
-    const editBtn = createElem('button', 'edit-btn');
+    const editBtn = createElem('button', 'address-edit-btn');
     editBtn.classList.add('btn', 'btn--blue');
     editBtn.innerHTML = 'Edit';
-    const deleteBtn = createElem('button', 'delete-btn');
+    const deleteBtn = createElem('button', 'address-delete-btn');
     deleteBtn.classList.add('btn', 'btn--blue');
     deleteBtn.innerHTML = 'Delete';
     editBtns.append(editBtn, deleteBtn);

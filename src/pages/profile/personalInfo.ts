@@ -48,7 +48,7 @@ export default class PersonalInfo {
       `${this.dateOfBirth}`
     ).render();
     const elemEmail = new InfoElem('email', 'Email:', `${this.email}`).render();
-    const editBtn = createElem('button', 'edit-btn');
+    const editBtn = createElem('button', 'info-edit-btn');
     editBtn.classList.add('btn', 'btn--blue');
     editBtn.innerHTML = 'Edit';
     profilePerson.append(
@@ -59,14 +59,7 @@ export default class PersonalInfo {
       elemEmail,
       editBtn
     );
-    editBtn.addEventListener('click', () => {
-      this.editPersonalInfo(this.id);
-    });
     this.container.appendChild(profilePerson);
-  }
-
-  public editPersonalInfo(id: string): void {
-    console.log('edit info', id);
   }
 
   public render(): HTMLElement {
