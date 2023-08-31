@@ -10,12 +10,14 @@ import {
 import Router from '../../services/router/router';
 import State from '../../services/state';
 import Component from '../../components/abstract/component';
+import ItemView from '../item/item';
 
 export default class CatalogView extends Component {
   private errorModal: HTMLDialogElement;
   private currentCategory: string;
   private cardContainer: HTMLElement;
   private controls: HTMLFormElement;
+  private item: ItemView;
 
   constructor() {
     super();
@@ -30,6 +32,7 @@ export default class CatalogView extends Component {
       this.errorModal.close();
     });
     this.currentCategory = 'All categories';
+    this.item = new ItemView();
   }
 
   private renderCatalog(): void {
@@ -89,7 +92,7 @@ export default class CatalogView extends Component {
   private renderCatalogItemCard(catalogItem: ProductProjection): HTMLElement {
     const catalogItemLink = document.createElement('a');
     catalogItemLink.classList.add('card-item-link');
-    catalogItemLink.href = `${Router.pages.catalog}/${catalogItem.id}`;
+    catalogItemLink.href = `${Router.pages.catalog}/${catalogItem.slug.en}`;
 
     const catalogItemCard = document.createElement('div');
     catalogItemCard.classList.add('catalog-card');
@@ -140,31 +143,17 @@ export default class CatalogView extends Component {
     });
   }
 
-  public renderItemPage(route: string): HTMLElement {
+  public async renderItemPage(route: string): Promise<HTMLElement> {
     this.container.innerHTML = '';
-    this.container.classList.add('item-page');
     const cardId = route.slice(9);
     if (this.verifiCardId(route, State.catalog)) {
       const chosenItem = State.catalog?.body.results.find(
-        (catalogItem) => catalogItem.id === cardId
+        (catalogItem) => catalogItem.slug.en === cardId
       );
-
-      const itemPageImageContainer = document.createElement('div');
-      itemPageImageContainer.classList.add('item-page-image-container');
-      chosenItem?.masterVariant.images?.forEach((image) => {
-        const itemPageImage = document.createElement('img');
-        itemPageImage.classList.add('item-page-image');
-        itemPageImage.src = `${image.url}`;
-        itemPageImageContainer.append(itemPageImage);
-      });
-
-      const descriptionBlock = document.createElement('div');
-      descriptionBlock.classList.add('item-page-description');
-
-      this.container.append(itemPageImageContainer);
     } else {
       Router.navigate(Router.pages.notFound);
     }
+    this.container.append(await this.item.render());
     return this.container;
   }
 
@@ -176,8 +165,9 @@ export default class CatalogView extends Component {
       return false;
     }
     const catalogIds = catalog?.body.results.map(
-      (catalogItem) => catalogItem.id
+      (catalogItem) => catalogItem.slug.en
     );
+
     const cardId = route.slice(9);
     return catalogIds?.includes(cardId);
   }

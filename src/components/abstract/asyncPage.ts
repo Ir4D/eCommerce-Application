@@ -5,7 +5,7 @@ export default abstract class AsyncPage {
     this.container = document.createElement('div');
   }
 
-  protected async render(): Promise<HTMLElement> {
+  public async render(): Promise<HTMLElement> {
     return this.container;
   }
 }
