@@ -59,10 +59,28 @@
 .abc {
   background: url('../../assets/images/icons/sortalphabetically_80942.svg')
     no-repeat center;
+  background-size: 90%;
 }
 
 .price {
   background: url('../../assets/images/icons/price-sort.svg') no-repeat center;
+  background-size: 90%;
+}
+
+.catalog-sort-arrow {
+  width: 3vw;
+  height: 3vw;
+  transform: translateX(-4vw);
+}
+
+.decrease {
+  background: url('../../assets/images/icons/down-arrow.svg') no-repeat center;
+  background-size: 90%;
+}
+
+.increase {
+  background: url('../../assets/images/icons/up_arrow.svg') no-repeat center;
+  background-size: 90%;
 }
 
 .card-item-link {
