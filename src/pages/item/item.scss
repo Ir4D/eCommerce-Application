@@ -1,0 +1,36 @@
+.item-hero {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 450px;
+  background: url('../../assets/images/bgPat-itemHero.png'),
+    url('../../assets/images/bg-itemHero.png');
+}
+
+.item-content {
+  position: relative;
+  max-width: 1337px;
+  margin: 130px auto;
+
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5rem;
+
+  border-radius: 30px;
+  overflow: hidden;
+}
+
+.item-img_container {
+  position: relative;
+  width: 600px;
+  height: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background-color: #f9f8f8;
+}
+
+.item-img {
+  border-radius: 30px;
+}

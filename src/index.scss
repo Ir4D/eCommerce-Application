@@ -327,12 +327,17 @@ h6 {
 
   &-item {
     box-sizing: border-box;
-    width: 335px;
-    height: 483px;
+
     padding: 25px;
 
-    background-color: $bg-dark;
     border-radius: 30px;
+
+    &--main-page {
+      width: 335px;
+      height: 483px;
+
+      background-color: $bg-dark;
+    }
   }
 
   &-card_btn {
