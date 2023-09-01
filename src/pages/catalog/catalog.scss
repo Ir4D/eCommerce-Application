@@ -133,7 +133,8 @@
 
 .catalog-card-price-container {
   display: flex;
-  justify-content: space-between;
+  align-items: center;
+  gap: 1vw;
   padding-top: 10px;
   border-top: 1px solid #d4d4d4;
 }
@@ -145,40 +146,17 @@
   font-size: 1.25rem;
 }
 
-.catalog-pagination-bar {
-  display: flex;
-  gap: 2vw;
-  justify-content: center;
+.catalog-card-price.full {
+  text-decoration: line-through;
+  color: #9da19e;
 }
 
-.catalog-pagination-button {
-  cursor: pointer;
-  height: 3vw;
-  width: 3vw;
-  font-weight: 700;
-  font-size: 1.25rem;
-  line-height: 1.25rem;
-  border: 1px solid #7eb693;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.disabled {
-  cursor: auto;
-  border: 1px solid #d4d4d4;
-  color: #d4d4d4;
-}
-
-.catalog-pagination-page {
-  height: 3vw;
-  width: 3vw;
-  border: 1px solid #7eb693;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.catalog-card-discount-icon {
+  width: 2vw;
+  height: 2vw;
+  background: url('../../assets/images/icons/discount-icon.svg') no-repeat
+    center;
+  background-size: 90%;
 }
 
 .item-page-image-container {

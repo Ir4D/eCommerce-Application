@@ -28,8 +28,6 @@ export default class CatalogView extends Component {
   private abcSortArrow: HTMLDivElement;
   private priceSortArrow: HTMLDivElement;
   private paginationBar: HTMLElement;
-  private currentPage: number;
-  private itemsPerPage = 1;
 
   constructor() {
     super();
@@ -42,7 +40,6 @@ export default class CatalogView extends Component {
     this.container.append(this.errorModal);
     this.paginationBar = document.createElement('div');
     this.paginationBar.classList.add('catalog-pagination-bar');
-    this.currentPage = 1;
     this.errorModal.addEventListener('click', () => {
       this.errorModal.close();
     });
@@ -52,24 +49,6 @@ export default class CatalogView extends Component {
     [this.abcSortArrow, this.priceSortArrow].forEach((arrow) => {
       arrow.classList.add('catalog-sort-arrow');
     });
-    this.setItemsPerPage();
-    window.addEventListener('resize', () => {
-      this.setItemsPerPage();
-      console.log(this.itemsPerPage);
-    });
-  }
-
-  private setItemsPerPage(): void {
-    const screenWidth = window.screen.width;
-    if (screenWidth >= 1600) {
-      this.itemsPerPage = 12;
-    } else if (screenWidth < 1600 && screenWidth >= 1200) {
-      this.itemsPerPage = 9;
-    } else if (screenWidth < 1200 && screenWidth >= 700) {
-      this.itemsPerPage = 6;
-    } else if (screenWidth < 700) {
-      this.itemsPerPage = 3;
-    }
   }
 
   private renderCatalog(): void {
@@ -174,34 +153,6 @@ export default class CatalogView extends Component {
 
     /* fill cards container */
     this.fillCardContainer();
-
-    /* pagination bar */
-    this.fillPaginationBar();
-  }
-
-  private fillPaginationBar(): void {
-    this.paginationBar.innerHTML = '';
-    const paginationLeftButton = document.createElement('div');
-    const paginationRightButton = document.createElement('div');
-    paginationLeftButton.innerText = '<<';
-    paginationRightButton.innerText = '>>';
-
-    [paginationLeftButton, paginationRightButton].forEach((button) => {
-      button.classList.add('catalog-pagination-button');
-    });
-    if (this.currentPage === 1) {
-      paginationLeftButton.classList.add('disabled');
-    }
-    const currentPageSpan = document.createElement('span');
-    currentPageSpan.classList.add('catalog-pagination-page');
-    currentPageSpan.innerText = `${this.currentPage}`;
-
-    this.paginationBar.append(
-      paginationLeftButton,
-      currentPageSpan,
-      paginationRightButton
-    );
-    this.container.append(this.paginationBar);
   }
 
   private renderCatalogItemCard(catalogItem: ProductProjection): HTMLElement {
@@ -233,12 +184,29 @@ export default class CatalogView extends Component {
 
     const priceContainer = document.createElement('div');
     priceContainer.classList.add('catalog-card-price-container');
-    const cardPrice = document.createElement('p');
+    const cardPrice = document.createElement('span');
     cardPrice.classList.add('catalog-card-price');
-    if (catalogItem.masterVariant.prices) {
-      cardPrice.innerText = `$${
+    if (
+      catalogItem.masterVariant.prices?.length &&
+      catalogItem.masterVariant.prices[0].discounted
+    ) {
+      const fullPrice = document.createElement('span');
+      fullPrice.innerText = `€${(
         Number(catalogItem.masterVariant.prices[0]?.value.centAmount) / 100
-      },00`;
+      ).toFixed(2)}`;
+      const discountIcon = document.createElement('span');
+      discountIcon.classList.add('catalog-card-discount-icon');
+      priceContainer.append(fullPrice, discountIcon);
+      fullPrice.classList.add('catalog-card-price', 'full');
+      cardPrice.innerText = `€${(
+        Number(
+          catalogItem.masterVariant.prices[0].discounted.value.centAmount
+        ) / 100
+      ).toFixed(2)}`;
+    } else if (catalogItem.masterVariant.prices) {
+      cardPrice.innerText = `€${(
+        Number(catalogItem.masterVariant.prices[0]?.value.centAmount) / 100
+      ).toFixed(2)}`;
     }
     priceContainer.append(cardPrice);
 
@@ -290,14 +258,41 @@ export default class CatalogView extends Component {
           const undefinedPriceArr = outputArr?.filter((item) => {
             return !item.masterVariant.prices?.length;
           });
-          const definedPriceArr = outputArr?.filter((item) => {
+          let definedPriceArr = outputArr?.filter((item) => {
             return item.masterVariant.prices?.length;
           });
-          definedPriceArr?.sort(
-            (a, b) =>
-              a.masterVariant.prices![0].value.centAmount -
-              b.masterVariant.prices![0].value.centAmount
-          );
+          // definedPriceArr?.forEach((product) => {
+          //   if (product.masterVariant.prices![0].discounted) {
+          //     Object.defineProperty(product, 'sortPrice', {
+          //       value:
+          //         product.masterVariant.prices![0].discounted.value.centAmount,
+          //       enumerable: true,
+          //       writable: false,
+          //       configurable: false
+          //     });
+          //   } else {
+          //     Object.defineProperty(product, 'sortPrice', {
+          //       value: product.masterVariant.prices![0].value.centAmount,
+          //       enumerable: true,
+          //       writable: false,
+          //       configurable: false
+          //     });
+          //   }
+          // });
+          const sortPricesArr: [number, ProductProjection][] | undefined =
+            definedPriceArr?.map((product) => {
+              const sortPrice = product.masterVariant.prices![0].discounted
+                ? product.masterVariant.prices![0].discounted.value.centAmount
+                : product.masterVariant.prices![0].value.centAmount;
+              return [sortPrice, product];
+            });
+          sortPricesArr?.sort((a, b) => a[0] - b[0]);
+          definedPriceArr = sortPricesArr?.map((item) => item[1]);
+          // definedPriceArr?.sort(
+          //   (a, b) =>
+          //     a.masterVariant.prices![0].value.centAmount -
+          //     b.masterVariant.prices![0].value.centAmount
+          // );
           outputArr = [...definedPriceArr!, ...undefinedPriceArr!];
           break;
         }
@@ -305,17 +300,19 @@ export default class CatalogView extends Component {
           const undefinedPriceArr = outputArr?.filter((item) => {
             return !item.masterVariant.prices?.length;
           });
-          const definedPriceArr = outputArr?.filter((item) => {
+          let definedPriceArr = outputArr?.filter((item) => {
             return item.masterVariant.prices?.length;
           });
-          definedPriceArr
-            ?.sort(
-              (a, b) =>
-                a.masterVariant.prices![0].value.centAmount -
-                b.masterVariant.prices![0].value.centAmount
-            )
-            .reverse();
-          outputArr = [...definedPriceArr!, ...undefinedPriceArr!];
+          const sortPricesArr: [number, ProductProjection][] | undefined =
+            definedPriceArr?.map((product) => {
+              const sortPrice = product.masterVariant.prices![0].discounted
+                ? product.masterVariant.prices![0].discounted.value.centAmount
+                : product.masterVariant.prices![0].value.centAmount;
+              return [sortPrice, product];
+            });
+          sortPricesArr?.sort((a, b) => a[0] - b[0]);
+          definedPriceArr = sortPricesArr?.map((item) => item[1]);
+          outputArr = [...definedPriceArr!, ...undefinedPriceArr!].reverse();
           break;
         }
         default: {
