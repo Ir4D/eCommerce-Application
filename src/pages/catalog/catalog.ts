@@ -17,7 +17,7 @@ export default class CatalogView extends Component {
   private currentCategory: string;
   private cardContainer: HTMLElement;
   private controls: HTMLFormElement;
-  private item: ItemView;
+  // private item: ItemView;
 
   constructor() {
     super();
@@ -32,7 +32,7 @@ export default class CatalogView extends Component {
       this.errorModal.close();
     });
     this.currentCategory = 'All categories';
-    this.item = new ItemView();
+    // this.item = new ItemView(chosenItem);
   }
 
   private renderCatalog(): void {
@@ -145,7 +145,6 @@ export default class CatalogView extends Component {
 
   public async renderItemPage(route: string): Promise<HTMLElement> {
     this.container.innerHTML = '';
-    this.item = new ItemView();
 
     const cardId = route.slice(9);
     if (this.verifiCardId(route, State.catalog)) {
@@ -153,7 +152,9 @@ export default class CatalogView extends Component {
         (catalogItem) => catalogItem.slug.en === cardId
       );
       if (!chosenItem) throw new Error('error');
-      this.container.append(await this.item.render(chosenItem));
+
+      const item = new ItemView(chosenItem);
+      this.container.append(await item.render());
     } else {
       Router.navigate(Router.pages.notFound);
     }
