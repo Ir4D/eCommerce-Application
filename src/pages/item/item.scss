@@ -2,7 +2,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
+
   height: 450px;
+
   background: url('../../assets/images/bgPat-itemHero.png'),
     url('../../assets/images/bg-itemHero.png');
 }
@@ -11,26 +13,62 @@
   position: relative;
   max-width: 1337px;
   margin: 130px auto;
+  padding-right: 50px;
 
   display: flex;
-  flex-wrap: wrap;
   gap: 5rem;
 
   border-radius: 30px;
+
+  background-color: #f9f8f8;
   overflow: hidden;
 }
 
-.item-img_container {
-  position: relative;
-  width: 600px;
-  height: 600px;
+.item-description {
   display: flex;
-  align-items: center;
+  flex-direction: column;
   justify-content: center;
-
-  background-color: #f9f8f8;
 }
 
-.item-img {
-  border-radius: 30px;
+.item-category {
+  position: absolute;
+  top: 40px;
+  left: 40px;
+}
+
+.item-rating {
+  margin-bottom: 1rem;
+}
+
+.item-text {
+  margin-top: 30px;
+  margin-bottom: 30px;
+
+  color: #525c60;
+}
+
+.order-form {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.order-text {
+  font-size: 20px;
+  font-weight: 700;
+  color: #274c5b;
+}
+
+.order-quantity {
+  box-sizing: border-box;
+  height: 100%;
+  width: 135px;
+  padding: 10px;
+
+  text-align: center;
+  font-size: 1rem;
+  outline: none;
+  border: #274c5b solid 2px;
+  border-radius: 16px;
 }
