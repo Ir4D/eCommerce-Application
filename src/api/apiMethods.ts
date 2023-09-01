@@ -39,7 +39,14 @@ export function GetProductsPublished(): Promise<
   ClientResponse<ProductProjectionPagedQueryResponse>
 > {
   const getProducts = () => {
-    return apiRoot.productProjections().get().execute();
+    return apiRoot
+      .productProjections()
+      .get({
+        queryArgs: {
+          limit: 30
+        }
+      })
+      .execute();
   };
   return getProducts();
   // .then(({ body }) => {

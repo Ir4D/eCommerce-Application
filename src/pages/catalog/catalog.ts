@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable max-lines-per-function */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
@@ -26,6 +27,9 @@ export default class CatalogView extends Component {
   private controls: HTMLFormElement;
   private abcSortArrow: HTMLDivElement;
   private priceSortArrow: HTMLDivElement;
+  private paginationBar: HTMLElement;
+  private currentPage: number;
+  private itemsPerPage = 1;
 
   constructor() {
     super();
@@ -36,6 +40,9 @@ export default class CatalogView extends Component {
     this.controls = document.createElement('form');
     this.controls.classList.add('catalog-controls');
     this.container.append(this.errorModal);
+    this.paginationBar = document.createElement('div');
+    this.paginationBar.classList.add('catalog-pagination-bar');
+    this.currentPage = 1;
     this.errorModal.addEventListener('click', () => {
       this.errorModal.close();
     });
@@ -45,6 +52,24 @@ export default class CatalogView extends Component {
     [this.abcSortArrow, this.priceSortArrow].forEach((arrow) => {
       arrow.classList.add('catalog-sort-arrow');
     });
+    this.setItemsPerPage();
+    window.addEventListener('resize', () => {
+      this.setItemsPerPage();
+      console.log(this.itemsPerPage);
+    });
+  }
+
+  private setItemsPerPage(): void {
+    const screenWidth = window.screen.width;
+    if (screenWidth >= 1600) {
+      this.itemsPerPage = 12;
+    } else if (screenWidth < 1600 && screenWidth >= 1200) {
+      this.itemsPerPage = 9;
+    } else if (screenWidth < 1200 && screenWidth >= 700) {
+      this.itemsPerPage = 6;
+    } else if (screenWidth < 700) {
+      this.itemsPerPage = 3;
+    }
   }
 
   private renderCatalog(): void {
@@ -149,6 +174,34 @@ export default class CatalogView extends Component {
 
     /* fill cards container */
     this.fillCardContainer();
+
+    /* pagination bar */
+    this.fillPaginationBar();
+  }
+
+  private fillPaginationBar(): void {
+    this.paginationBar.innerHTML = '';
+    const paginationLeftButton = document.createElement('div');
+    const paginationRightButton = document.createElement('div');
+    paginationLeftButton.innerText = '<<';
+    paginationRightButton.innerText = '>>';
+
+    [paginationLeftButton, paginationRightButton].forEach((button) => {
+      button.classList.add('catalog-pagination-button');
+    });
+    if (this.currentPage === 1) {
+      paginationLeftButton.classList.add('disabled');
+    }
+    const currentPageSpan = document.createElement('span');
+    currentPageSpan.classList.add('catalog-pagination-page');
+    currentPageSpan.innerText = `${this.currentPage}`;
+
+    this.paginationBar.append(
+      paginationLeftButton,
+      currentPageSpan,
+      paginationRightButton
+    );
+    this.container.append(this.paginationBar);
   }
 
   private renderCatalogItemCard(catalogItem: ProductProjection): HTMLElement {
@@ -156,27 +209,40 @@ export default class CatalogView extends Component {
     catalogItemLink.classList.add('card-item-link');
     catalogItemLink.href = `${Router.pages.catalog}/${catalogItem.id}`;
 
-    const catalogItemCard = document.createElement('div');
-    catalogItemCard.classList.add('catalog-card');
-    catalogItemCard.setAttribute('data-id', catalogItem.id);
+    const categoryButton = document.createElement('button');
+    categoryButton.classList.add('catalog-card-category-button');
+    if (catalogItem.categories[0]) {
+      for (const [key, value] of State.CategoryMap.entries()) {
+        if (value === catalogItem.categories[0].id) {
+          categoryButton.innerText = key;
+        }
+      }
+    } else {
+      categoryButton.innerText = 'No category';
+    }
 
     const cardImage = document.createElement('div');
     cardImage.classList.add('catalog-card-image');
     if (catalogItem.masterVariant.images?.length) {
-      cardImage.style.background = `center / contain no-repeat url('${catalogItem.masterVariant.images[0].url}')`;
+      cardImage.style.background = `center / contain no-repeat url('${catalogItem.masterVariant.images[0].url}') #ffff`;
     }
 
-    const cardName = document.createElement('h6');
+    const cardName = document.createElement('p');
+    cardName.classList.add('catalog-catd-title');
     cardName.innerText = catalogItem.name.en;
 
-    const cardPrice = document.createElement('h6');
+    const priceContainer = document.createElement('div');
+    priceContainer.classList.add('catalog-card-price-container');
+    const cardPrice = document.createElement('p');
+    cardPrice.classList.add('catalog-card-price');
     if (catalogItem.masterVariant.prices) {
-      cardPrice.innerText = JSON.stringify(
+      cardPrice.innerText = `$${
         Number(catalogItem.masterVariant.prices[0]?.value.centAmount) / 100
-      );
+      },00`;
     }
-    catalogItemCard.append(cardImage, cardName, cardPrice);
-    catalogItemLink.append(catalogItemCard);
+    priceContainer.append(cardPrice);
+
+    catalogItemLink.append(categoryButton, cardImage, cardName, priceContainer);
 
     return catalogItemLink;
   }
@@ -198,19 +264,15 @@ export default class CatalogView extends Component {
     };
 
     const catalog = State.catalog?.body.results;
-    const categories = State.categories?.body.results;
     this.cardContainer.innerHTML = '';
-    const categoryMap: Map<string, string> = new Map();
-    categories?.forEach((category) => {
-      categoryMap.set(`${category.name.en}`, `${category.id}`);
-    });
     let outputArr: ProductProjection[] | undefined;
     if (this.currentCategory === 'All categories') {
       outputArr = catalog;
     } else {
       outputArr = catalog?.filter((item) => {
         return item.categories.some(
-          (category) => category.id === categoryMap.get(this.currentCategory)
+          (category) =>
+            category.id === State.CategoryMap.get(this.currentCategory)
         );
       });
     }

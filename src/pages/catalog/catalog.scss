@@ -12,6 +12,26 @@
   gap: 1vw;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   padding: 2vw;
+  justify-items: center;
+  justify-content: center;
+}
+
+@media only screen and (max-width: 1600px) {
+  .catalog-card-container {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
+@media only screen and (max-width: 1200px) {
+  .catalog-card-container {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media only screen and (max-width: 700px) {
+  .catalog-card-container {
+    grid-template-columns: 1fr;
+  }
 }
 
 .catalog-controls {
@@ -85,20 +105,80 @@
 
 .card-item-link {
   text-decoration: none;
-}
-
-.catalog-card {
   display: flex;
-  background-color: #f9f8f8;
+  width: 335px;
+  height: 483px;
   flex-direction: column;
-  align-items: center;
+  background-color: #f9f8f8;
   border-radius: 30px;
   padding: 2vw 2vw;
 }
 
+.catalog-card-category-button {
+  border: none;
+  font-weight: 700;
+  font-size: 1.25rem;
+  line-height: 1.25rem;
+  padding: 5px 12px;
+  color: #fff;
+  background-color: #274c5b;
+  border-radius: 8px;
+  align-self: baseline;
+}
+
 .catalog-card-image {
-  height: 30vw;
-  width: 18vw;
+  width: 100%;
+  height: 350px;
+}
+
+.catalog-card-price-container {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 10px;
+  border-top: 1px solid #d4d4d4;
+}
+
+.catalog-card-price,
+.catalog-catd-title {
+  color: #274c5b;
+  font-weight: 700;
+  font-size: 1.25rem;
+}
+
+.catalog-pagination-bar {
+  display: flex;
+  gap: 2vw;
+  justify-content: center;
+}
+
+.catalog-pagination-button {
+  cursor: pointer;
+  height: 3vw;
+  width: 3vw;
+  font-weight: 700;
+  font-size: 1.25rem;
+  line-height: 1.25rem;
+  border: 1px solid #7eb693;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.disabled {
+  cursor: auto;
+  border: 1px solid #d4d4d4;
+  color: #d4d4d4;
+}
+
+.catalog-pagination-page {
+  height: 3vw;
+  width: 3vw;
+  border: 1px solid #7eb693;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .item-page-image-container {
