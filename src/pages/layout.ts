@@ -99,7 +99,7 @@ export default class Layout {
       this.slot.append(this.profile.render());
     } else if (route.includes('catalog/')) {
       pageHTML = '';
-      this.slot.append(this.catalog.renderItemPage(route));
+      this.slot.append(await this.catalog.renderItemPage(route));
     } else {
       this.slot.innerHTML = pageHTML;
     }

@@ -2,6 +2,7 @@
 @import url('../src/pages/login/login.scss');
 @import url('../src/pages/profile/profile.scss');
 @import url('../src/pages/catalog/catalog.scss');
+@import url('../src/pages/item/item.scss');
 
 $blue: #274c5b;
 $green: #7eb693;
@@ -326,12 +327,17 @@ h6 {
 
   &-item {
     box-sizing: border-box;
-    width: 335px;
-    height: 483px;
+
     padding: 25px;
 
-    background-color: $bg-dark;
     border-radius: 30px;
+
+    &--main-page {
+      width: 335px;
+      height: 483px;
+
+      background-color: $bg-dark;
+    }
   }
 
   &-card_btn {

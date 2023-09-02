@@ -7,7 +7,7 @@ interface IGoog {
 
 const createCodeTemplate = (el: IGoog): string => {
   return `
-  <li class="catalog-item">
+  <li class="catalog-item catalog-item--main-page">
     <a href="" class="catalog-link link">
       <button class="btn catalog-card_btn">${el.category}</button>
       <img src="${el.src}" alt="" class="catalog-img" height="350">
