@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable max-lines-per-function */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
@@ -26,6 +27,7 @@ export default class CatalogView extends Component {
   private controls: HTMLFormElement;
   private abcSortArrow: HTMLDivElement;
   private priceSortArrow: HTMLDivElement;
+  private paginationBar: HTMLElement;
 
   constructor() {
     super();
@@ -36,6 +38,8 @@ export default class CatalogView extends Component {
     this.controls = document.createElement('form');
     this.controls.classList.add('catalog-controls');
     this.container.append(this.errorModal);
+    this.paginationBar = document.createElement('div');
+    this.paginationBar.classList.add('catalog-pagination-bar');
     this.errorModal.addEventListener('click', () => {
       this.errorModal.close();
     });
@@ -156,27 +160,57 @@ export default class CatalogView extends Component {
     catalogItemLink.classList.add('card-item-link');
     catalogItemLink.href = `${Router.pages.catalog}/${catalogItem.id}`;
 
-    const catalogItemCard = document.createElement('div');
-    catalogItemCard.classList.add('catalog-card');
-    catalogItemCard.setAttribute('data-id', catalogItem.id);
+    const categoryButton = document.createElement('button');
+    categoryButton.classList.add('catalog-card-category-button');
+    if (catalogItem.categories[0]) {
+      for (const [key, value] of State.CategoryMap.entries()) {
+        if (value === catalogItem.categories[0].id) {
+          categoryButton.innerText = key;
+        }
+      }
+    } else {
+      categoryButton.innerText = 'No category';
+    }
 
     const cardImage = document.createElement('div');
     cardImage.classList.add('catalog-card-image');
     if (catalogItem.masterVariant.images?.length) {
-      cardImage.style.background = `center / contain no-repeat url('${catalogItem.masterVariant.images[0].url}')`;
+      cardImage.style.background = `center / contain no-repeat url('${catalogItem.masterVariant.images[0].url}') #ffff`;
     }
 
-    const cardName = document.createElement('h6');
+    const cardName = document.createElement('p');
+    cardName.classList.add('catalog-catd-title');
     cardName.innerText = catalogItem.name.en;
 
-    const cardPrice = document.createElement('h6');
-    if (catalogItem.masterVariant.prices) {
-      cardPrice.innerText = JSON.stringify(
+    const priceContainer = document.createElement('div');
+    priceContainer.classList.add('catalog-card-price-container');
+    const cardPrice = document.createElement('span');
+    cardPrice.classList.add('catalog-card-price');
+    if (
+      catalogItem.masterVariant.prices?.length &&
+      catalogItem.masterVariant.prices[0].discounted
+    ) {
+      const fullPrice = document.createElement('span');
+      fullPrice.innerText = `€${(
         Number(catalogItem.masterVariant.prices[0]?.value.centAmount) / 100
-      );
+      ).toFixed(2)}`;
+      const discountIcon = document.createElement('span');
+      discountIcon.classList.add('catalog-card-discount-icon');
+      priceContainer.append(fullPrice, discountIcon);
+      fullPrice.classList.add('catalog-card-price', 'full');
+      cardPrice.innerText = `€${(
+        Number(
+          catalogItem.masterVariant.prices[0].discounted.value.centAmount
+        ) / 100
+      ).toFixed(2)}`;
+    } else if (catalogItem.masterVariant.prices) {
+      cardPrice.innerText = `€${(
+        Number(catalogItem.masterVariant.prices[0]?.value.centAmount) / 100
+      ).toFixed(2)}`;
     }
-    catalogItemCard.append(cardImage, cardName, cardPrice);
-    catalogItemLink.append(catalogItemCard);
+    priceContainer.append(cardPrice);
+
+    catalogItemLink.append(categoryButton, cardImage, cardName, priceContainer);
 
     return catalogItemLink;
   }
@@ -198,19 +232,15 @@ export default class CatalogView extends Component {
     };
 
     const catalog = State.catalog?.body.results;
-    const categories = State.categories?.body.results;
     this.cardContainer.innerHTML = '';
-    const categoryMap: Map<string, string> = new Map();
-    categories?.forEach((category) => {
-      categoryMap.set(`${category.name.en}`, `${category.id}`);
-    });
     let outputArr: ProductProjection[] | undefined;
     if (this.currentCategory === 'All categories') {
       outputArr = catalog;
     } else {
       outputArr = catalog?.filter((item) => {
         return item.categories.some(
-          (category) => category.id === categoryMap.get(this.currentCategory)
+          (category) =>
+            category.id === State.CategoryMap.get(this.currentCategory)
         );
       });
     }
@@ -228,14 +258,41 @@ export default class CatalogView extends Component {
           const undefinedPriceArr = outputArr?.filter((item) => {
             return !item.masterVariant.prices?.length;
           });
-          const definedPriceArr = outputArr?.filter((item) => {
+          let definedPriceArr = outputArr?.filter((item) => {
             return item.masterVariant.prices?.length;
           });
-          definedPriceArr?.sort(
-            (a, b) =>
-              a.masterVariant.prices![0].value.centAmount -
-              b.masterVariant.prices![0].value.centAmount
-          );
+          // definedPriceArr?.forEach((product) => {
+          //   if (product.masterVariant.prices![0].discounted) {
+          //     Object.defineProperty(product, 'sortPrice', {
+          //       value:
+          //         product.masterVariant.prices![0].discounted.value.centAmount,
+          //       enumerable: true,
+          //       writable: false,
+          //       configurable: false
+          //     });
+          //   } else {
+          //     Object.defineProperty(product, 'sortPrice', {
+          //       value: product.masterVariant.prices![0].value.centAmount,
+          //       enumerable: true,
+          //       writable: false,
+          //       configurable: false
+          //     });
+          //   }
+          // });
+          const sortPricesArr: [number, ProductProjection][] | undefined =
+            definedPriceArr?.map((product) => {
+              const sortPrice = product.masterVariant.prices![0].discounted
+                ? product.masterVariant.prices![0].discounted.value.centAmount
+                : product.masterVariant.prices![0].value.centAmount;
+              return [sortPrice, product];
+            });
+          sortPricesArr?.sort((a, b) => a[0] - b[0]);
+          definedPriceArr = sortPricesArr?.map((item) => item[1]);
+          // definedPriceArr?.sort(
+          //   (a, b) =>
+          //     a.masterVariant.prices![0].value.centAmount -
+          //     b.masterVariant.prices![0].value.centAmount
+          // );
           outputArr = [...definedPriceArr!, ...undefinedPriceArr!];
           break;
         }
@@ -243,17 +300,19 @@ export default class CatalogView extends Component {
           const undefinedPriceArr = outputArr?.filter((item) => {
             return !item.masterVariant.prices?.length;
           });
-          const definedPriceArr = outputArr?.filter((item) => {
+          let definedPriceArr = outputArr?.filter((item) => {
             return item.masterVariant.prices?.length;
           });
-          definedPriceArr
-            ?.sort(
-              (a, b) =>
-                a.masterVariant.prices![0].value.centAmount -
-                b.masterVariant.prices![0].value.centAmount
-            )
-            .reverse();
-          outputArr = [...definedPriceArr!, ...undefinedPriceArr!];
+          const sortPricesArr: [number, ProductProjection][] | undefined =
+            definedPriceArr?.map((product) => {
+              const sortPrice = product.masterVariant.prices![0].discounted
+                ? product.masterVariant.prices![0].discounted.value.centAmount
+                : product.masterVariant.prices![0].value.centAmount;
+              return [sortPrice, product];
+            });
+          sortPricesArr?.sort((a, b) => a[0] - b[0]);
+          definedPriceArr = sortPricesArr?.map((item) => item[1]);
+          outputArr = [...definedPriceArr!, ...undefinedPriceArr!].reverse();
           break;
         }
         default: {
