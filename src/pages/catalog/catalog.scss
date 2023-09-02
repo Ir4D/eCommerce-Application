@@ -163,8 +163,9 @@
 }
 
 @media (hover: hover) {
-  .card-item-link:hover {
-    background-color: #f8f2f2;
+  .card-item-link:hover,
+  .catalog-sort-button:hover {
+    background-color: #f0efea;
     transition: 0.3s;
   }
 }

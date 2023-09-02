@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable max-lines-per-function */
@@ -172,7 +173,7 @@ export default class CatalogView extends Component {
     catalogItemLink.classList.add('card-item-link');
     catalogItemLink.href = `${Router.pages.catalog}/${catalogItem.id}`;
 
-    const categoryButton = document.createElement('button');
+    const categoryButton = document.createElement('div');
     categoryButton.classList.add('catalog-card-category-button');
     if (catalogItem.categories[0]) {
       for (const [key, value] of State.CategoryMap.entries()) {
@@ -243,6 +244,30 @@ export default class CatalogView extends Component {
       return catalog;
     };
 
+    const sortByPrice = (
+      catalog: ProductProjection[] | undefined
+    ): ProductProjection[] | undefined => {
+      const undefinedPriceArr = catalog?.filter((item) => {
+        return !item.masterVariant.prices?.length;
+      });
+      let definedPriceArr = catalog?.filter((item) => {
+        return item.masterVariant.prices?.length;
+      });
+
+      const sortPricesArr: [number, ProductProjection][] | undefined =
+        definedPriceArr?.map((product) => {
+          const sortPrice = product.masterVariant.prices![0].discounted
+            ? product.masterVariant.prices![0].discounted.value.centAmount
+            : product.masterVariant.prices![0].value.centAmount;
+          return [sortPrice, product];
+        });
+      sortPricesArr?.sort((a, b) => a[0] - b[0]);
+      definedPriceArr = sortPricesArr?.map((item) => item[1]);
+
+      catalog = [...definedPriceArr!, ...undefinedPriceArr!];
+      return catalog;
+    };
+
     const catalog = State.catalog?.body.results;
     this.cardContainer.innerHTML = '';
     let outputArr: ProductProjection[] | undefined;
@@ -267,64 +292,11 @@ export default class CatalogView extends Component {
           break;
         }
         case 'price-dec': {
-          const undefinedPriceArr = outputArr?.filter((item) => {
-            return !item.masterVariant.prices?.length;
-          });
-          let definedPriceArr = outputArr?.filter((item) => {
-            return item.masterVariant.prices?.length;
-          });
-          // definedPriceArr?.forEach((product) => {
-          //   if (product.masterVariant.prices![0].discounted) {
-          //     Object.defineProperty(product, 'sortPrice', {
-          //       value:
-          //         product.masterVariant.prices![0].discounted.value.centAmount,
-          //       enumerable: true,
-          //       writable: false,
-          //       configurable: false
-          //     });
-          //   } else {
-          //     Object.defineProperty(product, 'sortPrice', {
-          //       value: product.masterVariant.prices![0].value.centAmount,
-          //       enumerable: true,
-          //       writable: false,
-          //       configurable: false
-          //     });
-          //   }
-          // });
-          const sortPricesArr: [number, ProductProjection][] | undefined =
-            definedPriceArr?.map((product) => {
-              const sortPrice = product.masterVariant.prices![0].discounted
-                ? product.masterVariant.prices![0].discounted.value.centAmount
-                : product.masterVariant.prices![0].value.centAmount;
-              return [sortPrice, product];
-            });
-          sortPricesArr?.sort((a, b) => a[0] - b[0]);
-          definedPriceArr = sortPricesArr?.map((item) => item[1]);
-          // definedPriceArr?.sort(
-          //   (a, b) =>
-          //     a.masterVariant.prices![0].value.centAmount -
-          //     b.masterVariant.prices![0].value.centAmount
-          // );
-          outputArr = [...definedPriceArr!, ...undefinedPriceArr!];
+          outputArr = sortByPrice(outputArr);
           break;
         }
         case 'price-inc': {
-          const undefinedPriceArr = outputArr?.filter((item) => {
-            return !item.masterVariant.prices?.length;
-          });
-          let definedPriceArr = outputArr?.filter((item) => {
-            return item.masterVariant.prices?.length;
-          });
-          const sortPricesArr: [number, ProductProjection][] | undefined =
-            definedPriceArr?.map((product) => {
-              const sortPrice = product.masterVariant.prices![0].discounted
-                ? product.masterVariant.prices![0].discounted.value.centAmount
-                : product.masterVariant.prices![0].value.centAmount;
-              return [sortPrice, product];
-            });
-          sortPricesArr?.sort((a, b) => a[0] - b[0]);
-          definedPriceArr = sortPricesArr?.map((item) => item[1]);
-          outputArr = [...definedPriceArr!, ...undefinedPriceArr!].reverse();
+          outputArr = sortByPrice(outputArr)?.reverse();
           break;
         }
         default: {
