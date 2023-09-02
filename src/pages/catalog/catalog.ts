@@ -1,7 +1,9 @@
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable max-lines-per-function */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 import {
-  CategoryPagedQueryResponse,
   ClientResponse,
   ProductProjection,
   ProductProjectionPagedQueryResponse
@@ -12,12 +14,22 @@ import State from '../../services/state';
 import Component from '../../components/abstract/component';
 import ItemView from '../item/item';
 
+type SortPatternType =
+  | undefined
+  | 'alphabet-dec'
+  | 'alphabet-inc'
+  | 'price-dec'
+  | 'price-inc';
+
 export default class CatalogView extends Component {
   private errorModal: HTMLDialogElement;
   private currentCategory: string;
+  private sortPattern: SortPatternType;
   private cardContainer: HTMLElement;
   private controls: HTMLFormElement;
-  // private item: ItemView;
+  private abcSortArrow: HTMLDivElement;
+  private priceSortArrow: HTMLDivElement;
+  private paginationBar: HTMLElement;
 
   constructor() {
     super();
@@ -28,11 +40,17 @@ export default class CatalogView extends Component {
     this.controls = document.createElement('form');
     this.controls.classList.add('catalog-controls');
     this.container.append(this.errorModal);
+    this.paginationBar = document.createElement('div');
+    this.paginationBar.classList.add('catalog-pagination-bar');
     this.errorModal.addEventListener('click', () => {
       this.errorModal.close();
     });
     this.currentCategory = 'All categories';
-    // this.item = new ItemView(chosenItem);
+    this.abcSortArrow = document.createElement('div');
+    this.priceSortArrow = document.createElement('div');
+    [this.abcSortArrow, this.priceSortArrow].forEach((arrow) => {
+      arrow.classList.add('catalog-sort-arrow');
+    });
   }
 
   private renderCatalog(): void {
@@ -52,6 +70,9 @@ export default class CatalogView extends Component {
       this.fillCardContainer();
     });
 
+    const searchGroup = document.createElement('div');
+    searchGroup.classList.add('catalog-controls-search-group');
+
     const searchInput = document.createElement('input');
     searchInput.placeholder = 'Search...';
     searchInput.classList.add('catalog-search-input');
@@ -61,24 +82,83 @@ export default class CatalogView extends Component {
     });
 
     const searchButton = document.createElement('button');
-    searchButton.type = 'submit';
+    // searchButton.type = 'submit';
     searchButton.classList.add('catalog-search-button');
+
+    searchGroup.append(searchInput, searchButton);
 
     const abcSortButton = document.createElement('button');
     const priceSortButton = document.createElement('button');
-    const sortButtons = [abcSortButton, priceSortButton];
-    sortButtons.forEach((button) => {
+    [abcSortButton, priceSortButton].forEach((button) => {
       button.classList.add('catalog-sort-button');
     });
     abcSortButton.classList.add('abc');
     priceSortButton.classList.add('price');
 
-    this.controls.append(categorySelect);
-    this.controls.append(searchInput);
-    this.controls.append(searchButton);
-    sortButtons.forEach((button) => {
-      this.controls.append(button);
+    const abcSortGroup = document.createElement('div');
+    const priceSortGroup = document.createElement('div');
+    abcSortGroup.append(abcSortButton, this.abcSortArrow);
+    priceSortGroup.append(priceSortButton, this.priceSortArrow);
+    [abcSortGroup, priceSortGroup].forEach((div) => {
+      div.classList.add('catalog-controls-sort-group');
     });
+    abcSortGroup.append(abcSortButton, this.abcSortArrow);
+    priceSortGroup.append(priceSortButton, this.priceSortArrow);
+
+    const deleteArrow = (arrow: HTMLDivElement): void => {
+      arrow.classList.remove('increase');
+      arrow.classList.remove('decrease');
+    };
+
+    const changeArrow = (
+      arrow: HTMLDivElement,
+      prev: string,
+      curr: string
+    ): void => {
+      arrow.classList.remove(prev);
+      arrow.classList.add(curr);
+    };
+
+    abcSortButton.addEventListener('click', () => {
+      deleteArrow(this.priceSortArrow);
+      if (!this.sortPattern) {
+        this.sortPattern = 'alphabet-dec';
+        this.abcSortArrow.classList.add('decrease');
+        this.fillCardContainer();
+      } else if (this.sortPattern === 'alphabet-inc') {
+        this.sortPattern = 'alphabet-dec';
+        changeArrow(this.abcSortArrow, 'increase', 'decrease');
+        this.fillCardContainer();
+      } else {
+        this.sortPattern = 'alphabet-inc';
+        changeArrow(this.abcSortArrow, 'decrease', 'increase');
+        this.fillCardContainer();
+      }
+    });
+
+    priceSortButton.addEventListener('click', () => {
+      deleteArrow(this.abcSortArrow);
+      if (!this.sortPattern) {
+        this.sortPattern = 'price-dec';
+        this.priceSortArrow.classList.add('decrease');
+        this.fillCardContainer();
+      } else if (this.sortPattern === 'price-inc') {
+        this.sortPattern = 'price-dec';
+        changeArrow(this.priceSortArrow, 'increase', 'decrease');
+        this.fillCardContainer();
+      } else {
+        this.sortPattern = 'price-inc';
+        changeArrow(this.priceSortArrow, 'decrease', 'increase');
+        this.fillCardContainer();
+      }
+    });
+
+    this.controls.append(
+      categorySelect,
+      searchGroup,
+      abcSortGroup,
+      priceSortGroup
+    );
     this.container.append(this.controls);
 
     /* cards container */
@@ -94,49 +174,142 @@ export default class CatalogView extends Component {
     catalogItemLink.classList.add('card-item-link');
     catalogItemLink.href = `${Router.pages.catalog}/${catalogItem.slug.en}`;
 
-    const catalogItemCard = document.createElement('div');
-    catalogItemCard.classList.add('catalog-card');
-    catalogItemCard.setAttribute('data-id', catalogItem.id);
+    const categoryButton = document.createElement('div');
+    categoryButton.classList.add('catalog-card-category-button');
+    if (catalogItem.categories[0]) {
+      for (const [key, value] of State.CategoryMap.entries()) {
+        if (value === catalogItem.categories[0].id) {
+          categoryButton.innerText = key;
+        }
+      }
+    } else {
+      categoryButton.innerText = 'No category';
+    }
 
     const cardImage = document.createElement('div');
     cardImage.classList.add('catalog-card-image');
     if (catalogItem.masterVariant.images?.length) {
-      cardImage.style.background = `center / contain no-repeat url('${catalogItem.masterVariant.images[0].url}')`;
+      cardImage.style.background = `center / contain no-repeat url('${catalogItem.masterVariant.images[0].url}') #ffff`;
     }
 
-    const cardName = document.createElement('h6');
+    const cardName = document.createElement('p');
+    cardName.classList.add('catalog-catd-title');
     cardName.innerText = catalogItem.name.en;
 
-    catalogItemCard.append(cardImage);
-    catalogItemCard.append(cardImage, cardName);
-    catalogItemLink.append(catalogItemCard);
+    const priceContainer = document.createElement('div');
+    priceContainer.classList.add('catalog-card-price-container');
+    const cardPrice = document.createElement('span');
+    cardPrice.classList.add('catalog-card-price');
+    if (
+      catalogItem.masterVariant.prices?.length &&
+      catalogItem.masterVariant.prices[0].discounted
+    ) {
+      const fullPrice = document.createElement('span');
+      fullPrice.innerText = `€${(
+        Number(catalogItem.masterVariant.prices[0]?.value.centAmount) / 100
+      ).toFixed(2)}`;
+      const discountIcon = document.createElement('span');
+      discountIcon.classList.add('catalog-card-discount-icon');
+      priceContainer.append(fullPrice, discountIcon);
+      fullPrice.classList.add('catalog-card-price', 'full');
+      cardPrice.innerText = `€${(
+        Number(
+          catalogItem.masterVariant.prices[0].discounted.value.centAmount
+        ) / 100
+      ).toFixed(2)}`;
+    } else if (catalogItem.masterVariant.prices) {
+      cardPrice.innerText = `€${(
+        Number(catalogItem.masterVariant.prices[0]?.value.centAmount) / 100
+      ).toFixed(2)}`;
+    }
+    priceContainer.append(cardPrice);
+
+    catalogItemLink.append(categoryButton, cardImage, cardName, priceContainer);
 
     return catalogItemLink;
   }
 
   private fillCardContainer(searchPattern?: string): void {
+    const sortByName = (
+      catalog: ProductProjection[] | undefined
+    ): ProductProjection[] | undefined => {
+      catalog?.sort((a, b) => {
+        if (a.name.en < b.name.en) {
+          return -1;
+        }
+        if (a.name.en > b.name.en) {
+          return 1;
+        }
+        return 0;
+      });
+      return catalog;
+    };
+
+    const sortByPrice = (
+      catalog: ProductProjection[] | undefined
+    ): ProductProjection[] | undefined => {
+      const undefinedPriceArr = catalog?.filter((item) => {
+        return !item.masterVariant.prices?.length;
+      });
+      let definedPriceArr = catalog?.filter((item) => {
+        return item.masterVariant.prices?.length;
+      });
+
+      const sortPricesArr: [number, ProductProjection][] | undefined =
+        definedPriceArr?.map((product) => {
+          const sortPrice = product.masterVariant.prices![0].discounted
+            ? product.masterVariant.prices![0].discounted.value.centAmount
+            : product.masterVariant.prices![0].value.centAmount;
+          return [sortPrice, product];
+        });
+      sortPricesArr?.sort((a, b) => a[0] - b[0]);
+      definedPriceArr = sortPricesArr?.map((item) => item[1]);
+
+      catalog = [...definedPriceArr!, ...undefinedPriceArr!];
+      return catalog;
+    };
+
     const catalog = State.catalog?.body.results;
-    const categories = State.categories?.body.results;
     this.cardContainer.innerHTML = '';
-    const categoryMap: Map<string, string> = new Map();
-    categories?.forEach((category) => {
-      categoryMap.set(`${category.name.en}`, `${category.id}`);
-    });
     let outputArr: ProductProjection[] | undefined;
-    if (searchPattern) {
-      outputArr = catalog?.filter((item) =>
-        item.name.en.toLowerCase().includes(searchPattern.toLowerCase())
-      );
-    } else if (this.currentCategory === 'All categories') {
+    if (this.currentCategory === 'All categories') {
       outputArr = catalog;
     } else {
       outputArr = catalog?.filter((item) => {
         return item.categories.some(
-          (category) => category.id === categoryMap.get(this.currentCategory)
+          (category) =>
+            category.id === State.CategoryMap.get(this.currentCategory)
         );
       });
     }
-
+    if (this.sortPattern) {
+      switch (this.sortPattern) {
+        case 'alphabet-dec': {
+          sortByName(outputArr);
+          break;
+        }
+        case 'alphabet-inc': {
+          sortByName(outputArr)?.reverse();
+          break;
+        }
+        case 'price-dec': {
+          outputArr = sortByPrice(outputArr);
+          break;
+        }
+        case 'price-inc': {
+          outputArr = sortByPrice(outputArr)?.reverse();
+          break;
+        }
+        default: {
+          true;
+        }
+      }
+    }
+    if (searchPattern) {
+      outputArr = catalog?.filter((item) =>
+        item.name.en.toLowerCase().includes(searchPattern.toLowerCase())
+      );
+    }
     outputArr?.forEach((catalogItem) => {
       const catalogItemLink = this.renderCatalogItemCard(catalogItem);
       this.cardContainer.append(catalogItemLink);

@@ -29,7 +29,7 @@
 }
 
 .profile-person,
-.profile-address {
+.address {
   width: 600px;
   margin: 0 auto;
   margin-top: 3em;
@@ -96,13 +96,28 @@
   align-self: center;
 }
 
+.info-edit-btn,
+.change-pass-btn,
+.address-edit-btn,
+.address-delete-btn {
+  width: 7.5em;
+  height: 2em;
+  margin-top: 1em;
+  margin-left: 1em;
+  padding: 1.75rem 1.75rem !important;
+}
+
+.change-pass-btn {
+  width: 8.5em;
+}
+
 @media only screen and (max-width: 700px) {
   .profile-title {
     font-size: 2.2em;
   }
 
   .profile-person,
-  .profile-address {
+  .address {
     width: 360px;
     margin-top: 2em;
     padding: 1em;
@@ -163,7 +178,7 @@
 
 @media only screen and (max-width: 500px) {
   .profile-person,
-  .profile-address {
+  .address {
     margin-top: 1em;
     padding: 0.25em;
   }

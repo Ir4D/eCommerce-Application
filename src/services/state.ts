@@ -29,6 +29,14 @@ export default abstract class State {
     }
   }
 
+  public static get CategoryMap(): Map<string, string> {
+    const categoryMap: Map<string, string> = new Map();
+    State.categories?.body.results.forEach((category) => {
+      categoryMap.set(`${category.name.en}`, `${category.id}`);
+    });
+    return categoryMap;
+  }
+
   public static async init(
     handleCatalogError: () => void,
     handleCategoriesError: () => void
