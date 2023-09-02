@@ -68,6 +68,9 @@ export default class CatalogView extends Component {
       this.fillCardContainer();
     });
 
+    const searchGroup = document.createElement('div');
+    searchGroup.classList.add('catalog-controls-search-group');
+
     const searchInput = document.createElement('input');
     searchInput.placeholder = 'Search...';
     searchInput.classList.add('catalog-search-input');
@@ -77,8 +80,10 @@ export default class CatalogView extends Component {
     });
 
     const searchButton = document.createElement('button');
-    searchButton.type = 'submit';
+    // searchButton.type = 'submit';
     searchButton.classList.add('catalog-search-button');
+
+    searchGroup.append(searchInput, searchButton);
 
     const abcSortButton = document.createElement('button');
     const priceSortButton = document.createElement('button');
@@ -87,6 +92,16 @@ export default class CatalogView extends Component {
     });
     abcSortButton.classList.add('abc');
     priceSortButton.classList.add('price');
+
+    const abcSortGroup = document.createElement('div');
+    const priceSortGroup = document.createElement('div');
+    abcSortGroup.append(abcSortButton, this.abcSortArrow);
+    priceSortGroup.append(priceSortButton, this.priceSortArrow);
+    [abcSortGroup, priceSortGroup].forEach((div) => {
+      div.classList.add('catalog-controls-sort-group');
+    });
+    abcSortGroup.append(abcSortButton, this.abcSortArrow);
+    priceSortGroup.append(priceSortButton, this.priceSortArrow);
 
     const deleteArrow = (arrow: HTMLDivElement): void => {
       arrow.classList.remove('increase');
@@ -138,12 +153,9 @@ export default class CatalogView extends Component {
 
     this.controls.append(
       categorySelect,
-      searchInput,
-      searchButton,
-      abcSortButton,
-      this.abcSortArrow,
-      priceSortButton,
-      this.priceSortArrow
+      searchGroup,
+      abcSortGroup,
+      priceSortGroup
     );
     this.container.append(this.controls);
 
