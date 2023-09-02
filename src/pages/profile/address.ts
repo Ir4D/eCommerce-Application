@@ -2,8 +2,8 @@
 /* eslint-disable no-restricted-syntax */
 import InfoElem from './profileElem';
 
-const createDivElem = (className: string): HTMLElement =>
-  Object.assign(document.createElement('div'), { className });
+const createElem = (tag: string, className: string): HTMLElement =>
+  Object.assign(document.createElement(tag), { className });
 
 export default class Address {
   public id: string;
@@ -44,13 +44,13 @@ export default class Address {
     this.isShippingAddress = isShippingAddress;
     this.isBillingAddress = isBillingAddress;
     this.container = document.createElement('div');
-    this.container.className = 'profile-address';
+    this.container.className = 'address';
     this.createAddressElem();
   }
 
   public createAddressElem(): void {
-    const addressItem = createDivElem('address-item');
-    const adrTitle = createDivElem('address-title');
+    const addressItem = createElem('div', 'address-item');
+    const adrTitle = createElem('div', 'address-title');
     if (this.isBillingAddress) {
       adrTitle.classList.add('adr-billing');
     }
@@ -97,13 +97,22 @@ export default class Address {
         adrTitle.appendChild(label);
       }
     }
+    const editBtns = createElem('div', 'edit-btns');
+    const editBtn = createElem('button', 'address-edit-btn');
+    editBtn.classList.add('btn', 'btn--blue');
+    editBtn.innerHTML = 'Edit';
+    const deleteBtn = createElem('button', 'address-delete-btn');
+    deleteBtn.classList.add('btn', 'btn--blue');
+    deleteBtn.innerHTML = 'Delete';
+    editBtns.append(editBtn, deleteBtn);
     addressItem.append(
       adrTitle,
       adrStreet,
       adrCity,
       adrState,
       adrCountry,
-      adrPostalCode
+      adrPostalCode,
+      editBtns
     );
     this.container.append(addressItem);
   }

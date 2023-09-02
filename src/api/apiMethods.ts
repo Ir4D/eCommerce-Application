@@ -4,7 +4,9 @@ import {
   ClientResponse,
   ProductProjectionPagedQueryResponse,
   createApiBuilderFromCtpClient,
-  Project
+  CustomerUpdate,
+  CustomerUpdateAction,
+  CustomerChangePassword
 } from '@commercetools/platform-sdk';
 import { apiData } from './apiData';
 import { createCtpClient, createCtpClientExistingFlow } from './BuildClients';
@@ -95,14 +97,67 @@ export function QueryCustomerById(
   CUSTOMER_ID: string
 ): Promise<ClientResponse> {
   return apiRootProfile.customers().withId({ ID: CUSTOMER_ID }).get().execute();
-  // const queryCustomer = (customerID: string) => {
-  //   return apiRoot.customers().withId({ ID: customerID }).get().execute();
-  // };
-  // queryCustomer(CUSTOMER_ID)
-  //   .then(({ body }) => {
-  //     console.log(body.email);
-  //   })
-  //   .catch(console.error);
+}
+
+// Edit customer's info by ID
+export function EditCustomerById(
+  CUSTOMER_ID: string,
+  FISRT_NAME: string,
+  LAST_NAME: string,
+  DATE_OF_BIRTH: string,
+  EMAIL: string,
+  VERSION: number
+): Promise<ClientResponse> {
+  const updateFirstName: CustomerUpdateAction = {
+    action: 'setFirstName',
+    firstName: FISRT_NAME
+  };
+  const updateLastName: CustomerUpdateAction = {
+    action: 'setLastName',
+    lastName: LAST_NAME
+  };
+  const updateDateOfBirth: CustomerUpdateAction = {
+    action: 'setDateOfBirth',
+    dateOfBirth: DATE_OF_BIRTH
+  };
+  const updateEmail: CustomerUpdateAction = {
+    action: 'changeEmail',
+    email: EMAIL
+  };
+  const updateData: CustomerUpdate = {
+    version: VERSION,
+    actions: [updateFirstName, updateLastName, updateDateOfBirth, updateEmail]
+  };
+
+  return apiRootProfile
+    .customers()
+    .withId({ ID: CUSTOMER_ID })
+    .post({
+      body: updateData
+    })
+    .execute();
+}
+
+// Change password by customer ID and old password
+export function ChangePassword(
+  CUSTOMER_ID: string,
+  PASS_OLD: string,
+  PASS_NEW: string,
+  VERSION: number
+): Promise<ClientResponse> {
+  const updateData: CustomerChangePassword = {
+    id: CUSTOMER_ID,
+    version: VERSION,
+    currentPassword: PASS_OLD,
+    newPassword: PASS_NEW
+  };
+  return apiRootProfile
+    .customers()
+    .password()
+    .post({
+      body: updateData
+    })
+    .execute();
 }
 
 // Request info about a customer by its EMAIL
