@@ -84,11 +84,13 @@
 
 .img-container {
   min-width: 550px;
+  width: 550px;
   height: 550px;
-
+  display: flex;
   overflow: hidden;
 }
 
 .visually-hidden {
-  transform: translateY(550px);
+  display: none;
+  //transform: translateX(550px);
 }

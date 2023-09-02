@@ -72,6 +72,7 @@ export default class ItemView extends State {
   private container: HTMLElement;
   private activeSlideNumber: number;
   private catalogItem: ProductProjection;
+  private next: HTMLElement;
 
   constructor(catalogItem: ProductProjection) {
     super();
@@ -80,25 +81,13 @@ export default class ItemView extends State {
     this.container.innerHTML = `${INNER_HTML.hero}`;
     this.activeSlideNumber = 0;
     this.catalogItem = catalogItem;
+    this.next = this.container.querySelector('.next') as HTMLElement;
   }
 
   public async render(): Promise<HTMLElement> {
     const category: string = getCategory(this.catalogItem.categories[0].id);
     this.container.innerHTML += getContent(this.catalogItem, category);
 
-    console.log(this.activeSlideNumber);
-    this.showSlide(this.activeSlideNumber);
-
-    document.addEventListener('click', (e) => console.log(e.target));
-
     return this.container;
-  }
-
-  public showSlide(number: number): void {
-    const slides = document.getElementsByClassName(
-      'item-img'
-    ) as HTMLCollectionOf<Element>;
-    console.log(slides);
-    // slides[number].classList.remove('visually-hidden');
   }
 }
