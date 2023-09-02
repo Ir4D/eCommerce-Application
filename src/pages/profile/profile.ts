@@ -169,7 +169,7 @@ export default class ProfileView extends Component {
     this.container.appendChild(profileWrapper);
     document.addEventListener('click', (event: MouseEvent) => {
       const target = event.target as HTMLElement;
-      event.stopImmediatePropagation();
+      // event.stopImmediatePropagation();
       if (target && target.classList.contains('info-edit-btn')) {
         if (this.customerId) {
           QueryCustomerById(this.customerId)

@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable max-lines-per-function */
@@ -68,6 +69,9 @@ export default class CatalogView extends Component {
       this.fillCardContainer();
     });
 
+    const searchGroup = document.createElement('div');
+    searchGroup.classList.add('catalog-controls-search-group');
+
     const searchInput = document.createElement('input');
     searchInput.placeholder = 'Search...';
     searchInput.classList.add('catalog-search-input');
@@ -77,8 +81,10 @@ export default class CatalogView extends Component {
     });
 
     const searchButton = document.createElement('button');
-    searchButton.type = 'submit';
+    // searchButton.type = 'submit';
     searchButton.classList.add('catalog-search-button');
+
+    searchGroup.append(searchInput, searchButton);
 
     const abcSortButton = document.createElement('button');
     const priceSortButton = document.createElement('button');
@@ -87,6 +93,16 @@ export default class CatalogView extends Component {
     });
     abcSortButton.classList.add('abc');
     priceSortButton.classList.add('price');
+
+    const abcSortGroup = document.createElement('div');
+    const priceSortGroup = document.createElement('div');
+    abcSortGroup.append(abcSortButton, this.abcSortArrow);
+    priceSortGroup.append(priceSortButton, this.priceSortArrow);
+    [abcSortGroup, priceSortGroup].forEach((div) => {
+      div.classList.add('catalog-controls-sort-group');
+    });
+    abcSortGroup.append(abcSortButton, this.abcSortArrow);
+    priceSortGroup.append(priceSortButton, this.priceSortArrow);
 
     const deleteArrow = (arrow: HTMLDivElement): void => {
       arrow.classList.remove('increase');
@@ -138,12 +154,9 @@ export default class CatalogView extends Component {
 
     this.controls.append(
       categorySelect,
-      searchInput,
-      searchButton,
-      abcSortButton,
-      this.abcSortArrow,
-      priceSortButton,
-      this.priceSortArrow
+      searchGroup,
+      abcSortGroup,
+      priceSortGroup
     );
     this.container.append(this.controls);
 
@@ -160,7 +173,7 @@ export default class CatalogView extends Component {
     catalogItemLink.classList.add('card-item-link');
     catalogItemLink.href = `${Router.pages.catalog}/${catalogItem.id}`;
 
-    const categoryButton = document.createElement('button');
+    const categoryButton = document.createElement('div');
     categoryButton.classList.add('catalog-card-category-button');
     if (catalogItem.categories[0]) {
       for (const [key, value] of State.CategoryMap.entries()) {
@@ -231,6 +244,30 @@ export default class CatalogView extends Component {
       return catalog;
     };
 
+    const sortByPrice = (
+      catalog: ProductProjection[] | undefined
+    ): ProductProjection[] | undefined => {
+      const undefinedPriceArr = catalog?.filter((item) => {
+        return !item.masterVariant.prices?.length;
+      });
+      let definedPriceArr = catalog?.filter((item) => {
+        return item.masterVariant.prices?.length;
+      });
+
+      const sortPricesArr: [number, ProductProjection][] | undefined =
+        definedPriceArr?.map((product) => {
+          const sortPrice = product.masterVariant.prices![0].discounted
+            ? product.masterVariant.prices![0].discounted.value.centAmount
+            : product.masterVariant.prices![0].value.centAmount;
+          return [sortPrice, product];
+        });
+      sortPricesArr?.sort((a, b) => a[0] - b[0]);
+      definedPriceArr = sortPricesArr?.map((item) => item[1]);
+
+      catalog = [...definedPriceArr!, ...undefinedPriceArr!];
+      return catalog;
+    };
+
     const catalog = State.catalog?.body.results;
     this.cardContainer.innerHTML = '';
     let outputArr: ProductProjection[] | undefined;
@@ -255,64 +292,11 @@ export default class CatalogView extends Component {
           break;
         }
         case 'price-dec': {
-          const undefinedPriceArr = outputArr?.filter((item) => {
-            return !item.masterVariant.prices?.length;
-          });
-          let definedPriceArr = outputArr?.filter((item) => {
-            return item.masterVariant.prices?.length;
-          });
-          // definedPriceArr?.forEach((product) => {
-          //   if (product.masterVariant.prices![0].discounted) {
-          //     Object.defineProperty(product, 'sortPrice', {
-          //       value:
-          //         product.masterVariant.prices![0].discounted.value.centAmount,
-          //       enumerable: true,
-          //       writable: false,
-          //       configurable: false
-          //     });
-          //   } else {
-          //     Object.defineProperty(product, 'sortPrice', {
-          //       value: product.masterVariant.prices![0].value.centAmount,
-          //       enumerable: true,
-          //       writable: false,
-          //       configurable: false
-          //     });
-          //   }
-          // });
-          const sortPricesArr: [number, ProductProjection][] | undefined =
-            definedPriceArr?.map((product) => {
-              const sortPrice = product.masterVariant.prices![0].discounted
-                ? product.masterVariant.prices![0].discounted.value.centAmount
-                : product.masterVariant.prices![0].value.centAmount;
-              return [sortPrice, product];
-            });
-          sortPricesArr?.sort((a, b) => a[0] - b[0]);
-          definedPriceArr = sortPricesArr?.map((item) => item[1]);
-          // definedPriceArr?.sort(
-          //   (a, b) =>
-          //     a.masterVariant.prices![0].value.centAmount -
-          //     b.masterVariant.prices![0].value.centAmount
-          // );
-          outputArr = [...definedPriceArr!, ...undefinedPriceArr!];
+          outputArr = sortByPrice(outputArr);
           break;
         }
         case 'price-inc': {
-          const undefinedPriceArr = outputArr?.filter((item) => {
-            return !item.masterVariant.prices?.length;
-          });
-          let definedPriceArr = outputArr?.filter((item) => {
-            return item.masterVariant.prices?.length;
-          });
-          const sortPricesArr: [number, ProductProjection][] | undefined =
-            definedPriceArr?.map((product) => {
-              const sortPrice = product.masterVariant.prices![0].discounted
-                ? product.masterVariant.prices![0].discounted.value.centAmount
-                : product.masterVariant.prices![0].value.centAmount;
-              return [sortPrice, product];
-            });
-          sortPricesArr?.sort((a, b) => a[0] - b[0]);
-          definedPriceArr = sortPricesArr?.map((item) => item[1]);
-          outputArr = [...definedPriceArr!, ...undefinedPriceArr!].reverse();
+          outputArr = sortByPrice(outputArr)?.reverse();
           break;
         }
         default: {
