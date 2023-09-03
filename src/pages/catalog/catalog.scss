@@ -93,6 +93,32 @@
   background-size: 90%;
 }
 
+.catalog-controls-range-group {
+  display: flex;
+  align-items: baseline;
+  gap: 1vw;
+  padding: 2vw;
+}
+
+.catalog-controls-range-span {
+  font-size: 16px;
+  font-weight: 300;
+}
+
+.catalog-controls-range-input {
+  box-sizing: border-box;
+  width: 7vw;
+  height: 3vw;
+  border: 1px solid #7eb693;
+  border-radius: 12px;
+  margin-bottom: 0.8em;
+  padding: 2px 20px;
+  font-size: 16px;
+  font-style: italic;
+  font-weight: 300;
+  background-color: #f9f8f8;
+}
+
 .card-item-link {
   text-decoration: none;
   display: flex;
@@ -209,6 +235,11 @@
     width: 4vw;
     height: 4vw;
   }
+
+  .catalog-controls-range-input {
+    height: 4vw;
+    width: 10vw;
+  }
 }
 
 @media only screen and (max-width: 800px) {
@@ -232,6 +263,12 @@
     height: 5vw;
     width: 5vw;
   }
+
+  .catalog-controls-range-input {
+    border-radius: 5px;
+    height: 5vw;
+    width: 10vw;
+  }
 }
 
 @media only screen and (max-width: 750px) {
@@ -249,7 +286,6 @@
 
   .catalog-category-select,
   .catalog-search-input {
-    border-radius: 5px;
     height: 6vw;
     width: 40vw;
   }
@@ -273,5 +309,14 @@
   .catalog-card-discount-icon {
     width: 5vw;
     height: 5vw;
+  }
+
+  .catalog-controls-range-input {
+    height: 6vw;
+    width: 10vw;
+  }
+
+  .catalog-controls-range-group {
+    justify-content: center;
   }
 }
