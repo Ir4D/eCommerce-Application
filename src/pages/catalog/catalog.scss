@@ -2,6 +2,40 @@
   max-width: 1920px;
 }
 
+.catalog-header {
+  padding: 2vw;
+}
+
+.catalog-nav-group {
+  padding: 1vw 0;
+}
+
+.catalog-nav-group.hiden {
+  display: none;
+}
+
+.catalog-filter-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 700;
+  padding: 5px 12px;
+  color: #fff;
+  background-color: #274c5b;
+  border-radius: 8px;
+  align-self: start;
+}
+
+.catalog-filter-title::after {
+  content: url('../../assets/images/icons/arrow-to-right.svg');
+  margin: 1vw;
+}
+
+.catalog-filter-title.open::after {
+  transform: rotate(0.25turn);
+  transition: 0.5s;
+}
+
 .catalog-container.item-page {
   display: flex;
   flex-direction: column;
@@ -19,7 +53,7 @@
 .catalog-controls {
   display: flex;
   gap: 1vw;
-  padding: 2vw;
+  padding: 1vw 0;
 }
 
 .catalog-category-select,
@@ -97,7 +131,7 @@
   display: flex;
   align-items: baseline;
   gap: 1vw;
-  padding: 2vw;
+  padding: 1vw 0;
 }
 
 .catalog-controls-range-span {
@@ -221,19 +255,11 @@
     transform: translateX(-5vw);
   }
 
-  .catalog-sort-button {
-    height: 4vw;
-    width: 4vw;
-  }
-
-  .catalog-sort-arrow {
-    height: 4vw;
-    width: 4vw;
-  }
-
+  .catalog-sort-button,
+  .catalog-sort-arrow,
   .catalog-card-discount-icon {
-    width: 4vw;
     height: 4vw;
+    width: 4vw;
   }
 
   .catalog-controls-range-input {
@@ -250,15 +276,8 @@
     width: 40vw;
   }
 
-  .catalog-search-button {
-    height: 5vw;
-  }
-
-  .catalog-sort-button {
-    height: 5vw;
-    width: 5vw;
-  }
-
+  .catalog-search-button,
+  .catalog-sort-button,
   .catalog-sort-arrow {
     height: 5vw;
     width: 5vw;
@@ -286,23 +305,18 @@
 
   .catalog-category-select,
   .catalog-search-input {
-    height: 6vw;
+    height: 10vw;
     width: 40vw;
   }
 
   .catalog-search-button {
-    height: 6vw;
+    height: 10vw;
   }
 
-  .catalog-sort-button {
-    height: 6vw;
-    width: 6vw;
-    transform: translateX(0);
-  }
-
+  .catalog-sort-button,
   .catalog-sort-arrow {
-    height: 6vw;
-    width: 6vw;
+    height: 10vw;
+    width: 10vw;
     transform: translateX(0);
   }
 
@@ -312,8 +326,8 @@
   }
 
   .catalog-controls-range-input {
-    height: 6vw;
-    width: 10vw;
+    height: 10vw;
+    width: 20vw;
   }
 
   .catalog-controls-range-group {

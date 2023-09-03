@@ -29,7 +29,6 @@ export default class CatalogView extends Component {
   private controls: HTMLFormElement;
   private abcSortArrow: HTMLDivElement;
   private priceSortArrow: HTMLDivElement;
-  private paginationBar: HTMLElement;
   private priceFloor: number;
   private priceCeli: number;
 
@@ -42,8 +41,6 @@ export default class CatalogView extends Component {
     this.controls = document.createElement('form');
     this.controls.classList.add('catalog-controls');
     this.container.append(this.errorModal);
-    this.paginationBar = document.createElement('div');
-    this.paginationBar.classList.add('catalog-pagination-bar');
     this.errorModal.addEventListener('click', () => {
       this.errorModal.close();
     });
@@ -58,10 +55,36 @@ export default class CatalogView extends Component {
   }
 
   private renderCatalog(): void {
+    const deleteArrow = (arrow: HTMLDivElement): void => {
+      arrow.classList.remove('increase');
+      arrow.classList.remove('decrease');
+    };
+
+    const changeArrow = (
+      arrow: HTMLDivElement,
+      prev: string,
+      curr: string
+    ): void => {
+      arrow.classList.remove(prev);
+      arrow.classList.add(curr);
+    };
+
     this.container.classList.remove('item-page');
 
     /* catalog controls */
     this.controls.innerHTML = '';
+    const catalogHeader = document.createElement('div');
+    catalogHeader.classList.add('catalog-header');
+    const navGroup = document.createElement('div');
+    navGroup.classList.add('catalog-nav-group', 'hiden');
+    const filterTitle = document.createElement('span');
+    filterTitle.classList.add('catalog-filter-title');
+    filterTitle.innerText = 'Filters';
+    filterTitle.addEventListener('click', () => {
+      navGroup.classList.toggle('hiden');
+      filterTitle.classList.toggle('open');
+    });
+
     const categorySelect = document.createElement('select');
     categorySelect.classList.add('catalog-category-select');
     categorySelect.innerHTML = `<option data-id="all">All categories</option>`;
@@ -124,27 +147,6 @@ export default class CatalogView extends Component {
       input.type = 'number';
     });
 
-    priceRangeGroup.append(
-      titleSpan,
-      priceFloorInput,
-      betweenSpan,
-      priceCeliInput
-    );
-
-    const deleteArrow = (arrow: HTMLDivElement): void => {
-      arrow.classList.remove('increase');
-      arrow.classList.remove('decrease');
-    };
-
-    const changeArrow = (
-      arrow: HTMLDivElement,
-      prev: string,
-      curr: string
-    ): void => {
-      arrow.classList.remove(prev);
-      arrow.classList.add(curr);
-    };
-
     abcSortButton.addEventListener('click', () => {
       deleteArrow(this.priceSortArrow);
       if (!this.sortPattern) {
@@ -181,13 +183,11 @@ export default class CatalogView extends Component {
 
     priceFloorInput.addEventListener('input', () => {
       this.priceFloor = Number(priceFloorInput.value);
-      console.log('floor', this.priceFloor);
       this.fillCardContainer();
     });
 
     priceCeliInput.addEventListener('input', () => {
       this.priceCeli = Number(priceCeliInput.value) || Infinity;
-      console.log('celi', this.priceCeli);
       this.fillCardContainer();
     });
 
@@ -197,7 +197,17 @@ export default class CatalogView extends Component {
       abcSortGroup,
       priceSortGroup
     );
-    this.container.append(this.controls, priceRangeGroup);
+
+    navGroup.append(this.controls, priceRangeGroup);
+    priceRangeGroup.append(
+      titleSpan,
+      priceFloorInput,
+      betweenSpan,
+      priceCeliInput
+    );
+
+    catalogHeader.append(filterTitle, navGroup);
+    this.container.append(catalogHeader);
 
     /* cards container */
     this.container.append(this.cardContainer);
@@ -309,7 +319,6 @@ export default class CatalogView extends Component {
 
     const catalog = State.catalog?.body.results;
     this.cardContainer.innerHTML = '';
-    const priceRange = this.priceCeli - this.priceFloor;
     let outputArr: ProductProjection[] | undefined;
     if (this.currentCategory === 'All categories') {
       outputArr = catalog;
@@ -361,7 +370,6 @@ export default class CatalogView extends Component {
           this.priceCeli
     );
     outputArr?.forEach((catalogItem) => {
-      // console.log('price', catalogItem.masterVariant.prices![0]);
       const catalogItemLink = this.renderCatalogItemCard(catalogItem);
       this.cardContainer.append(catalogItemLink);
     });
