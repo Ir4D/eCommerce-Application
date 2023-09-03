@@ -201,7 +201,7 @@ export default class CatalogView extends Component {
     cardName.innerText = catalogItem.name.en;
 
     const priceContainer = document.createElement('div');
-    priceContainer.classList.add('catalog-card-price-container');
+    priceContainer.classList.add('price-container');
     const cardPrice = document.createElement('span');
     cardPrice.classList.add('catalog-card-price');
     if (
@@ -336,6 +336,28 @@ export default class CatalogView extends Component {
     } else {
       Router.navigate(Router.pages.notFound);
     }
+
+    const slider = document.querySelector('.swiper');
+    const swiperWrapper = document.querySelector('.swiper-wrapper');
+    const body = document.querySelector('body');
+    const overlay = document.createElement('div');
+    overlay.className = 'overlay';
+    body?.append(overlay);
+
+    swiperWrapper?.addEventListener('click', () => {
+      // console.log('modal')
+      slider?.classList.toggle('showModal');
+      overlay?.classList.toggle('visible');
+      body?.classList.toggle('stop-scroll');
+    });
+
+    overlay.addEventListener('click', () => {
+      slider?.classList.toggle('showModal');
+      overlay?.classList.toggle('visible');
+      body?.classList.toggle('stop-scroll');
+    });
+
+    // console.log(document.querySelector('.swiper'))
     return this.container;
   }
 
@@ -351,8 +373,6 @@ export default class CatalogView extends Component {
       },
       loop: true
     });
-
-    // Swiper.use([Navigation, Pagination]);
   }
 
   private verifiCardId(
