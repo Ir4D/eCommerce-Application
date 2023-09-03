@@ -9,10 +9,14 @@ import {
   ProductProjectionPagedQueryResponse
 } from '@commercetools/platform-sdk';
 
+import Swiper from 'swiper';
+import { Navigation, Pagination } from 'swiper/modules';
 import Router from '../../services/router/router';
 import State from '../../services/state';
 import Component from '../../components/abstract/component';
 import ItemView from '../item/item';
+
+Swiper.use([Navigation, Pagination]);
 
 type SortPatternType =
   | undefined
@@ -30,10 +34,6 @@ export default class CatalogView extends Component {
   private abcSortArrow: HTMLDivElement;
   private priceSortArrow: HTMLDivElement;
   private paginationBar: HTMLElement;
-  private next: HTMLElement;
-  private prev: HTMLElement;
-  private slides: HTMLCollectionOf<Element>;
-  // private activeSlideNumber: number;
 
   constructor() {
     super();
@@ -55,17 +55,7 @@ export default class CatalogView extends Component {
     [this.abcSortArrow, this.priceSortArrow].forEach((arrow) => {
       arrow.classList.add('catalog-sort-arrow');
     });
-    this.next = this.container.querySelector('.next') as HTMLElement;
-    this.prev = this.container.querySelector('.prev') as HTMLElement;
-    this.slides = document.getElementsByClassName(
-      'item-img'
-    ) as HTMLCollectionOf<Element>;
-    // this.activeSlideNumber = 0;
   }
-
-  /*  private activeSlideNumber(number: number = 0): number{
-    return number;
-  } */
 
   private renderCatalog(): void {
     this.container.classList.remove('item-page');
@@ -350,35 +340,19 @@ export default class CatalogView extends Component {
   }
 
   private createSlides(): void {
-    this.next = this.container.querySelector('.next') as HTMLElement;
-    this.next?.addEventListener('click', this.showNextSlide);
+    const swiper = new Swiper('.swiper', {
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev'
+      },
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true
+      },
+      loop: true
+    });
 
-    this.prev = this.container.querySelector('.prev') as HTMLElement;
-    this.prev?.addEventListener('click', (e) => console.log('prev'));
-    // let number = this.activeSlideNumber();
-
-    this.slides = document.getElementsByClassName(
-      'item-img'
-    ) as HTMLCollectionOf<Element>;
-    this.showSlide(this.activeSlideNumber);
-
-    console.log('create', this.activeSlideNumber);
-  }
-
-  private showSlide(number: number): void {
-    this.slides[number].classList.remove('visually-hidden');
-  }
-
-  private showNextSlide(): void {
-    this.slides = document.getElementsByClassName(
-      'item-img'
-    ) as HTMLCollectionOf<Element>;
-    console.log('next', this.slides);
-    console.log('next', this.activeSlideNumber());
-
-    /* this.slides[this.activeSlideNumber].classList.add('visually-hidden');
-    this.activeSlideNumber=(this.activeSlideNumber+1)%this.slides.length;
-    this.showSlide(this.activeSlideNumber) */
+    // Swiper.use([Navigation, Pagination]);
   }
 
   private verifiCardId(

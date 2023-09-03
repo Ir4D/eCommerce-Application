@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 import { ProductProjection } from '@commercetools/platform-sdk';
 import State from '../../services/state';
+// import Swiper from 'swiper';
 
 const getCategory = (currentId: string): string => {
   const category = State.categories?.body.results.find(
@@ -22,16 +23,20 @@ const getContent = (
     !catalogItem.description
   )
     throw new Error('error');
-  // catalogItem.masterVariant.images[0].url
   return `
   <section class="item-content">
-    <div class="img-container">
-      ${catalogItem.masterVariant.images
-        .map(
-          (img) =>
-            `<img src="${img.url}" class="item-img visually-hidden" width="550" height="550" />`
-        )
-        .join('')}
+    <div class="img-container swiper">
+      <div class="swiper-wrapper">
+          ${catalogItem.masterVariant.images
+            .map(
+              (img) =>
+                `<div class="swiper-slide"><img src="${img.url}" class="item-img" /></div>`
+            )
+            .join('')}
+      </div>
+      <div class="swiper-button-prev"></div>
+      <div class="swiper-button-next"></div>
+      <div class="swiper-pagination"></div>
     </div>
     <div class="item-description">
       <button class="btn catalog-card_btn item-category">${category}</button>
@@ -51,10 +56,7 @@ const getContent = (
           <br>Simply dummy text of the printing and typesetting industry. Lorem had ceased to been the industry's standard dummy text 
           ever since the 1500s, when an unknown printer took a galley.
         </div>
-        <div class="slider_btn-container">
-          <button class="slider-btn prev"> &#8592; </button>
-          <button class="slider-btn next"> &#8594; </button>
-        </div>
+      
         <form class=order-form>
           <span class="order-text">Quantity:</span>
           <input type="text" class="order-quantity" />
@@ -70,18 +72,14 @@ const INNER_HTML = {
 
 export default class ItemView extends State {
   private container: HTMLElement;
-  private activeSlideNumber: number;
   private catalogItem: ProductProjection;
-  private next: HTMLElement;
 
   constructor(catalogItem: ProductProjection) {
     super();
     this.container = document.createElement('section');
     this.container.classList.add('good-cart');
     this.container.innerHTML = `${INNER_HTML.hero}`;
-    this.activeSlideNumber = 0;
     this.catalogItem = catalogItem;
-    this.next = this.container.querySelector('.next') as HTMLElement;
   }
 
   public async render(): Promise<HTMLElement> {
