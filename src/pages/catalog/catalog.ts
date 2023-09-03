@@ -9,10 +9,14 @@ import {
   ProductProjectionPagedQueryResponse
 } from '@commercetools/platform-sdk';
 
+import Swiper from 'swiper';
+import { Navigation, Pagination } from 'swiper/modules';
 import Router from '../../services/router/router';
 import State from '../../services/state';
 import Component from '../../components/abstract/component';
 import ItemView from '../item/item';
+
+Swiper.use([Navigation, Pagination]);
 
 type SortPatternType =
   | undefined
@@ -245,7 +249,7 @@ export default class CatalogView extends Component {
     cardName.innerText = catalogItem.name.en;
 
     const priceContainer = document.createElement('div');
-    priceContainer.classList.add('catalog-card-price-container');
+    priceContainer.classList.add('price-container');
     const cardPrice = document.createElement('span');
     cardPrice.classList.add('catalog-card-price');
     if (
@@ -387,10 +391,47 @@ export default class CatalogView extends Component {
 
       const item = new ItemView(chosenItem);
       this.container.append(await item.render());
+      this.createSlides();
     } else {
       Router.navigate(Router.pages.notFound);
     }
+
+    const slider = document.querySelector('.swiper');
+    const swiperWrapper = document.querySelector('.swiper-wrapper');
+    const body = document.querySelector('body');
+    const overlay = document.createElement('div');
+    overlay.className = 'overlay';
+    body?.append(overlay);
+
+    swiperWrapper?.addEventListener('click', () => {
+      // console.log('modal')
+      slider?.classList.toggle('showModal');
+      overlay?.classList.toggle('visible');
+      body?.classList.toggle('stop-scroll');
+    });
+
+    overlay.addEventListener('click', () => {
+      slider?.classList.toggle('showModal');
+      overlay?.classList.toggle('visible');
+      body?.classList.toggle('stop-scroll');
+    });
+
+    // console.log(document.querySelector('.swiper'))
     return this.container;
+  }
+
+  private createSlides(): void {
+    const swiper = new Swiper('.swiper', {
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev'
+      },
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true
+      },
+      loop: true
+    });
   }
 
   private verifiCardId(

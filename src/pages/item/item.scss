@@ -12,6 +12,7 @@
 .item-content {
   position: relative;
   max-width: 1337px;
+  min-width: 0;
   margin: 130px auto;
   padding-right: 50px;
 
@@ -72,23 +73,15 @@
   border-radius: 16px;
 }
 
-.slider_btn-container {
-  position: absolute;
-  bottom: 10px;
-  left: 240px;
-
-  width: 70px;
-  display: flex;
-  justify-content: space-between;
-}
-
 .img-container {
-  min-width: 550px;
+  box-sizing: border-box;
+  width: 550px;
   height: 550px;
-
-  overflow: hidden;
 }
 
-.visually-hidden {
-  transform: translateY(550px);
+.item-img {
+  max-width: 100%;
+}
+.item-category--once {
+  z-index: 2;
 }
