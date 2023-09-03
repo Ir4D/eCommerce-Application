@@ -29,7 +29,8 @@ export default class CatalogView extends Component {
   private controls: HTMLFormElement;
   private abcSortArrow: HTMLDivElement;
   private priceSortArrow: HTMLDivElement;
-  private paginationBar: HTMLElement;
+  private priceFloor: number;
+  private priceCeli: number;
 
   constructor() {
     super();
@@ -40,8 +41,6 @@ export default class CatalogView extends Component {
     this.controls = document.createElement('form');
     this.controls.classList.add('catalog-controls');
     this.container.append(this.errorModal);
-    this.paginationBar = document.createElement('div');
-    this.paginationBar.classList.add('catalog-pagination-bar');
     this.errorModal.addEventListener('click', () => {
       this.errorModal.close();
     });
@@ -51,13 +50,41 @@ export default class CatalogView extends Component {
     [this.abcSortArrow, this.priceSortArrow].forEach((arrow) => {
       arrow.classList.add('catalog-sort-arrow');
     });
+    this.priceFloor = 0;
+    this.priceCeli = Infinity;
   }
 
   private renderCatalog(): void {
+    const deleteArrow = (arrow: HTMLDivElement): void => {
+      arrow.classList.remove('increase');
+      arrow.classList.remove('decrease');
+    };
+
+    const changeArrow = (
+      arrow: HTMLDivElement,
+      prev: string,
+      curr: string
+    ): void => {
+      arrow.classList.remove(prev);
+      arrow.classList.add(curr);
+    };
+
     this.container.classList.remove('item-page');
 
     /* catalog controls */
     this.controls.innerHTML = '';
+    const catalogHeader = document.createElement('div');
+    catalogHeader.classList.add('catalog-header');
+    const navGroup = document.createElement('div');
+    navGroup.classList.add('catalog-nav-group', 'hiden');
+    const filterTitle = document.createElement('span');
+    filterTitle.classList.add('catalog-filter-title');
+    filterTitle.innerText = 'Filters';
+    filterTitle.addEventListener('click', () => {
+      navGroup.classList.toggle('hiden');
+      filterTitle.classList.toggle('open');
+    });
+
     const categorySelect = document.createElement('select');
     categorySelect.classList.add('catalog-category-select');
     categorySelect.innerHTML = `<option data-id="all">All categories</option>`;
@@ -82,7 +109,6 @@ export default class CatalogView extends Component {
     });
 
     const searchButton = document.createElement('button');
-    // searchButton.type = 'submit';
     searchButton.classList.add('catalog-search-button');
 
     searchGroup.append(searchInput, searchButton);
@@ -105,19 +131,21 @@ export default class CatalogView extends Component {
     abcSortGroup.append(abcSortButton, this.abcSortArrow);
     priceSortGroup.append(priceSortButton, this.priceSortArrow);
 
-    const deleteArrow = (arrow: HTMLDivElement): void => {
-      arrow.classList.remove('increase');
-      arrow.classList.remove('decrease');
-    };
-
-    const changeArrow = (
-      arrow: HTMLDivElement,
-      prev: string,
-      curr: string
-    ): void => {
-      arrow.classList.remove(prev);
-      arrow.classList.add(curr);
-    };
+    const priceRangeGroup = document.createElement('div');
+    priceRangeGroup.classList.add('catalog-controls-range-group');
+    const titleSpan = document.createElement('span');
+    const betweenSpan = document.createElement('span');
+    titleSpan.innerText = 'Price filter';
+    betweenSpan.innerText = '-';
+    [titleSpan, betweenSpan].forEach((span) => {
+      span.classList.add('catalog-controls-range-span');
+    });
+    const priceFloorInput = document.createElement('input');
+    const priceCeliInput = document.createElement('input');
+    [priceFloorInput, priceCeliInput].forEach((input) => {
+      input.classList.add('catalog-controls-range-input');
+      input.type = 'number';
+    });
 
     abcSortButton.addEventListener('click', () => {
       deleteArrow(this.priceSortArrow);
@@ -153,13 +181,33 @@ export default class CatalogView extends Component {
       }
     });
 
+    priceFloorInput.addEventListener('input', () => {
+      this.priceFloor = Number(priceFloorInput.value);
+      this.fillCardContainer();
+    });
+
+    priceCeliInput.addEventListener('input', () => {
+      this.priceCeli = Number(priceCeliInput.value) || Infinity;
+      this.fillCardContainer();
+    });
+
     this.controls.append(
       categorySelect,
       searchGroup,
       abcSortGroup,
       priceSortGroup
     );
-    this.container.append(this.controls);
+
+    navGroup.append(this.controls, priceRangeGroup);
+    priceRangeGroup.append(
+      titleSpan,
+      priceFloorInput,
+      betweenSpan,
+      priceCeliInput
+    );
+
+    catalogHeader.append(filterTitle, navGroup);
+    this.container.append(catalogHeader);
 
     /* cards container */
     this.container.append(this.cardContainer);
@@ -310,6 +358,17 @@ export default class CatalogView extends Component {
         item.name.en.toLowerCase().includes(searchPattern.toLowerCase())
       );
     }
+    outputArr = outputArr?.filter(
+      (item) =>
+        (item.masterVariant.prices![0].discounted?.value.centAmount ||
+          item.masterVariant.prices![0].value.centAmount) /
+          100 >
+          this.priceFloor &&
+        (item.masterVariant.prices![0].discounted?.value.centAmount ||
+          item.masterVariant.prices![0].value.centAmount) /
+          100 <
+          this.priceCeli
+    );
     outputArr?.forEach((catalogItem) => {
       const catalogItemLink = this.renderCatalogItemCard(catalogItem);
       this.cardContainer.append(catalogItemLink);
