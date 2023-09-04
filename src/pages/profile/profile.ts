@@ -47,22 +47,23 @@ export default class ProfileView extends Component {
   private inputEmail!: HTMLInputElement;
   private inputPassOld!: HTMLInputElement;
   private inputPassNew!: HTMLInputElement;
+  public customerId: string | null;
 
   constructor() {
     super();
+    this.customerId = localStorage.getItem('customerID');
     this.container.classList.add('profile');
     this.errorModal = document.createElement('dialog');
     this.renderHeading();
+    this.refreshProfile();
     this.container.append(this.errorModal);
     this.errorModal.addEventListener('click', () => {
       this.errorModal.close();
     });
-    this.refreshProfile();
     this.setupEditModal();
     this.setupChangePassModal();
+    this.render();
   }
-
-  private customerId: string | null = localStorage.getItem('customerID');
 
   private setupEditModal(): void {
     this.editModal = document.createElement('dialog');
@@ -194,17 +195,16 @@ export default class ProfileView extends Component {
     }
   }
 
-  public refreshProfile(): void {
+  public async refreshProfile(): Promise<void> {
     if (this.customerId) {
-      QueryCustomerById(this.customerId)
-        .then(({ body }) => {
-          this.renderProfileInfo(body);
-          this.renderAddresses(body);
-        })
-        .catch((error) => {
-          this.errorModal.innerText = error;
-          this.errorModal.showModal();
-        });
+      try {
+        const { body } = await QueryCustomerById(this.customerId);
+        this.renderProfileInfo(body);
+        this.renderAddresses(body);
+      } catch (error) {
+        this.errorModal.innerText = 'Something went wrong, try again';
+        this.errorModal.showModal();
+      }
     }
   }
 

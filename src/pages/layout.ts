@@ -73,6 +73,10 @@ export default class Layout {
         }
         case Router.pages.profile: {
           pageHTML = '';
+          if (!localStorage.getItem('customerID')) {
+            Router.navigate(Router.pages.main);
+            pageHTML = this.main.render;
+          }
           break;
         }
         case Router.pages.cart: {
