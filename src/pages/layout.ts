@@ -104,7 +104,6 @@ export default class Layout {
     } else if (route.includes('catalog/')) {
       pageHTML = '';
       this.slot.append(this.catalog.render());
-      // this.slot.innerHTML = '';
       this.slot.append(await this.catalog.renderItemPage(route));
     } else {
       this.slot.innerHTML = pageHTML;
