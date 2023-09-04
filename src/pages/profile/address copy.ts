@@ -1,6 +1,12 @@
 /* eslint-disable max-lines-per-function */
 /* eslint-disable no-restricted-syntax */
-import { EditAddressById, QueryCustomerById } from '../../api/apiMethods';
+import { Customer } from '@commercetools/platform-sdk';
+import {
+  EditAddressById,
+  QueryCustomerById,
+  SetDefaultBillAdr,
+  SetDefaultShipAdr
+} from '../../api/apiMethods';
 import InfoElem from './profileElem';
 
 const createElem = (tag: string, className: string): HTMLElement =>
@@ -20,6 +26,14 @@ const MODAL_CHANGE_ADDRESS = `
     <label for="input-postal-code">Postal Code:</label>
     <input type="text" id="input-postal-code">
     </div>
+  <div class="dialog-checkbox-shipping">
+    <label for="input-shipping-def">Default Shipping</label>
+    <input type="checkbox" id="input-shipping-def">
+  </div>
+  <div class="dialog-checkbox-billing">
+    <label for="input-billing-def">Default Billing</label>
+    <input type="checkbox" id="input-billing-def">
+  </div>
   <button id="save-btn">Save</button>
   <button id="cancel-btn">Cancel</button>
   `;
@@ -44,6 +58,8 @@ export default class Address {
   private inputState!: HTMLInputElement;
   private inputCountry!: HTMLInputElement;
   private inputPostalCode!: HTMLInputElement;
+  private inputDefShipAdr!: HTMLInputElement;
+  private inputDefBillAdr!: HTMLInputElement;
 
   constructor(
     id: string,
@@ -86,15 +102,19 @@ export default class Address {
     const addressItem = createElem('div', 'address-item');
     const adrTitle = createElem('div', 'address-title');
     if (this.isBillingAddress) {
+      console.log('isBillingAddress:', this.id, this.isBillingAddress);
       adrTitle.classList.add('adr-billing');
     }
     if (this.isShippingAddress) {
+      console.log('isShippingAddress:', this.id, this.isShippingAddress);
       adrTitle.classList.add('adr-shipping');
     }
     if (this.isDefaultBilling) {
+      console.log('isDefaultBilling:', this.id, this.isDefaultBilling);
       adrTitle.classList.add('adr-billing_deafult');
     }
     if (this.isDefaultShipping) {
+      console.log('isDefaultShipping:', this.id, this.isDefaultShipping);
       adrTitle.classList.add('adr-shipping_deafult');
     }
     adrTitle.innerHTML = 'Address:';
@@ -162,11 +182,10 @@ export default class Address {
           const targetAddress = data.find(
             (item: { id: string }) => item.id === this.id
           );
-          this.openEditModal(targetAddress);
+          this.openEditModal(targetAddress, body);
         })
         .catch((error) => {
-          this.errorModal.innerText =
-            'The address does not contain correct data';
+          this.errorModal.innerText = error;
           this.errorModal.showModal();
         });
     }
@@ -192,6 +211,12 @@ export default class Address {
     this.inputPostalCode = this.editModal.querySelector(
       '#input-postal-code'
     ) as HTMLInputElement;
+    this.inputDefShipAdr = this.editModal.querySelector(
+      '#input-shipping-def'
+    ) as HTMLInputElement;
+    this.inputDefBillAdr = this.editModal.querySelector(
+      '#input-billing-def'
+    ) as HTMLInputElement;
     const saveBtn = this.editModal.querySelector('#save-btn');
     const cancelBtn = this.editModal.querySelector('#cancel-btn');
 
@@ -216,6 +241,8 @@ export default class Address {
     STATE: string,
     COUNTRY: string,
     POSTAL_CODE: string,
+    DEF_SHIPPING: boolean,
+    DEF_BILLING: boolean,
     VERSION: number
   ): void {
     if (this.customerId) {
@@ -228,15 +255,15 @@ export default class Address {
         COUNTRY,
         POSTAL_CODE,
         VERSION
-      )
+      );
+      SetDefaultShipAdr(this.customerId, this.id, DEF_SHIPPING, VERSION);
+      SetDefaultBillAdr(this.customerId, this.id, DEF_BILLING, VERSION)
         .then(({ body }) => {
-          this.errorModal.innerText = 'Your data has been successfully changed';
-          this.errorModal.showModal();
-          window.location.reload();
+          // window.location.reload();
+          console.log(body);
         })
         .catch((error) => {
-          this.errorModal.innerText =
-            'The address does not contain correct data';
+          this.errorModal.innerText = error;
           this.errorModal.showModal();
         });
     }
@@ -252,24 +279,33 @@ export default class Address {
             this.inputState.value,
             this.inputCountry.value,
             this.inputPostalCode.value,
+            this.inputDefShipAdr.checked,
+            this.inputDefShipAdr.checked,
             version
           );
         })
         .catch((error) => {
-          this.errorModal.innerText =
-            'Shomething went wrong, try one more time';
+          console.error('Error getting current version:', error);
+          this.errorModal.innerText = error;
           this.errorModal.showModal();
         });
     }
     this.editModal.close();
   }
 
-  public openEditModal(addresses: Address): void {
+  public openEditModal(addresses: Address, content: Customer): void {
+    console.log(content);
     this.inputStreetName.value = addresses.streetName || '';
     this.inputCity.value = addresses.city || '';
     this.inputState.value = addresses.state || '';
     this.inputCountry.value = addresses.country || '';
     this.inputPostalCode.value = addresses.postalCode || '';
+    if (this.isDefaultShipping) {
+      this.inputDefShipAdr.checked = true;
+    }
+    if (this.isDefaultBilling) {
+      this.inputDefBillAdr.checked = true;
+    }
     this.editModal.showModal();
   }
 

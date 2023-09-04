@@ -111,6 +111,30 @@
   width: 8.5em;
 }
 
+dialog {
+  min-width: 350px;
+  border: 2px solid #274c5b;
+  border-radius: 10px;
+}
+
+.dialog-edit-info,
+.dialog-change-pass,
+.dialog-edit-address {
+  display: flex;
+  flex-direction: column;
+}
+
+.dialog-edit-info input,
+.dialog-change-pass input,
+.dialog-edit-address input {
+  margin-bottom: 10px;
+}
+
+.dialog-checkbox-shipping,
+.dialog-checkbox-billing {
+  display: flex;
+}
+
 @media only screen and (max-width: 700px) {
   .profile-title {
     font-size: 2.2em;
