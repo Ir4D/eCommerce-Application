@@ -24,7 +24,7 @@ export default class MenuView {
 
   constructor() {
     this.container = document.createElement('nav');
-    this.container.classList.add('nav');
+    this.container.classList.add('navigation');
     this.renderList();
   }
 

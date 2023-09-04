@@ -974,7 +974,7 @@ h6 {
     &-mobile {
       box-sizing: border-box;
       position: relative;
-      z-index: 2;
+      z-index: 3;
 
       display: inline-block;
       width: 56px;
@@ -1019,6 +1019,7 @@ h6 {
     }
 
     &.show {
+      z-index: 2;
       box-sizing: border-box;
 
       transform: scaleX(1);

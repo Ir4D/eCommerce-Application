@@ -71,10 +71,11 @@ const getContent = (
           <br>Simply dummy text of the printing and typesetting industry. Lorem had ceased to been the industry's standard dummy text 
           ever since the 1500s, when an unknown printer took a galley.
         </div>
-      
         <form class=order-form>
-          <span class="order-text">Quantity:</span>
-          <input type="text" class="order-quantity" />
+          <div>
+            <span class="order-text">Quantity:</span>
+            <input type="text" class="order-quantity" />
+          </div>
           <button type="submit" class="order-submit btn btn--blue">Add To Cart</button>
         </form>
     </div>
