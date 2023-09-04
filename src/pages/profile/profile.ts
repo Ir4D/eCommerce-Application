@@ -10,25 +10,29 @@ import Address from './address';
 import PersonalInfo from './personalInfo';
 
 const MODAL_CHANGE_INFO = `
-  <h2>Edit Profile</h2>
-  <label for="input-first-name">First Name:</label>
-  <input type="text" id="input-first-name">
-  <label for="input-last-name">Last Name:</label>
-  <input type="text" id="input-last-name">
-  <label for="input-dob">Date of Birth:</label>
-  <input type="text" id="input-dob">
-  <label for="input-email">Email:</label>
-  <input type="text" id="input-email">
+  <h3>Edit Profile</h3>
+  <div class="dialog-edit-info">
+    <label for="input-first-name">First Name:</label>
+    <input type="text" id="input-first-name">
+    <label for="input-last-name">Last Name:</label>
+    <input type="text" id="input-last-name">
+    <label for="input-dob">Date of Birth:</label>
+    <input type="text" id="input-dob">
+    <label for="input-email">Email:</label>
+    <input type="text" id="input-email">
+  </div>
   <button id="save-btn">Save</button>
   <button id="cancel-btn">Cancel</button>
   `;
 
 const MODAL_CHANGE_PASS = `
-  <h2>Change password</h2>
-  <label for="input-pass-old">Current password:</label>
-  <input type="password" id="input-pass-old">
-  <label for="input-pass-new">New password:</label>
-  <input type="password" id="input-pass-new">
+  <h3>Change password</h3>
+  <div class="dialog-change-pass">
+    <label for="input-pass-old">Current password:</label>
+    <input type="password" id="input-pass-old">
+    <label for="input-pass-new">New password:</label>
+    <input type="password" id="input-pass-new">
+  </div>
   <button id="save-btn">Save</button>
   <button id="cancel-btn">Cancel</button>
 `;
@@ -43,22 +47,23 @@ export default class ProfileView extends Component {
   private inputEmail!: HTMLInputElement;
   private inputPassOld!: HTMLInputElement;
   private inputPassNew!: HTMLInputElement;
+  public customerId: string | null;
 
   constructor() {
     super();
+    this.customerId = localStorage.getItem('customerID');
     this.container.classList.add('profile');
     this.errorModal = document.createElement('dialog');
     this.renderHeading();
+    this.refreshProfile();
     this.container.append(this.errorModal);
     this.errorModal.addEventListener('click', () => {
       this.errorModal.close();
     });
-    this.refreshProfile();
     this.setupEditModal();
     this.setupChangePassModal();
+    this.render();
   }
-
-  private customerId: string | null = localStorage.getItem('customerID');
 
   private setupEditModal(): void {
     this.editModal = document.createElement('dialog');
@@ -169,35 +174,37 @@ export default class ProfileView extends Component {
     this.container.appendChild(profileWrapper);
     document.addEventListener('click', (event: MouseEvent) => {
       const target = event.target as HTMLElement;
-      // event.stopImmediatePropagation();
-      if (target && target.classList.contains('info-edit-btn')) {
-        if (this.customerId) {
-          QueryCustomerById(this.customerId)
-            .then(({ body }) => {
-              this.openEditModal(body);
-            })
-            .catch((error) => {
-              this.errorModal.innerText = error;
-              this.errorModal.showModal();
-            });
-        }
-      } else if (target && target.classList.contains('change-pass-btn')) {
-        this.openChangePassModal();
-      }
+      this.btnHandling(target);
     });
   }
 
-  public refreshProfile(): void {
+  public btnHandling(target: HTMLElement): void {
+    if (target && target.classList.contains('info-edit-btn')) {
+      if (this.customerId) {
+        QueryCustomerById(this.customerId)
+          .then(({ body }) => {
+            this.openEditModal(body);
+          })
+          .catch((error) => {
+            this.errorModal.innerText = error;
+            this.errorModal.showModal();
+          });
+      }
+    } else if (target && target.classList.contains('change-pass-btn')) {
+      this.openChangePassModal();
+    }
+  }
+
+  public async refreshProfile(): Promise<void> {
     if (this.customerId) {
-      QueryCustomerById(this.customerId)
-        .then(({ body }) => {
-          this.renderProfileInfo(body);
-          this.renderAddresses(body);
-        })
-        .catch((error) => {
-          this.errorModal.innerText = error;
-          this.errorModal.showModal();
-        });
+      try {
+        const { body } = await QueryCustomerById(this.customerId);
+        this.renderProfileInfo(body);
+        this.renderAddresses(body);
+      } catch (error) {
+        this.errorModal.innerText = 'Something went wrong, try again';
+        this.errorModal.showModal();
+      }
     }
   }
 

@@ -11,7 +11,6 @@ export default abstract class Router {
   };
 
   public static navigate(location: string): void {
-    console.log(location);
     window.location.hash = location;
   }
 }

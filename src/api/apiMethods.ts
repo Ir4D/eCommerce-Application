@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import {
@@ -6,7 +7,12 @@ import {
   createApiBuilderFromCtpClient,
   CustomerUpdate,
   CustomerUpdateAction,
-  CustomerChangePassword
+  CustomerChangePassword,
+  CustomerChangeAddressAction,
+  CartSetShippingAddressAction,
+  CustomerAddShippingAddressIdAction,
+  CustomerSetDefaultShippingAddressAction,
+  CustomerSetDefaultBillingAddressAction
 } from '@commercetools/platform-sdk';
 import { apiData } from './apiData';
 import { createCtpClient, createCtpClientExistingFlow } from './BuildClients';
@@ -154,6 +160,93 @@ export function ChangePassword(
   return apiRootProfile
     .customers()
     .password()
+    .post({
+      body: updateData
+    })
+    .execute();
+}
+
+// Edit customer's address by ID
+export function EditAddressById(
+  CUSTOMER_ID: string,
+  ADDRESS_ID: string,
+  STREET_NAME: string,
+  CITY: string,
+  STATE: string,
+  COUNTRY: string,
+  POSTAL_CODE: string,
+  VERSION: number
+): Promise<ClientResponse> {
+  const editAdrress: CustomerChangeAddressAction = {
+    action: 'changeAddress',
+    addressId: ADDRESS_ID,
+    address: {
+      streetName: STREET_NAME,
+      postalCode: POSTAL_CODE,
+      city: CITY,
+      state: STATE,
+      country: COUNTRY
+    }
+  };
+
+  const updateData: CustomerUpdate = {
+    version: VERSION,
+    actions: [editAdrress]
+  };
+
+  return apiRootProfile
+    .customers()
+    .withId({ ID: CUSTOMER_ID })
+    .post({
+      body: updateData
+    })
+    .execute();
+}
+
+// Set deafault shipping address
+export function SetDefaultShipAdr(
+  CUSTOMER_ID: string,
+  ADDRESS_ID: string,
+  DEF_SHIPPING: boolean,
+  VERSION: number
+): Promise<ClientResponse> {
+  const isShipDef = DEF_SHIPPING ? ADDRESS_ID : undefined;
+  const addShipping: CustomerSetDefaultShippingAddressAction = {
+    action: 'setDefaultShippingAddress',
+    addressId: isShipDef
+  };
+  const updateData: CustomerUpdate = {
+    version: VERSION,
+    actions: [addShipping]
+  };
+  return apiRootProfile
+    .customers()
+    .withId({ ID: CUSTOMER_ID })
+    .post({
+      body: updateData
+    })
+    .execute();
+}
+
+// Set deafault billing address
+export function SetDefaultBillAdr(
+  CUSTOMER_ID: string,
+  ADDRESS_ID: string,
+  DEF_BILLING: boolean,
+  VERSION: number
+): Promise<ClientResponse> {
+  const isBillDef = DEF_BILLING ? ADDRESS_ID : undefined;
+  const addShipping: CustomerSetDefaultBillingAddressAction = {
+    action: 'setDefaultBillingAddress',
+    addressId: isBillDef
+  };
+  const updateData: CustomerUpdate = {
+    version: VERSION,
+    actions: [addShipping]
+  };
+  return apiRootProfile
+    .customers()
+    .withId({ ID: CUSTOMER_ID })
     .post({
       body: updateData
     })

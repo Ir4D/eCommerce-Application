@@ -96,6 +96,11 @@ export class Customer {
         document.querySelector('.logged-item')?.classList.remove('hidden');
         document.querySelector('.nav-item_login')?.classList.add('hidden');
         document.querySelector('.nav-item_signup')?.classList.add('hidden');
+        function forceReloadPage(): void {
+          window.location.hash = 'main';
+          window.location.reload();
+        }
+        forceReloadPage();
       })
       .catch((/* error */) => {
         const registerRejectEvent = new CustomEvent('user-registration-fail', {
@@ -133,7 +138,11 @@ export class Customer {
         document.querySelector('.logged-item')?.classList.remove('hidden');
         document.querySelector('.nav-item_login')?.classList.add('hidden');
         document.querySelector('.nav-item_signup')?.classList.add('hidden');
-        window.location.hash = 'main';
+        function forceReloadPage(): void {
+          window.location.hash = 'main';
+          window.location.reload();
+        }
+        forceReloadPage();
       })
       .catch(() => {
         this.createMsg('Please, be sure your login and password are correct');
