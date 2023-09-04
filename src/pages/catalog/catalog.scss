@@ -19,6 +19,7 @@
 }
 
 .catalog-filter-title {
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -198,8 +199,8 @@
 }
 
 .catalog-card-discount-icon {
-  width: 3vw;
-  height: 3vw;
+  width: 20px;
+  height: 20px;
   background: url('../../assets/images/icons/discount-icon.svg') no-repeat
     center;
   background-size: 90%;

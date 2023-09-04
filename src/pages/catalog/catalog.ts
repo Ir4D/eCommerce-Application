@@ -27,10 +27,9 @@ type SortPatternType =
 
 export default class CatalogView extends Component {
   private errorModal: HTMLDialogElement;
+  private cardContainer: HTMLElement;
   private currentCategory: string;
   private sortPattern: SortPatternType;
-  private cardContainer: HTMLElement;
-  private controls: HTMLFormElement;
   private abcSortArrow: HTMLDivElement;
   private priceSortArrow: HTMLDivElement;
   private priceFloor: number;
@@ -42,8 +41,6 @@ export default class CatalogView extends Component {
     this.errorModal = document.createElement('dialog');
     this.cardContainer = document.createElement('div');
     this.cardContainer.classList.add('catalog-card-container');
-    this.controls = document.createElement('form');
-    this.controls.classList.add('catalog-controls');
     this.container.append(this.errorModal);
     this.errorModal.addEventListener('click', () => {
       this.errorModal.close();
@@ -76,7 +73,6 @@ export default class CatalogView extends Component {
     this.container.classList.remove('item-page');
 
     /* catalog controls */
-    this.controls.innerHTML = '';
     const catalogHeader = document.createElement('div');
     catalogHeader.classList.add('catalog-header');
     const navGroup = document.createElement('div');
@@ -88,6 +84,8 @@ export default class CatalogView extends Component {
       navGroup.classList.toggle('hiden');
       filterTitle.classList.toggle('open');
     });
+    const controls = document.createElement('form');
+    controls.classList.add('catalog-controls');
 
     const categorySelect = document.createElement('select');
     categorySelect.classList.add('catalog-category-select');
@@ -195,14 +193,9 @@ export default class CatalogView extends Component {
       this.fillCardContainer();
     });
 
-    this.controls.append(
-      categorySelect,
-      searchGroup,
-      abcSortGroup,
-      priceSortGroup
-    );
+    controls.append(categorySelect, searchGroup, abcSortGroup, priceSortGroup);
 
-    navGroup.append(this.controls, priceRangeGroup);
+    navGroup.append(controls, priceRangeGroup);
     priceRangeGroup.append(
       titleSpan,
       priceFloorInput,
