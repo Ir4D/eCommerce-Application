@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable max-lines-per-function */
@@ -8,9 +9,14 @@ import {
   ProductProjectionPagedQueryResponse
 } from '@commercetools/platform-sdk';
 
+import Swiper from 'swiper';
+import { Navigation, Pagination } from 'swiper/modules';
 import Router from '../../services/router/router';
 import State from '../../services/state';
 import Component from '../../components/abstract/component';
+import ItemView from '../item/item';
+
+Swiper.use([Navigation, Pagination]);
 
 type SortPatternType =
   | undefined
@@ -27,7 +33,8 @@ export default class CatalogView extends Component {
   private controls: HTMLFormElement;
   private abcSortArrow: HTMLDivElement;
   private priceSortArrow: HTMLDivElement;
-  private paginationBar: HTMLElement;
+  private priceFloor: number;
+  private priceCeli: number;
 
   constructor() {
     super();
@@ -38,8 +45,6 @@ export default class CatalogView extends Component {
     this.controls = document.createElement('form');
     this.controls.classList.add('catalog-controls');
     this.container.append(this.errorModal);
-    this.paginationBar = document.createElement('div');
-    this.paginationBar.classList.add('catalog-pagination-bar');
     this.errorModal.addEventListener('click', () => {
       this.errorModal.close();
     });
@@ -49,45 +54,11 @@ export default class CatalogView extends Component {
     [this.abcSortArrow, this.priceSortArrow].forEach((arrow) => {
       arrow.classList.add('catalog-sort-arrow');
     });
+    this.priceFloor = 0;
+    this.priceCeli = Infinity;
   }
 
   private renderCatalog(): void {
-    this.container.classList.remove('item-page');
-
-    /* catalog controls */
-    this.controls.innerHTML = '';
-    const categorySelect = document.createElement('select');
-    categorySelect.classList.add('catalog-category-select');
-    categorySelect.innerHTML = `<option data-id="all">All categories</option>`;
-    State.categories?.body.results.forEach((category) => {
-      categorySelect.innerHTML += `<option data-id="${category.id}">${category.name.en}</option>`;
-    });
-    categorySelect.addEventListener('change', (e) => {
-      const target = e.target as HTMLSelectElement;
-      this.currentCategory = target.value;
-      this.fillCardContainer();
-    });
-
-    const searchInput = document.createElement('input');
-    searchInput.placeholder = 'Search...';
-    searchInput.classList.add('catalog-search-input');
-    searchInput.addEventListener('input', (e) => {
-      const target = e.target as HTMLInputElement;
-      this.fillCardContainer(target.value);
-    });
-
-    const searchButton = document.createElement('button');
-    searchButton.type = 'submit';
-    searchButton.classList.add('catalog-search-button');
-
-    const abcSortButton = document.createElement('button');
-    const priceSortButton = document.createElement('button');
-    [abcSortButton, priceSortButton].forEach((button) => {
-      button.classList.add('catalog-sort-button');
-    });
-    abcSortButton.classList.add('abc');
-    priceSortButton.classList.add('price');
-
     const deleteArrow = (arrow: HTMLDivElement): void => {
       arrow.classList.remove('increase');
       arrow.classList.remove('decrease');
@@ -101,6 +72,84 @@ export default class CatalogView extends Component {
       arrow.classList.remove(prev);
       arrow.classList.add(curr);
     };
+
+    this.container.classList.remove('item-page');
+
+    /* catalog controls */
+    this.controls.innerHTML = '';
+    const catalogHeader = document.createElement('div');
+    catalogHeader.classList.add('catalog-header');
+    const navGroup = document.createElement('div');
+    navGroup.classList.add('catalog-nav-group', 'hiden');
+    const filterTitle = document.createElement('span');
+    filterTitle.classList.add('catalog-filter-title');
+    filterTitle.innerText = 'Filters';
+    filterTitle.addEventListener('click', () => {
+      navGroup.classList.toggle('hiden');
+      filterTitle.classList.toggle('open');
+    });
+
+    const categorySelect = document.createElement('select');
+    categorySelect.classList.add('catalog-category-select');
+    categorySelect.innerHTML = `<option data-id="all">All categories</option>`;
+    State.categories?.body.results.forEach((category) => {
+      categorySelect.innerHTML += `<option data-id="${category.id}">${category.name.en}</option>`;
+    });
+    categorySelect.addEventListener('change', (e) => {
+      const target = e.target as HTMLSelectElement;
+      this.currentCategory = target.value;
+      this.fillCardContainer();
+    });
+
+    const searchGroup = document.createElement('div');
+    searchGroup.classList.add('catalog-controls-search-group');
+
+    const searchInput = document.createElement('input');
+    searchInput.placeholder = 'Search...';
+    searchInput.classList.add('catalog-search-input');
+    searchInput.addEventListener('input', (e) => {
+      const target = e.target as HTMLInputElement;
+      this.fillCardContainer(target.value);
+    });
+
+    const searchButton = document.createElement('button');
+    searchButton.classList.add('catalog-search-button');
+
+    searchGroup.append(searchInput, searchButton);
+
+    const abcSortButton = document.createElement('button');
+    const priceSortButton = document.createElement('button');
+    [abcSortButton, priceSortButton].forEach((button) => {
+      button.classList.add('catalog-sort-button');
+    });
+    abcSortButton.classList.add('abc');
+    priceSortButton.classList.add('price');
+
+    const abcSortGroup = document.createElement('div');
+    const priceSortGroup = document.createElement('div');
+    abcSortGroup.append(abcSortButton, this.abcSortArrow);
+    priceSortGroup.append(priceSortButton, this.priceSortArrow);
+    [abcSortGroup, priceSortGroup].forEach((div) => {
+      div.classList.add('catalog-controls-sort-group');
+    });
+    abcSortGroup.append(abcSortButton, this.abcSortArrow);
+    priceSortGroup.append(priceSortButton, this.priceSortArrow);
+
+    const priceRangeGroup = document.createElement('div');
+    priceRangeGroup.classList.add('catalog-controls-range-group');
+    const titleSpan = document.createElement('span');
+    const betweenSpan = document.createElement('span');
+    titleSpan.innerText = 'Price filter';
+    betweenSpan.innerText = '-';
+    [titleSpan, betweenSpan].forEach((span) => {
+      span.classList.add('catalog-controls-range-span');
+    });
+    const priceFloorInput = document.createElement('input');
+    const priceCeliInput = document.createElement('input');
+    [priceFloorInput, priceCeliInput].forEach((input) => {
+      input.classList.add('catalog-controls-range-input');
+      input.type = 'number';
+    });
 
     abcSortButton.addEventListener('click', () => {
       deleteArrow(this.priceSortArrow);
@@ -136,16 +185,33 @@ export default class CatalogView extends Component {
       }
     });
 
+    priceFloorInput.addEventListener('input', () => {
+      this.priceFloor = Number(priceFloorInput.value);
+      this.fillCardContainer();
+    });
+
+    priceCeliInput.addEventListener('input', () => {
+      this.priceCeli = Number(priceCeliInput.value) || Infinity;
+      this.fillCardContainer();
+    });
+
     this.controls.append(
       categorySelect,
-      searchInput,
-      searchButton,
-      abcSortButton,
-      this.abcSortArrow,
-      priceSortButton,
-      this.priceSortArrow
+      searchGroup,
+      abcSortGroup,
+      priceSortGroup
     );
-    this.container.append(this.controls);
+
+    navGroup.append(this.controls, priceRangeGroup);
+    priceRangeGroup.append(
+      titleSpan,
+      priceFloorInput,
+      betweenSpan,
+      priceCeliInput
+    );
+
+    catalogHeader.append(filterTitle, navGroup);
+    this.container.append(catalogHeader);
 
     /* cards container */
     this.container.append(this.cardContainer);
@@ -158,9 +224,9 @@ export default class CatalogView extends Component {
   private renderCatalogItemCard(catalogItem: ProductProjection): HTMLElement {
     const catalogItemLink = document.createElement('a');
     catalogItemLink.classList.add('card-item-link');
-    catalogItemLink.href = `${Router.pages.catalog}/${catalogItem.id}`;
+    catalogItemLink.href = `${Router.pages.catalog}/${catalogItem.slug.en}`;
 
-    const categoryButton = document.createElement('button');
+    const categoryButton = document.createElement('div');
     categoryButton.classList.add('catalog-card-category-button');
     if (catalogItem.categories[0]) {
       for (const [key, value] of State.CategoryMap.entries()) {
@@ -183,7 +249,7 @@ export default class CatalogView extends Component {
     cardName.innerText = catalogItem.name.en;
 
     const priceContainer = document.createElement('div');
-    priceContainer.classList.add('catalog-card-price-container');
+    priceContainer.classList.add('price-container');
     const cardPrice = document.createElement('span');
     cardPrice.classList.add('catalog-card-price');
     if (
@@ -231,6 +297,30 @@ export default class CatalogView extends Component {
       return catalog;
     };
 
+    const sortByPrice = (
+      catalog: ProductProjection[] | undefined
+    ): ProductProjection[] | undefined => {
+      const undefinedPriceArr = catalog?.filter((item) => {
+        return !item.masterVariant.prices?.length;
+      });
+      let definedPriceArr = catalog?.filter((item) => {
+        return item.masterVariant.prices?.length;
+      });
+
+      const sortPricesArr: [number, ProductProjection][] | undefined =
+        definedPriceArr?.map((product) => {
+          const sortPrice = product.masterVariant.prices![0].discounted
+            ? product.masterVariant.prices![0].discounted.value.centAmount
+            : product.masterVariant.prices![0].value.centAmount;
+          return [sortPrice, product];
+        });
+      sortPricesArr?.sort((a, b) => a[0] - b[0]);
+      definedPriceArr = sortPricesArr?.map((item) => item[1]);
+
+      catalog = [...definedPriceArr!, ...undefinedPriceArr!];
+      return catalog;
+    };
+
     const catalog = State.catalog?.body.results;
     this.cardContainer.innerHTML = '';
     let outputArr: ProductProjection[] | undefined;
@@ -255,64 +345,11 @@ export default class CatalogView extends Component {
           break;
         }
         case 'price-dec': {
-          const undefinedPriceArr = outputArr?.filter((item) => {
-            return !item.masterVariant.prices?.length;
-          });
-          let definedPriceArr = outputArr?.filter((item) => {
-            return item.masterVariant.prices?.length;
-          });
-          // definedPriceArr?.forEach((product) => {
-          //   if (product.masterVariant.prices![0].discounted) {
-          //     Object.defineProperty(product, 'sortPrice', {
-          //       value:
-          //         product.masterVariant.prices![0].discounted.value.centAmount,
-          //       enumerable: true,
-          //       writable: false,
-          //       configurable: false
-          //     });
-          //   } else {
-          //     Object.defineProperty(product, 'sortPrice', {
-          //       value: product.masterVariant.prices![0].value.centAmount,
-          //       enumerable: true,
-          //       writable: false,
-          //       configurable: false
-          //     });
-          //   }
-          // });
-          const sortPricesArr: [number, ProductProjection][] | undefined =
-            definedPriceArr?.map((product) => {
-              const sortPrice = product.masterVariant.prices![0].discounted
-                ? product.masterVariant.prices![0].discounted.value.centAmount
-                : product.masterVariant.prices![0].value.centAmount;
-              return [sortPrice, product];
-            });
-          sortPricesArr?.sort((a, b) => a[0] - b[0]);
-          definedPriceArr = sortPricesArr?.map((item) => item[1]);
-          // definedPriceArr?.sort(
-          //   (a, b) =>
-          //     a.masterVariant.prices![0].value.centAmount -
-          //     b.masterVariant.prices![0].value.centAmount
-          // );
-          outputArr = [...definedPriceArr!, ...undefinedPriceArr!];
+          outputArr = sortByPrice(outputArr);
           break;
         }
         case 'price-inc': {
-          const undefinedPriceArr = outputArr?.filter((item) => {
-            return !item.masterVariant.prices?.length;
-          });
-          let definedPriceArr = outputArr?.filter((item) => {
-            return item.masterVariant.prices?.length;
-          });
-          const sortPricesArr: [number, ProductProjection][] | undefined =
-            definedPriceArr?.map((product) => {
-              const sortPrice = product.masterVariant.prices![0].discounted
-                ? product.masterVariant.prices![0].discounted.value.centAmount
-                : product.masterVariant.prices![0].value.centAmount;
-              return [sortPrice, product];
-            });
-          sortPricesArr?.sort((a, b) => a[0] - b[0]);
-          definedPriceArr = sortPricesArr?.map((item) => item[1]);
-          outputArr = [...definedPriceArr!, ...undefinedPriceArr!].reverse();
+          outputArr = sortByPrice(outputArr)?.reverse();
           break;
         }
         default: {
@@ -325,38 +362,80 @@ export default class CatalogView extends Component {
         item.name.en.toLowerCase().includes(searchPattern.toLowerCase())
       );
     }
+    outputArr = outputArr?.filter(
+      (item) =>
+        (item.masterVariant.prices![0].discounted?.value.centAmount ||
+          item.masterVariant.prices![0].value.centAmount) /
+          100 >
+          this.priceFloor &&
+        (item.masterVariant.prices![0].discounted?.value.centAmount ||
+          item.masterVariant.prices![0].value.centAmount) /
+          100 <
+          this.priceCeli
+    );
     outputArr?.forEach((catalogItem) => {
       const catalogItemLink = this.renderCatalogItemCard(catalogItem);
       this.cardContainer.append(catalogItemLink);
     });
   }
 
-  public renderItemPage(route: string): HTMLElement {
+  public async renderItemPage(route: string): Promise<HTMLElement> {
     this.container.innerHTML = '';
-    this.container.classList.add('item-page');
+
     const cardId = route.slice(9);
     if (this.verifiCardId(route, State.catalog)) {
       const chosenItem = State.catalog?.body.results.find(
-        (catalogItem) => catalogItem.id === cardId
+        (catalogItem) => catalogItem.slug.en === cardId
       );
+      if (!chosenItem) throw new Error('error');
 
-      const itemPageImageContainer = document.createElement('div');
-      itemPageImageContainer.classList.add('item-page-image-container');
-      chosenItem?.masterVariant.images?.forEach((image) => {
-        const itemPageImage = document.createElement('img');
-        itemPageImage.classList.add('item-page-image');
-        itemPageImage.src = `${image.url}`;
-        itemPageImageContainer.append(itemPageImage);
-      });
-
-      const descriptionBlock = document.createElement('div');
-      descriptionBlock.classList.add('item-page-description');
-
-      this.container.append(itemPageImageContainer);
+      const item = new ItemView(chosenItem);
+      this.container.append(await item.render());
+      this.createSlides();
     } else {
       Router.navigate(Router.pages.notFound);
     }
+
+    const slider = document.querySelector('.swiper');
+    const swiperWrapper = document.querySelector('.swiper-wrapper');
+    const body = document.querySelector('body');
+    if (document.querySelector('.overlay')) {
+      document.querySelector('.overlay')?.remove();
+    }
+    const overlay = document.createElement('div');
+    overlay.className = 'overlay';
+    body?.append(overlay);
+
+    swiperWrapper?.addEventListener('click', () => {
+      // console.log('modal')
+
+      slider?.classList.toggle('showModal');
+      overlay?.classList.toggle('visible');
+      body?.classList.toggle('stop-scroll');
+    });
+
+    overlay.addEventListener('click', () => {
+      slider?.classList.toggle('showModal');
+      overlay?.classList.toggle('visible');
+      body?.classList.toggle('stop-scroll');
+    });
+
+    // console.log(document.querySelector('.swiper'))
     return this.container;
+  }
+
+  private createSlides(): void {
+    const swiper = new Swiper('.swiper', {
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev'
+      },
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true
+      },
+      loop: true
+    });
   }
 
   private verifiCardId(
@@ -367,8 +446,9 @@ export default class CatalogView extends Component {
       return false;
     }
     const catalogIds = catalog?.body.results.map(
-      (catalogItem) => catalogItem.id
+      (catalogItem) => catalogItem.slug.en
     );
+
     const cardId = route.slice(9);
     return catalogIds?.includes(cardId);
   }

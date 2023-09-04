@@ -2,6 +2,7 @@
 @import url('../src/pages/login/login.scss');
 @import url('../src/pages/profile/profile.scss');
 @import url('../src/pages/catalog/catalog.scss');
+@import url('../src/pages/item/item.scss');
 
 $blue: #274c5b;
 $green: #7eb693;
@@ -326,12 +327,17 @@ h6 {
 
   &-item {
     box-sizing: border-box;
-    width: 335px;
-    height: 483px;
+
     padding: 25px;
 
-    background-color: $bg-dark;
     border-radius: 30px;
+
+    &--main-page {
+      width: 335px;
+      height: 483px;
+
+      background-color: $bg-dark;
+    }
   }
 
   &-card_btn {
@@ -361,12 +367,19 @@ h6 {
     display: flex;
     justify-content: space-between;
     padding-top: 10px;
-    border-top: 1px solid $gray;
   }
 
   &-btn {
     margin-top: 100px;
   }
+}
+
+.price-container {
+  display: flex;
+  align-items: center;
+  column-gap: 10px;
+  padding-top: 10px;
+  border-top: 1px solid $gray;
 }
 
 .special_offer {
@@ -399,6 +412,10 @@ h6 {
     display: flex;
     justify-content: center;
     gap: 20px;
+  }
+
+  &-rating {
+    margin-left: auto;
   }
 }
 
