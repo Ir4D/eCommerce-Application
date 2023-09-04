@@ -143,4 +143,14 @@
   .order-form > div {
     height: auto;
   }
+
+  .showModal + .item-description {
+    padding-left: 0;
+    height: auto;
+  }
+
+  .showModal.img-container {
+    left: calc(50% - 45vw);
+    width: 90vw;
+  }
 }

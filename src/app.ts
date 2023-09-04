@@ -48,6 +48,5 @@ export default class App {
   private toggleMenu(): void {
     this.menuIcon?.classList.toggle('clicked');
     this.nav?.classList.toggle('show');
-    this.appContainer?.classList.toggle('stop-scroll');
   }
 }
