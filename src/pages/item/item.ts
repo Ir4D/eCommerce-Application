@@ -2,7 +2,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 import { ProductProjection } from '@commercetools/platform-sdk';
 import State from '../../services/state';
-// import Swiper from 'swiper';
 
 const getCategory = (currentId: string): string => {
   const category = State.categories?.body.results.find(
@@ -48,10 +47,11 @@ const getContent = (
         <path d="M57.325 3.23964C57.6244 2.31832 58.9278 2.31832 59.2272 3.23964L60.1143 5.96992C60.2481 6.38194 60.6321 6.66091 61.0653 6.66091H63.9361C64.9048 6.66091 65.3076 7.90051 64.5239 8.46992L62.2013 10.1574C61.8508 10.412 61.7042 10.8634 61.8381 11.2754L62.7252 14.0058C63.0245 14.9271 61.97 15.6932 61.1863 15.1238L58.8639 13.4364C58.5134 13.1817 58.0388 13.1817 57.6883 13.4364L55.3659 15.1238C54.5822 15.6932 53.5277 14.9271 53.827 14.0058L54.7141 11.2754C54.848 10.8634 54.7014 10.412 54.3509 10.1574L52.0283 8.46991C51.2446 7.90051 51.6474 6.66091 52.6161 6.66091H55.4869C55.9201 6.66091 56.3041 6.38194 56.4379 5.96992L57.325 3.23964Z" fill="#FFA858"/>
         <path d="M73.5164 3.09367C73.824 2.18997 75.1022 2.18998 75.4098 3.09367L76.3933 5.98313C76.5312 6.3884 76.9118 6.66091 77.3399 6.66091H80.4202C81.4001 6.66091 81.7953 7.92416 80.9901 8.48263L78.5793 10.1546C78.2124 10.409 78.0587 10.8758 78.2025 11.2985L79.142 14.0586C79.4529 14.9718 78.4181 15.7523 77.6255 15.2025L75.033 13.4046C74.6902 13.1668 74.236 13.1668 73.8932 13.4046L71.3007 15.2025C70.5081 15.7523 69.4733 14.9718 69.7842 14.0586L70.7237 11.2985C70.8675 10.8758 70.7138 10.409 70.3469 10.1546L67.9362 8.48263C67.1309 7.92416 67.5261 6.66091 68.506 6.66091H71.5863C72.0144 6.66091 72.395 6.3884 72.5329 5.98313L73.5164 3.09367Z" fill="#FFA858"/>
       </svg>
-      <span class="catalog-card_price">${
+      <div class="price-container">
+      ${
         catalogItem.masterVariant.prices[0].discounted
           ? `
-          <div class="price-container">
+          
             <span class="catalog-card-price full">€${
               catalogItem.masterVariant.prices[0].value.centAmount / 100
             }</span>
@@ -60,15 +60,12 @@ const getContent = (
               Number(
                 catalogItem.masterVariant.prices[0].discounted?.value.centAmount
               ) / 100
-            }</span>
-          </div>`
+            }</span>`
           : `
-          <div class="price-container">
             <span class="catalog-card-price">€${
               catalogItem.masterVariant.prices[0].value.centAmount / 100
-            }</span>
-          </div>`
-      }</span>
+            }</span>`
+      }</div> 
         <div class="item-text">
           ${catalogItem.description.en} 
           <br>Simply dummy text of the printing and typesetting industry. Lorem had ceased to been the industry's standard dummy text 

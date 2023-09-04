@@ -399,12 +399,16 @@ export default class CatalogView extends Component {
     const slider = document.querySelector('.swiper');
     const swiperWrapper = document.querySelector('.swiper-wrapper');
     const body = document.querySelector('body');
+    if (document.querySelector('.overlay')) {
+      document.querySelector('.overlay')?.remove();
+    }
     const overlay = document.createElement('div');
     overlay.className = 'overlay';
     body?.append(overlay);
 
     swiperWrapper?.addEventListener('click', () => {
       // console.log('modal')
+
       slider?.classList.toggle('showModal');
       overlay?.classList.toggle('visible');
       body?.classList.toggle('stop-scroll');
