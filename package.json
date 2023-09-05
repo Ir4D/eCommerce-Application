@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
+    "test:coverage": "jest --coverage",
     "dev": "webpack-dev-server --mode development",
     "build": "webpack --mode production",
     "lint": "eslint ./src",
@@ -74,6 +75,7 @@
   },
   "dependencies": {
     "@commercetools/platform-sdk": "^5.0.0",
-    "@commercetools/sdk-client-v2": "^2.2.0"
+    "@commercetools/sdk-client-v2": "^2.2.0",
+    "swiper": "^10.2.0"
   }
 }

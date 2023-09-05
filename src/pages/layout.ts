@@ -1,3 +1,8 @@
+/* eslint-disable max-lines-per-function */
+import {
+  ClientResponse,
+  ProductProjectionPagedQueryResponse
+} from '@commercetools/platform-sdk';
 import Router from '../services/router/router';
 import HeaderView from '../components/header';
 import FooterView from '../components/footer';
@@ -8,8 +13,9 @@ import LoginView from './login/login';
 import SignupView from './signup/signup';
 import NotFoundView from './404/404';
 import CartView from './cart/cart';
-
-import { signupCreate } from '../services/signupCustomer/signupCustomer';
+import State from '../services/state';
+import { GetProductsPublished } from '../api/apiMethods';
+import ProfileView from './profile/profile';
 
 export default class Layout {
   private header: HeaderView;
@@ -23,6 +29,7 @@ export default class Layout {
   private signup: SignupView;
   private notFound: NotFoundView;
   private cart: CartView;
+  private profile: ProfileView;
 
   constructor() {
     this.header = new HeaderView();
@@ -34,12 +41,12 @@ export default class Layout {
     this.signup = new SignupView();
     this.notFound = new NotFoundView();
     this.cart = new CartView();
+    this.profile = new ProfileView();
     this.slot = document.createElement('main');
     this.handleRouteChange();
   }
 
-  private renderPage(route: string): void {
-    this.slot.innerHTML = '';
+  private async renderPage(route: string): Promise<void> {
     let pageHTML: string;
     if (route) {
       switch (route) {
@@ -52,7 +59,8 @@ export default class Layout {
           break;
         }
         case Router.pages.catalog: {
-          pageHTML = this.catalog.render;
+          pageHTML = '';
+          this.slot.innerHTML = '';
           break;
         }
         case Router.pages.login: {
@@ -63,28 +71,53 @@ export default class Layout {
           pageHTML = this.signup.render;
           break;
         }
+        case Router.pages.profile: {
+          pageHTML = '';
+          if (!localStorage.getItem('customerID')) {
+            Router.navigate(Router.pages.main);
+            pageHTML = this.main.render;
+          }
+          break;
+        }
         case Router.pages.cart: {
           pageHTML = this.cart.render;
           break;
         }
         default: {
-          Router.navigate(Router.pages.notFound);
-          pageHTML = this.notFound.render;
+          if (route.includes('catalog/')) {
+            pageHTML = '';
+          } else {
+            pageHTML = this.notFound.render;
+          }
         }
       }
     } else {
       Router.navigate(Router.pages.main);
       pageHTML = this.main.render;
     }
-    this.slot.innerHTML = pageHTML;
+    if (route === Router.pages.catalog) {
+      await State.setCatalog(() => {} /* error handling */);
+      this.slot.append(this.catalog.render());
+    } else if (route === Router.pages.profile) {
+      this.slot.innerHTML = '';
+      this.slot.append(this.profile.render());
+    } else if (route.includes('catalog/')) {
+      pageHTML = '';
+      this.slot.append(this.catalog.render());
+      this.slot.append(await this.catalog.renderItemPage(route));
+    } else {
+      this.slot.innerHTML = pageHTML;
+    }
   }
 
   private handleRouteChange(): void {
-    window.addEventListener('hashchange', () => {
-      const { hash } = window.location;
-      this.renderPage(hash);
-    });
+    window.addEventListener('hashchange', this.routeChange);
   }
+
+  private routeChange = (): void => {
+    const { hash } = window.location;
+    this.renderPage(hash);
+  };
 
   public render(container: HTMLElement): void {
     container.append(this.header.render());

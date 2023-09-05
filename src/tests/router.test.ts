@@ -16,5 +16,5 @@ test('Navigation test', () => {
   Router.navigate(Router.pages.notFound);
   expect(window.location.hash).toBe('#404');
   Router.navigate('');
-  expect(window.location.hash).toBe('#404');
+  expect(window.location.hash).toBe('');
 });

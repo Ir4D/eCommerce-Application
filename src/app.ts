@@ -1,5 +1,6 @@
 import Layout from './pages/layout';
 import SignUpModal from './pages/signup/sign-up-modal';
+import State from './services/state';
 
 export default class App {
   public appContainer = document.querySelector<HTMLElement>('body');
@@ -7,10 +8,15 @@ export default class App {
   public nav = this.appContainer?.querySelector('.nav');
   public menuItems = this.appContainer?.querySelectorAll('.nav-item');
   private signUpModal = new SignUpModal();
+  private layout = new Layout();
 
-  public init(): void {
+  public async init(): Promise<void> {
+    await State.init(
+      () => {},
+      () => {}
+    );
     if (!this.appContainer) throw new Error('error');
-    new Layout().render(this.appContainer);
+    this.layout.render(this.appContainer);
 
     this.menuIcon =
       this.appContainer?.querySelector<HTMLElement>('.nav-mobile');
@@ -42,5 +48,6 @@ export default class App {
   private toggleMenu(): void {
     this.menuIcon?.classList.toggle('clicked');
     this.nav?.classList.toggle('show');
+    this.appContainer?.classList.toggle('stop-scroll');
   }
 }

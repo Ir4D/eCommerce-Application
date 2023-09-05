@@ -12,6 +12,7 @@ test('E-mail validation test', () => {
   expect(validators.email('wwwww@www.www')).toBe(true);
   expect(validators.email('1@gmail.com')).toBe(true);
   expect(validators.email('mail@tut.com')).toBe(true);
+  expect(validators.email('почта@gmail.com')).toBe(true);
   expect(validators.email(' @gmail.c')).toBe(false);
   expect(validators.email('weeeee@gmail.c')).toBe(false);
   expect(validators.email('')).toBe(false);
@@ -19,7 +20,6 @@ test('E-mail validation test', () => {
   expect(validators.email('true')).toBe(false);
   expect(validators.email('@gmail.com')).toBe(false);
   expect(validators.email('gmail.com')).toBe(false);
-  expect(validators.email('почта@gmail.com')).toBe(false);
 });
 
 test('Password validation test', () => {
@@ -60,12 +60,12 @@ test('City validation test', () => {
   expect(validators.city('Gomel+')).toBe(true);
   expect(validators.city('Gomel+2023')).toBe(true);
   expect(validators.city('G')).toBe(true);
-  expect(validators.city(' ')).toBe(true); /* shuld be? */
-  expect(validators.city('2023')).toBe(true); /* shuld be? */
-  expect(validators.city('/')).toBe(true); /* shuld be? */
-  expect(validators.city('/1}&*_))')).toBe(true); /* shuld be? */
-  expect(validators.city('1')).toBe(true); /* shuld be? */
 
+  expect(validators.city(' ')).toBe(false);
+  expect(validators.city('2023')).toBe(false);
+  expect(validators.city('/')).toBe(false);
+  expect(validators.city('/1}&*_))')).toBe(false);
+  expect(validators.city('1')).toBe(false);
   expect(validators.city('')).toBe(false);
 });
 
