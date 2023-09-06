@@ -400,8 +400,6 @@ export default class CatalogView extends Component {
     body?.append(overlay);
 
     swiperWrapper?.addEventListener('click', () => {
-      // console.log('modal')
-
       slider?.classList.toggle('showModal');
       overlay?.classList.toggle('visible');
       body?.classList.toggle('stop-scroll');
