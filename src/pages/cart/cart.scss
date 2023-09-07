@@ -1,0 +1,24 @@
+.cart-products-container {
+  width: 600px;
+  height: 100%;
+  padding: 20px;
+  margin: 20px;
+  background-color: #f9f8f8;
+}
+
+.cart-product-item {
+  text-decoration: none;
+  display: flex;
+  width: 600px;
+  height: 100%;
+  padding: 10px 0;
+  justify-content: center;
+  align-items: center;
+  gap: 25px;
+}
+
+.cart-product-image {
+  width: 120px;
+  height: 120px;
+  border-radius: 8px;
+}

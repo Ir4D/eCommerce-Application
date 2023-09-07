@@ -12,7 +12,11 @@ import {
   CartSetShippingAddressAction,
   CustomerAddShippingAddressIdAction,
   CustomerSetDefaultShippingAddressAction,
-  CustomerSetDefaultBillingAddressAction
+  CustomerSetDefaultBillingAddressAction,
+  CartDraft,
+  MyCartUpdate,
+  MyCartDraft,
+  Cart
 } from '@commercetools/platform-sdk';
 import { apiData } from './apiData';
 import { createCtpClient, createCtpClientExistingFlow } from './BuildClients';
@@ -42,7 +46,6 @@ export function GetProjectInfo(): void {
 }
 
 // Get info about published products
-
 export function GetProductsPublished(): Promise<
   ClientResponse<ProductProjectionPagedQueryResponse>
 > {
@@ -68,6 +71,53 @@ export function getProductCategories() {
     return apiRoot.categories().get().execute();
   };
   return getCategories();
+}
+
+// Get active in cart
+export function GetCart(
+  CURRENCY: string
+  // CART_ID: string,
+  // VERSION: number
+): Promise<ClientResponse> {
+  // const data: MyCartDraft = {
+  //   currency: CURRENCY
+  // };
+  const getCart = () => {
+    return apiRootProfile
+      .me()
+      .carts()
+      .withId({ ID: 'daa28bb4-7a2d-42bb-9580-8b0fa6e3a998' })
+      .get()
+      .execute();
+    // activeCart().get().execute();
+  };
+  return getCart();
+}
+
+// Update cart
+export function UpdateCart(
+  CART_ID: string,
+  VERSION: number
+): Promise<ClientResponse<Cart>> {
+  const data: MyCartUpdate = {
+    version: VERSION,
+    actions: [
+      {
+        action: 'addLineItem',
+        productId: '5afaa1e1-5929-40c3-ade7-b8fd99cb60cf',
+        variantId: 1,
+        quantity: 2
+      }
+    ]
+  };
+  return apiRootProfile
+    .me()
+    .carts()
+    .withId({ ID: CART_ID })
+    .post({
+      body: data
+    })
+    .execute();
 }
 
 // Create a new customer

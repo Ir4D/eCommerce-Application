@@ -80,7 +80,8 @@ export default class Layout {
           break;
         }
         case Router.pages.cart: {
-          pageHTML = this.cart.render;
+          pageHTML = '';
+          this.slot.innerHTML = '';
           break;
         }
         default: {
@@ -105,6 +106,9 @@ export default class Layout {
       pageHTML = '';
       this.slot.append(this.catalog.render());
       this.slot.append(await this.catalog.renderItemPage(route));
+    } else if (route === Router.pages.cart) {
+      await State.setCart(() => {} /* error handling */);
+      this.slot.append(this.cart.render());
     } else {
       this.slot.innerHTML = pageHTML;
     }
