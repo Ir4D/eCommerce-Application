@@ -25,6 +25,14 @@ type SortPatternType =
   | 'price-dec'
   | 'price-inc';
 
+type PaginationBarType = {
+  backButton: HTMLElement;
+  forwardButton: HTMLElement;
+  currentPageSpan: HTMLElement;
+};
+
+type PaginationDirection = '+' | '-';
+
 export default class CatalogView extends Component {
   private errorModal: HTMLDialogElement;
   private cardContainer: HTMLElement;
@@ -34,6 +42,8 @@ export default class CatalogView extends Component {
   private priceSortArrow: HTMLDivElement;
   private priceFloor: number;
   private priceCeli: number;
+  private currentPage: number;
+  private paginationControls: PaginationBarType;
 
   constructor() {
     super();
@@ -53,6 +63,18 @@ export default class CatalogView extends Component {
     });
     this.priceFloor = 0;
     this.priceCeli = Infinity;
+    this.currentPage = 1;
+    this.paginationControls = {
+      backButton: document.createElement('div'),
+      forwardButton: document.createElement('div'),
+      currentPageSpan: document.createElement('span')
+    };
+    this.paginationControls.backButton.addEventListener('click', () => {
+      this.setCurrentPage('-');
+    });
+    this.paginationControls.forwardButton.addEventListener('click', () => {
+      this.setCurrentPage('+');
+    });
   }
 
   private renderCatalog(): void {
@@ -212,6 +234,29 @@ export default class CatalogView extends Component {
 
     /* fill cards container */
     this.fillCardContainer();
+
+    /* paggination bar */
+    const paginationBar = document.createElement('nav');
+    paginationBar.classList.add('catalog-pagination-bar');
+    this.paginationControls.currentPageSpan.classList.add(
+      'catalog-current-page-span'
+    );
+    [
+      this.paginationControls.backButton,
+      this.paginationControls.forwardButton
+    ].forEach((button) => {
+      button.classList.add('catalog-pagination-button');
+    });
+    this.paginationControls.backButton.innerText = '<<';
+    this.paginationControls.forwardButton.innerText = '>>';
+
+    paginationBar.append(
+      this.paginationControls.backButton,
+      this.paginationControls.currentPageSpan,
+      this.paginationControls.forwardButton
+    );
+    this.container.append(paginationBar);
+    this.fillPaginationBar();
   }
 
   private renderCatalogItemCard(catalogItem: ProductProjection): HTMLElement {
@@ -359,11 +404,11 @@ export default class CatalogView extends Component {
       (item) =>
         (item.masterVariant.prices![0].discounted?.value.centAmount ||
           item.masterVariant.prices![0].value.centAmount) /
-          100 >
+          100 >=
           this.priceFloor &&
         (item.masterVariant.prices![0].discounted?.value.centAmount ||
           item.masterVariant.prices![0].value.centAmount) /
-          100 <
+          100 <=
           this.priceCeli
     );
     outputArr?.forEach((catalogItem) => {
@@ -374,7 +419,6 @@ export default class CatalogView extends Component {
 
   public async renderItemPage(route: string): Promise<HTMLElement> {
     this.container.innerHTML = '';
-
     const cardId = route.slice(9);
     if (this.verifiCardId(route, State.catalog)) {
       const chosenItem = State.catalog?.body.results.find(
@@ -427,6 +471,24 @@ export default class CatalogView extends Component {
       },
       loop: true
     });
+  }
+
+  private fillPaginationBar = (): void => {
+    this.paginationControls.currentPageSpan.innerText =
+      this.currentPage.toString();
+    if (this.currentPage === 1) {
+      this.paginationControls.backButton.classList.add('disabled');
+    }
+  };
+
+  private setCurrentPage(direction: PaginationDirection): void {
+    if (direction === '+') {
+      this.currentPage += 1;
+      this.fillPaginationBar();
+    } else {
+      this.currentPage -= 1;
+      this.fillPaginationBar();
+    }
   }
 
   private verifiCardId(
