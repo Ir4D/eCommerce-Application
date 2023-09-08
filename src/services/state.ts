@@ -1,9 +1,14 @@
 import {
+  Cart,
   CategoryPagedQueryResponse,
   ClientResponse,
   ProductProjectionPagedQueryResponse
 } from '@commercetools/platform-sdk';
-import { GetProductsPublished, getProductCategories } from '../api/apiMethods';
+import {
+  GetCart,
+  GetProductsPublished,
+  getProductCategories
+} from '../api/apiMethods';
 
 export default abstract class State {
   public static catalog:
@@ -12,6 +17,7 @@ export default abstract class State {
   public static categories:
     | ClientResponse<CategoryPagedQueryResponse>
     | undefined;
+  public static cart: ClientResponse<Cart> | undefined;
 
   public static async setCatalog(handleError: () => void): Promise<void> {
     try {
@@ -35,6 +41,20 @@ export default abstract class State {
       categoryMap.set(`${category.name.en}`, `${category.id}`);
     });
     return categoryMap;
+  }
+
+  public static async setCart(handleError: () => void): Promise<void> {
+    try {
+      const CUSTOMER_ID = localStorage.getItem('customerID');
+      const CURRENCY = 'EUR';
+      // for the purposes of cart testing:
+      const CART_ID = 'daa28bb4-7a2d-42bb-9580-8b0fa6e3a998';
+      if (CUSTOMER_ID) {
+        State.cart = await GetCart(CART_ID);
+      }
+    } catch {
+      handleError();
+    }
   }
 
   public static async init(
