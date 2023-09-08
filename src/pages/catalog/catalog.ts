@@ -1,3 +1,4 @@
+/* eslint-disable no-unsafe-optional-chaining */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
@@ -31,7 +32,7 @@ type PaginationBarType = {
   currentPageSpan: HTMLElement;
 };
 
-type PaginationDirection = '+' | '-';
+type PaginationDirectionType = '+' | '-';
 
 export default class CatalogView extends Component {
   private errorModal: HTMLDialogElement;
@@ -44,6 +45,7 @@ export default class CatalogView extends Component {
   private priceCeli: number;
   private currentPage: number;
   private paginationControls: PaginationBarType;
+  private itemsPerPage = 12;
 
   constructor() {
     super();
@@ -69,11 +71,18 @@ export default class CatalogView extends Component {
       forwardButton: document.createElement('div'),
       currentPageSpan: document.createElement('span')
     };
+    this.setItemsPerPage();
     this.paginationControls.backButton.addEventListener('click', () => {
       this.setCurrentPage('-');
     });
     this.paginationControls.forwardButton.addEventListener('click', () => {
       this.setCurrentPage('+');
+    });
+    window.addEventListener('resize', () => {
+      this.setItemsPerPage();
+      this.reasignCurrentPage();
+      this.fillCardContainer();
+      this.fillPaginationBar();
     });
   }
 
@@ -411,6 +420,11 @@ export default class CatalogView extends Component {
           100 <=
           this.priceCeli
     );
+    outputArr = outputArr?.filter(
+      (item, i) =>
+        i < this.currentPage * this.itemsPerPage &&
+        i >= (this.currentPage - 1) * this.itemsPerPage
+    );
     outputArr?.forEach((catalogItem) => {
       const catalogItemLink = this.renderCatalogItemCard(catalogItem);
       this.cardContainer.append(catalogItemLink);
@@ -476,18 +490,56 @@ export default class CatalogView extends Component {
   private fillPaginationBar = (): void => {
     this.paginationControls.currentPageSpan.innerText =
       this.currentPage.toString();
+    [
+      this.paginationControls.backButton,
+      this.paginationControls.forwardButton
+    ].forEach((button) => {
+      button.classList.remove('disabled');
+    });
     if (this.currentPage === 1) {
       this.paginationControls.backButton.classList.add('disabled');
     }
+    if (this.currentPage === this.setPageCount()) {
+      this.paginationControls.forwardButton.classList.add('disabled');
+    }
   };
 
-  private setCurrentPage(direction: PaginationDirection): void {
-    if (direction === '+') {
+  private setCurrentPage(direction: PaginationDirectionType): void {
+    const pageCount = this.setPageCount();
+    if (direction === '+' && this.currentPage !== pageCount) {
       this.currentPage += 1;
       this.fillPaginationBar();
-    } else {
+      this.fillCardContainer();
+    } else if (this.currentPage !== 1 && direction !== '+') {
       this.currentPage -= 1;
       this.fillPaginationBar();
+      this.fillCardContainer();
+    }
+  }
+
+  private setItemsPerPage(): void {
+    const viewPortWidth = window.screen.width;
+    if (viewPortWidth > 1600) {
+      this.itemsPerPage = 12;
+    } else if (viewPortWidth <= 1600 && viewPortWidth > 1200) {
+      this.itemsPerPage = 9;
+    } else if (viewPortWidth <= 1200 && viewPortWidth > 750) {
+      this.itemsPerPage = 6;
+    } else if (viewPortWidth <= 750) {
+      this.itemsPerPage = 4;
+    }
+  }
+
+  private setPageCount(): number {
+    return State.catalog?.body.results.length
+      ? Math.ceil(State.catalog?.body.results.length / this.itemsPerPage)
+      : 0;
+  }
+
+  private reasignCurrentPage(): void {
+    const pageCount = this.setPageCount();
+    if (this.currentPage > pageCount) {
+      this.currentPage = pageCount;
     }
   }
 
