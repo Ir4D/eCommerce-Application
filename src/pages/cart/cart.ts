@@ -1,5 +1,5 @@
 /* eslint-disable max-lines-per-function */
-import { LineItem, MyLineItemDraft } from '@commercetools/platform-sdk';
+import { LineItem } from '@commercetools/platform-sdk';
 import Component from '../../components/abstract/component';
 import State from '../../services/state';
 
@@ -12,6 +12,17 @@ export default class CartView extends Component {
   private renderCart(): void {
     const productsContainer = document.createElement('div');
     productsContainer.classList.add('cart-products-container');
+
+    const productsTitle = document.createElement('div');
+    productsTitle.classList.add('cart-products-title');
+    productsTitle.innerHTML = `
+      <div>Image</div>
+      <div>Name</div>
+      <div>Price</div>
+      <div>Quantity</div>
+      <div>Total price</div>
+    `;
+    productsContainer.append(productsTitle);
 
     const cart = State.cart?.body;
     if (cart && cart.lineItems) {
@@ -39,16 +50,16 @@ export default class CartView extends Component {
       productName.innerHTML = product.name.en;
     }
 
-    const productQuantity = document.createElement('div');
-    if (product.quantity) {
-      productQuantity.innerHTML = `${product.quantity}`;
-    }
-
     const productPrice = document.createElement('div');
     if (product.price) {
       productPrice.innerHTML = `${product.price.value.currencyCode} ${String(
         (product.price.value.centAmount / 100).toFixed(2)
       )}`;
+    }
+
+    const productQuantity = document.createElement('div');
+    if (product.quantity) {
+      productQuantity.innerHTML = `${product.quantity}`;
     }
 
     const productTotalPrice = document.createElement('div');
@@ -61,8 +72,8 @@ export default class CartView extends Component {
     productElem.append(
       productImage,
       productName,
-      productQuantity,
       productPrice,
+      productQuantity,
       productTotalPrice
     );
 

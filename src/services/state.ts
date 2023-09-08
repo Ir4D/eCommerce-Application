@@ -2,9 +2,6 @@ import {
   Cart,
   CategoryPagedQueryResponse,
   ClientResponse,
-  LineItem,
-  LineItemDraft,
-  MyCartDraft,
   ProductProjectionPagedQueryResponse
 } from '@commercetools/platform-sdk';
 import {
@@ -50,9 +47,10 @@ export default abstract class State {
     try {
       const CUSTOMER_ID = localStorage.getItem('customerID');
       const CURRENCY = 'EUR';
+      // for the purposes of cart testing:
       const CART_ID = 'daa28bb4-7a2d-42bb-9580-8b0fa6e3a998';
       if (CUSTOMER_ID) {
-        State.cart = await GetCart(CURRENCY);
+        State.cart = await GetCart(CART_ID);
       }
     } catch {
       handleError();

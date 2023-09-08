@@ -13,9 +13,7 @@ import {
   CustomerAddShippingAddressIdAction,
   CustomerSetDefaultShippingAddressAction,
   CustomerSetDefaultBillingAddressAction,
-  CartDraft,
   MyCartUpdate,
-  MyCartDraft,
   Cart
 } from '@commercetools/platform-sdk';
 import { apiData } from './apiData';
@@ -73,22 +71,10 @@ export function getProductCategories() {
   return getCategories();
 }
 
-// Get active in cart
-export function GetCart(
-  CURRENCY: string
-  // CART_ID: string,
-  // VERSION: number
-): Promise<ClientResponse> {
-  // const data: MyCartDraft = {
-  //   currency: CURRENCY
-  // };
+// Get cart by ID
+export function GetCart(CART_ID: string): Promise<ClientResponse> {
   const getCart = () => {
-    return apiRootProfile
-      .me()
-      .carts()
-      .withId({ ID: 'daa28bb4-7a2d-42bb-9580-8b0fa6e3a998' })
-      .get()
-      .execute();
+    return apiRootProfile.me().carts().withId({ ID: CART_ID }).get().execute();
     // activeCart().get().execute();
   };
   return getCart();
