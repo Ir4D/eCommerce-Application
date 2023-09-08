@@ -10,8 +10,8 @@ const INNER_HTML = {
   //   `,
   cartItem: `<li class="profile_container-item cart-item">
       <a href="${Router.pages.cart}" class="profile_container-link link profile_container-link--cart">
-        <img src="./images/icons/cart-icon.png" alt="cart" class="cart" width="56" height="56">
-        <span class="cart">Cart (0)</span>
+        <img src="./images/icons/cart-icon.png" alt="cart" class="cart cart-icon" width="56" height="56">
+        <span class="cart cart-indicator">0</span>
       </a>
     </li>
     `,

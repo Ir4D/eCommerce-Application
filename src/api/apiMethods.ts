@@ -12,7 +12,9 @@ import {
   CartSetShippingAddressAction,
   CustomerAddShippingAddressIdAction,
   CustomerSetDefaultShippingAddressAction,
-  CustomerSetDefaultBillingAddressAction
+  CustomerSetDefaultBillingAddressAction,
+  MyCartUpdate,
+  Cart
 } from '@commercetools/platform-sdk';
 import { apiData } from './apiData';
 import { createCtpClient, createCtpClientExistingFlow } from './BuildClients';
@@ -42,7 +44,6 @@ export function GetProjectInfo(): void {
 }
 
 // Get info about published products
-
 export function GetProductsPublished(): Promise<
   ClientResponse<ProductProjectionPagedQueryResponse>
 > {
@@ -68,6 +69,41 @@ export function getProductCategories() {
     return apiRoot.categories().get().execute();
   };
   return getCategories();
+}
+
+// Get cart by ID
+export function GetCart(CART_ID: string): Promise<ClientResponse> {
+  const getCart = () => {
+    return apiRootProfile.me().carts().withId({ ID: CART_ID }).get().execute();
+    // activeCart().get().execute();
+  };
+  return getCart();
+}
+
+// Update cart
+export function UpdateCart(
+  CART_ID: string,
+  VERSION: number
+): Promise<ClientResponse<Cart>> {
+  const data: MyCartUpdate = {
+    version: VERSION,
+    actions: [
+      {
+        action: 'addLineItem',
+        productId: '5afaa1e1-5929-40c3-ade7-b8fd99cb60cf',
+        variantId: 1,
+        quantity: 2
+      }
+    ]
+  };
+  return apiRootProfile
+    .me()
+    .carts()
+    .withId({ ID: CART_ID })
+    .post({
+      body: data
+    })
+    .execute();
 }
 
 // Create a new customer
