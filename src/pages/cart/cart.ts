@@ -16,11 +16,12 @@ export default class CartView extends Component {
     const productsContainer = createElem('cart-products-container');
     const productsTitle = createElem('cart-products-title');
     productsTitle.innerHTML = `
-      <div>Image</div>
-      <div>Name</div>
-      <div>Price</div>
-      <div>Quantity</div>
-      <div>Total price</div>
+      <div class="title-column">Image</div>
+      <div class="title-column">Name</div>
+      <div class="title-column">Price</div>
+      <div class="title-column">Quantity</div>
+      <div class="title-column">Total price</div>
+      <div class="title-column title-empty"></div>
     `;
     productsContainer.append(productsTitle);
 
@@ -55,8 +56,12 @@ export default class CartView extends Component {
     }
 
     const productQuantity = createElem('cart-product-quantity');
+    const prodQuantNumber = createElem('prod-quantity_number');
+    const prodQuantMinus = createElem('prod-quantity_minus');
+    const prodQuantPlus = createElem('prod-quantity_plus');
     if (product.quantity) {
-      productQuantity.innerHTML = `${product.quantity}`;
+      prodQuantNumber.innerHTML = `${product.quantity}`;
+      productQuantity.append(prodQuantMinus, prodQuantNumber, prodQuantPlus);
     }
 
     const productTotalPrice = createElem('cart-product-price_total');
@@ -66,12 +71,17 @@ export default class CartView extends Component {
       } ${String((product.totalPrice.centAmount / 100).toFixed(2))}`;
     }
 
+    const productRemove = createElem('cart-product-remove', 'button');
+    productRemove.classList.add('btn', 'btn--blue');
+    productRemove.innerHTML = 'Remove';
+
     productElem.append(
       productImage,
       productName,
       productPrice,
       productQuantity,
-      productTotalPrice
+      productTotalPrice,
+      productRemove
     );
 
     return productElem;
