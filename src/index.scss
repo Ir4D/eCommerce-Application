@@ -126,6 +126,11 @@ h6 {
     width: 19px;
     height: 19px;
   }
+
+  &:disabled {
+    background-color: #f8edc6;
+    color: #b1b1b1;
+  }
 }
 
 .header {
@@ -318,11 +323,12 @@ h6 {
   align-items: center;
 
   &-list {
+    max-width: 1400px;
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
 
-    margin-top: 40px;
+    margin: 40px auto;
   }
 
   &-item {

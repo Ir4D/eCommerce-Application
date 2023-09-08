@@ -238,8 +238,12 @@ export default class CatalogView extends Component {
     }
 
     const cardName = document.createElement('p');
-    cardName.classList.add('catalog-catd-title');
+    cardName.classList.add('catalog-card-title');
     cardName.innerText = catalogItem.name.en;
+
+    const toCartBtn = document.createElement('button');
+    toCartBtn.className = 'to_cart-btn btn btn--yellow order-submit';
+    toCartBtn.textContent = 'Add to cart';
 
     const priceContainer = document.createElement('div');
     priceContainer.classList.add('price-container');
@@ -269,7 +273,13 @@ export default class CatalogView extends Component {
     }
     priceContainer.append(cardPrice);
 
-    catalogItemLink.append(categoryButton, cardImage, cardName, priceContainer);
+    catalogItemLink.append(
+      categoryButton,
+      cardImage,
+      cardName,
+      priceContainer,
+      toCartBtn
+    );
 
     return catalogItemLink;
   }

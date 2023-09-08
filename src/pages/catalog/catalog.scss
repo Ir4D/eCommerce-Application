@@ -159,14 +159,18 @@
 }
 
 .card-item-link {
-  text-decoration: none;
-  display: flex;
+  position: relative;
   width: 335px;
   height: 483px;
+  padding: 2vw 2vw;
+
+  display: flex;
   flex-direction: column;
+
+  text-decoration: none;
+
   background-color: #f9f8f8;
   border-radius: 30px;
-  padding: 2vw 2vw;
 }
 
 .catalog-card-category-button {
@@ -187,7 +191,7 @@
 }
 
 .catalog-card-price,
-.catalog-catd-title {
+.catalog-card-title {
   color: #274c5b;
   font-weight: 700;
   font-size: 1.25rem;
@@ -251,6 +255,16 @@
 
 .stop-scroll {
   overflow: hidden;
+}
+
+.to_cart-btn {
+  position: absolute;
+  bottom: 40px;
+  right: 0;
+}
+
+.to_cart-btn::after {
+  display: none;
 }
 
 @media (hover: hover) {
