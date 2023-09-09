@@ -87,9 +87,16 @@ export default class CartView extends Component {
     return productElem;
   }
 
+  private renderCartTotal(): void {
+    const totalContainer = createElem('cart-total-container');
+    totalContainer.innerHTML = '123';
+    this.container.append(totalContainer);
+  }
+
   public render(): HTMLElement {
     this.container.innerHTML = '';
     this.renderCart();
+    this.renderCartTotal();
     return this.container;
   }
 }

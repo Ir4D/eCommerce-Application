@@ -43,12 +43,23 @@ export const apiDataPassword = {
     'create_anonymous_token:rss-ecom-app manage_my_quotes:rss-ecom-app manage_my_quote_requests:rss-ecom-app manage_my_profile:rss-ecom-app manage_my_orders:rss-ecom-app manage_my_shopping_lists:rss-ecom-app view_categories:rss-ecom-app manage_my_business_units:rss-ecom-app manage_my_payments:rss-ecom-app view_published_products:rss-ecom-app'
 };
 
+// export const apiDataPassManageCustomers = {
+//   PROJECT_KEY: 'rss-ecom-app',
+//   CLIENT_ID: 'pAMvorhpN5_-mQDEarU8KpCh',
+//   CLIENT_SECRET: '9N5Hf6958dKW2paKAVCL1OvWTnft5_XN',
+//   AUTH_URL: 'https://auth.europe-west1.gcp.commercetools.com',
+//   API_URL: 'https://api.europe-west1.gcp.commercetools.com',
+//   SCOPES:
+//     'create_anonymous_token:rss-ecom-app manage_customers:rss-ecom-app manage_my_quotes:rss-ecom-app manage_my_quote_requests:rss-ecom-app manage_my_profile:rss-ecom-app manage_my_orders:rss-ecom-app manage_my_shopping_lists:rss-ecom-app view_categories:rss-ecom-app manage_my_business_units:rss-ecom-app manage_my_payments:rss-ecom-app view_published_products:rss-ecom-app'
+// };
+
+// API password + manage customers (copy from 09.09)
 export const apiDataPassManageCustomers = {
   PROJECT_KEY: 'rss-ecom-app',
-  CLIENT_ID: 'pAMvorhpN5_-mQDEarU8KpCh',
-  CLIENT_SECRET: '9N5Hf6958dKW2paKAVCL1OvWTnft5_XN',
+  CLIENT_ID: 'oyFim6eNsHcA6dB9Pt5Anwvl',
+  CLIENT_SECRET: 'lynic285T29Y_3Hh_iCIHj4N32f_ZFcJ',
   AUTH_URL: 'https://auth.europe-west1.gcp.commercetools.com',
   API_URL: 'https://api.europe-west1.gcp.commercetools.com',
   SCOPES:
-    'create_anonymous_token:rss-ecom-app manage_customers:rss-ecom-app manage_my_quotes:rss-ecom-app manage_my_quote_requests:rss-ecom-app manage_my_profile:rss-ecom-app manage_my_orders:rss-ecom-app manage_my_shopping_lists:rss-ecom-app view_categories:rss-ecom-app manage_my_business_units:rss-ecom-app manage_my_payments:rss-ecom-app view_published_products:rss-ecom-app'
+    'create_anonymous_token:rss-ecom-app manage_customers:rss-ecom-app manage_my_quotes:rss-ecom-app manage_my_quote_requests:rss-ecom-app manage_my_profile:rss-ecom-app manage_my_orders:rss-ecom-app manage_my_shopping_lists:rss-ecom-app view_categories:rss-ecom-app manage_orders:rss-ecom-app manage_my_business_units:rss-ecom-app manage_my_payments:rss-ecom-app view_published_products:rss-ecom-app'
 };

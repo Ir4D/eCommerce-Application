@@ -5,7 +5,11 @@ import {
   ProductProjectionPagedQueryResponse
 } from '@commercetools/platform-sdk';
 import {
+  CreateCartAnonim,
+  CreateCartCustomer,
   GetCart,
+  GetCartByID,
+  GetCartFromAnonim,
   GetProductsPublished,
   getProductCategories
 } from '../api/apiMethods';
@@ -43,14 +47,35 @@ export default abstract class State {
     return categoryMap;
   }
 
+  public static getCurrentCartVersion(CART_ID: string): Promise<number> {
+    return GetCartByID(CART_ID)
+      .then(({ body }) => {
+        return body.version;
+      })
+      .catch((error) => {
+        console.error('Something went wrong:', error);
+      });
+  }
+
   public static async setCart(handleError: () => void): Promise<void> {
     try {
       const CUSTOMER_ID = localStorage.getItem('customerID');
       const CURRENCY = 'EUR';
-      // for the purposes of cart testing:
-      const CART_ID = 'daa28bb4-7a2d-42bb-9580-8b0fa6e3a998';
+      const CART_ID = localStorage.getItem('cartID');
       if (CUSTOMER_ID) {
-        State.cart = await GetCart(CART_ID);
+        if (CART_ID) {
+          const VERSION = this.getCurrentCartVersion(CART_ID);
+          State.cart = await GetCartFromAnonim(
+            CUSTOMER_ID,
+            CART_ID,
+            await VERSION
+          );
+        } else {
+          State.cart = await CreateCartCustomer(CURRENCY);
+        }
+      } else {
+        State.cart = await CreateCartAnonim(CURRENCY);
+        localStorage.setItem('cartID', State.cart.body.id);
       }
     } catch {
       handleError();

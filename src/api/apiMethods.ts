@@ -14,10 +14,18 @@ import {
   CustomerSetDefaultShippingAddressAction,
   CustomerSetDefaultBillingAddressAction,
   MyCartUpdate,
-  Cart
+  Cart,
+  MyCartDraft,
+  CartDraft,
+  CartSetCustomerIdAction,
+  CartUpdate
 } from '@commercetools/platform-sdk';
 import { apiData } from './apiData';
-import { createCtpClient, createCtpClientExistingFlow } from './BuildClients';
+import {
+  createCtpClient,
+  createCtpClientAnonymous,
+  createCtpClientExistingFlow
+} from './BuildClients';
 
 const apiRoot = createApiBuilderFromCtpClient(createCtpClient()).withProjectKey(
   {
@@ -27,6 +35,12 @@ const apiRoot = createApiBuilderFromCtpClient(createCtpClient()).withProjectKey(
 
 const apiRootProfile = createApiBuilderFromCtpClient(
   createCtpClientExistingFlow()
+).withProjectKey({
+  projectKey: apiData.PROJECT_KEY
+});
+
+const apiRootAnonim = createApiBuilderFromCtpClient(
+  createCtpClientAnonymous()
 ).withProjectKey({
   projectKey: apiData.PROJECT_KEY
 });
@@ -75,9 +89,73 @@ export function getProductCategories() {
 export function GetCart(CART_ID: string): Promise<ClientResponse> {
   const getCart = () => {
     return apiRootProfile.me().carts().withId({ ID: CART_ID }).get().execute();
-    // activeCart().get().execute();
   };
   return getCart();
+}
+
+export function GetCartByID(CART_ID: string): Promise<ClientResponse> {
+  const getCart = () => {
+    return apiRootProfile.carts().withId({ ID: CART_ID }).get().execute();
+  };
+  return getCart();
+}
+
+// Get cart from anonymous customer by cart ID
+export function GetCartFromAnonim(
+  CUSTOMER_ID: string,
+  CART_ID: string,
+  VERSION: number
+): Promise<ClientResponse> {
+  const cartUpdate: CartUpdate = {
+    version: VERSION,
+    actions: [
+      {
+        action: 'setCustomerId',
+        customerId: CUSTOMER_ID
+      }
+    ]
+  };
+  return apiRootProfile
+    .carts()
+    .withId({
+      ID: CART_ID
+    })
+    .post({
+      body: cartUpdate
+    })
+    .execute();
+}
+
+// Create cart for anonymous customer
+export function CreateCartAnonim(
+  CURRENCY: string
+): Promise<ClientResponse<Cart>> {
+  const data: MyCartDraft = {
+    currency: CURRENCY
+  };
+  return apiRootAnonim
+    .me()
+    .carts()
+    .post({
+      body: data
+    })
+    .execute();
+}
+
+// Create cart for logged customer
+export function CreateCartCustomer(
+  CURRENCY: string
+): Promise<ClientResponse<Cart>> {
+  const data: MyCartDraft = {
+    currency: CURRENCY
+  };
+  return apiRootProfile
+    .me()
+    .carts()
+    .post({
+      body: data
+    })
+    .execute();
 }
 
 // Update cart
