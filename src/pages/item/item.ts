@@ -28,6 +28,7 @@ const getContent = (
     <button class="btn catalog-card_btn item-category item-category--once">${category}</button>
       <div class="swiper-wrapper">
           ${catalogItem.masterVariant.images
+            .slice(1)
             .map(
               (img) =>
                 `<div class="swiper-slide"><img src="${img.url}" class="item-img" /></div>`
