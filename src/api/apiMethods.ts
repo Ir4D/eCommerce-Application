@@ -184,7 +184,7 @@ export function UpdateCart(
     .execute();
 }
 
-// Update cart
+// Update cart by changing product's quantity
 export function UpdateCartProdQuantity(
   CART_ID: string,
   VERSION: number,

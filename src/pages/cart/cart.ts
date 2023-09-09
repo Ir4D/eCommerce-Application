@@ -65,14 +65,15 @@ export default class CartView extends Component {
       productQuantity.append(prodQuantMinus, prodQuantNumber, prodQuantPlus);
     }
     const index = 0;
+    const lineItemId = product.id;
     prodQuantMinus.addEventListener(
       'click',
-      this.minusProductInCart.bind(this, index)
+      this.minusProductInCart.bind(this, lineItemId)
     );
 
     prodQuantPlus.addEventListener(
       'click',
-      this.plusProductInCart.bind(this, index)
+      this.plusProductInCart.bind(this, lineItemId)
     );
 
     const productTotalPrice = createElem('cart-product-price_total');
@@ -85,6 +86,10 @@ export default class CartView extends Component {
     const productRemove = createElem('cart-product-remove', 'button');
     productRemove.classList.add('btn', 'btn--blue');
     productRemove.innerHTML = 'Remove';
+    productRemove.addEventListener(
+      'click',
+      this.removeProductFromCart.bind(this, lineItemId)
+    );
 
     productElem.append(
       productImage,
@@ -109,28 +114,50 @@ export default class CartView extends Component {
     }
   }
 
-  private async minusProductInCart(index: number): Promise<void> {
-    const LINE_ITEM_ID = State.cart?.body.lineItems[index].id;
+  private async minusProductInCart(LINE_ITEM_ID: string): Promise<void> {
     const CART_ID = localStorage.getItem('cartID');
     if (CART_ID && LINE_ITEM_ID) {
       try {
         const CART_INFO = await this.getCurrentCartVersion(CART_ID);
-        const QUANTITY = CART_INFO.lineItems[index].quantity - 1;
-        const VERSION = CART_INFO.version;
-        UpdateCartProdQuantity(CART_ID, VERSION, LINE_ITEM_ID, QUANTITY);
+        const lineItem = CART_INFO.lineItems.find(
+          (item) => item.id === LINE_ITEM_ID
+        );
+        if (lineItem) {
+          const QUANTITY = lineItem.quantity - 1;
+          const VERSION = CART_INFO.version;
+          UpdateCartProdQuantity(CART_ID, VERSION, LINE_ITEM_ID, QUANTITY);
+        }
       } catch (error) {
         console.error('Error getting cart version:', error);
       }
     }
   }
 
-  private async plusProductInCart(index: number): Promise<void> {
-    const LINE_ITEM_ID = State.cart?.body.lineItems[index].id;
+  private async plusProductInCart(LINE_ITEM_ID: string): Promise<void> {
     const CART_ID = localStorage.getItem('cartID');
     if (CART_ID && LINE_ITEM_ID) {
       try {
         const CART_INFO = await this.getCurrentCartVersion(CART_ID);
-        const QUANTITY = CART_INFO.lineItems[index].quantity + 1;
+        const lineItem = CART_INFO.lineItems.find(
+          (item) => item.id === LINE_ITEM_ID
+        );
+        if (lineItem) {
+          const QUANTITY = lineItem.quantity + 1;
+          const VERSION = CART_INFO.version;
+          UpdateCartProdQuantity(CART_ID, VERSION, LINE_ITEM_ID, QUANTITY);
+        }
+      } catch (error) {
+        console.error('Error getting cart version:', error);
+      }
+    }
+  }
+
+  private async removeProductFromCart(LINE_ITEM_ID: string): Promise<void> {
+    const CART_ID = localStorage.getItem('cartID');
+    if (CART_ID && LINE_ITEM_ID) {
+      try {
+        const CART_INFO = await this.getCurrentCartVersion(CART_ID);
+        const QUANTITY = 0;
         const VERSION = CART_INFO.version;
         UpdateCartProdQuantity(CART_ID, VERSION, LINE_ITEM_ID, QUANTITY);
       } catch (error) {
@@ -157,7 +184,7 @@ export default class CartView extends Component {
     const discountContainer = createElem('cart-discount-container');
     const discountInput = createElem('cart-discount-input', 'input');
     discountInput.setAttribute('type', 'text');
-    discountInput.setAttribute('placeholder', 'Discount code');
+    discountInput.setAttribute('placeholder', 'Promo code');
     const discountBtn = createElem('cart-discount-btn', 'button');
     discountBtn.classList.add('btn', 'btn--yellow');
     discountBtn.innerHTML = 'OK';
