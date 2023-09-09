@@ -1,7 +1,8 @@
 /* eslint-disable max-lines-per-function */
-import { LineItem } from '@commercetools/platform-sdk';
+import { Cart, LineItem } from '@commercetools/platform-sdk';
 import Component from '../../components/abstract/component';
 import State from '../../services/state';
+import { GetCartByID, UpdateCartProdQuantity } from '../../api/apiMethods';
 
 const createElem = (className: string, tag = 'div'): HTMLElement =>
   Object.assign(document.createElement(tag), { className });
@@ -63,6 +64,16 @@ export default class CartView extends Component {
       prodQuantNumber.innerHTML = `${product.quantity}`;
       productQuantity.append(prodQuantMinus, prodQuantNumber, prodQuantPlus);
     }
+    const index = 0;
+    prodQuantMinus.addEventListener(
+      'click',
+      this.minusProductInCart.bind(this, index)
+    );
+
+    prodQuantPlus.addEventListener(
+      'click',
+      this.plusProductInCart.bind(this, index)
+    );
 
     const productTotalPrice = createElem('cart-product-price_total');
     if (product.totalPrice) {
@@ -85,6 +96,47 @@ export default class CartView extends Component {
     );
 
     return productElem;
+  }
+
+  public async getCurrentCartVersion(CART_ID: string): Promise<Cart> {
+    try {
+      const response = await GetCartByID(CART_ID);
+      const { body } = response;
+      return body;
+    } catch (error) {
+      console.error('Something went wrong:', error);
+      throw error;
+    }
+  }
+
+  private async minusProductInCart(index: number): Promise<void> {
+    const LINE_ITEM_ID = State.cart?.body.lineItems[index].id;
+    const CART_ID = localStorage.getItem('cartID');
+    if (CART_ID && LINE_ITEM_ID) {
+      try {
+        const CART_INFO = await this.getCurrentCartVersion(CART_ID);
+        const QUANTITY = CART_INFO.lineItems[index].quantity - 1;
+        const VERSION = CART_INFO.version;
+        UpdateCartProdQuantity(CART_ID, VERSION, LINE_ITEM_ID, QUANTITY);
+      } catch (error) {
+        console.error('Error getting cart version:', error);
+      }
+    }
+  }
+
+  private async plusProductInCart(index: number): Promise<void> {
+    const LINE_ITEM_ID = State.cart?.body.lineItems[index].id;
+    const CART_ID = localStorage.getItem('cartID');
+    if (CART_ID && LINE_ITEM_ID) {
+      try {
+        const CART_INFO = await this.getCurrentCartVersion(CART_ID);
+        const QUANTITY = CART_INFO.lineItems[index].quantity + 1;
+        const VERSION = CART_INFO.version;
+        UpdateCartProdQuantity(CART_ID, VERSION, LINE_ITEM_ID, QUANTITY);
+      } catch (error) {
+        console.error('Error getting cart version:', error);
+      }
+    }
   }
 
   private renderCartTotal(): void {
