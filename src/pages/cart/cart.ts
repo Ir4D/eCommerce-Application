@@ -19,7 +19,7 @@ export default class CartView extends Component {
     productsTitle.innerHTML = `
       <div class="title-column">Image</div>
       <div class="title-column">Name</div>
-      <div class="title-column">Price</div>
+      <div class="title-column">Item Price</div>
       <div class="title-column">Quantity</div>
       <div class="title-column">Total price</div>
       <div class="title-column title-empty"></div>
@@ -51,7 +51,7 @@ export default class CartView extends Component {
 
     const productPrice = createElem('cart-product-price');
     if (product.price) {
-      productPrice.innerHTML = `${product.price.value.currencyCode} ${String(
+      productPrice.innerHTML = `€ ${String(
         (product.price.value.centAmount / 100).toFixed(2)
       )}`;
     }
@@ -77,9 +77,9 @@ export default class CartView extends Component {
 
     const productTotalPrice = createElem('cart-product-price_total');
     if (product.totalPrice) {
-      productTotalPrice.innerHTML = `${
-        product.totalPrice.currencyCode
-      } ${String((product.totalPrice.centAmount / 100).toFixed(2))}`;
+      productTotalPrice.innerHTML = `€ ${String(
+        (product.totalPrice.centAmount / 100).toFixed(2)
+      )}`;
     }
 
     const productRemove = createElem('cart-product-remove', 'button');
@@ -140,8 +140,30 @@ export default class CartView extends Component {
   }
 
   private renderCartTotal(): void {
+    const cart = State.cart?.body;
     const totalContainer = createElem('cart-total-container');
-    totalContainer.innerHTML = '123';
+
+    const totalPrice = createElem('cart-total-price');
+    const totalTitle = createElem('cart-total-title');
+    totalTitle.innerHTML = 'Total price:';
+    const totalAmount = createElem('cart-total-amount');
+    if (cart && cart.totalPrice) {
+      totalAmount.innerHTML = `€ ${String(
+        (cart.totalPrice.centAmount / 100).toFixed(2)
+      )}`;
+    }
+    totalPrice.append(totalTitle, totalAmount);
+
+    const discountContainer = createElem('cart-discount-container');
+    const discountInput = createElem('cart-discount-input', 'input');
+    discountInput.setAttribute('type', 'text');
+    discountInput.setAttribute('placeholder', 'Discount code');
+    const discountBtn = createElem('cart-discount-btn', 'button');
+    discountBtn.classList.add('btn', 'btn--yellow');
+    discountBtn.innerHTML = 'OK';
+    discountContainer.append(discountInput, discountBtn);
+
+    totalContainer.append(totalPrice, discountContainer);
     this.container.append(totalContainer);
   }
 
