@@ -57,7 +57,7 @@ export default abstract class State {
       });
   }
 
-  public static async setCart(handleError: () => void): Promise<void> {
+  public static async setCart(handleError?: () => void): Promise<void> {
     try {
       const CUSTOMER_ID = localStorage.getItem('customerID');
       const CURRENCY = 'EUR';
@@ -78,7 +78,7 @@ export default abstract class State {
         localStorage.setItem('cartID', State.cart.body.id);
       }
     } catch {
-      handleError();
+      if (handleError) handleError();
     }
   }
 
@@ -88,5 +88,6 @@ export default abstract class State {
   ): Promise<void> {
     await this.setCatalog(handleCatalogError);
     await this.setCategories(handleCategoriesError);
+    await this.setCart();
   }
 }

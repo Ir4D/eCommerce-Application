@@ -16,6 +16,7 @@ import Router from '../../services/router/router';
 import State from '../../services/state';
 import Component from '../../components/abstract/component';
 import ItemView from '../item/item';
+import { addToCart } from '../../api/apiMethods';
 
 Swiper.use([Navigation, Pagination]);
 
@@ -298,6 +299,16 @@ export default class CatalogView extends Component {
     const toCartBtn = document.createElement('button');
     toCartBtn.className = 'to_cart-btn btn btn--yellow order-submit';
     toCartBtn.textContent = 'Add to cart';
+    toCartBtn.addEventListener('click', async (e) => {
+      e.preventDefault();
+      console.log('State.cart', State.cart);
+      await addToCart(
+        State.cart!.body.id,
+        State.cart!.body.version,
+        catalogItem.id,
+        catalogItem.masterVariant.id
+      );
+    });
 
     const priceContainer = document.createElement('div');
     priceContainer.classList.add('price-container');

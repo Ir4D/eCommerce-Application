@@ -184,6 +184,34 @@ export function UpdateCart(
     .execute();
 }
 
+/* Add to cart */
+export function addToCart(
+  CART_ID: string,
+  VERSION: number,
+  productId: string,
+  variantId: number
+): Promise<ClientResponse<Cart>> {
+  const data: MyCartUpdate = {
+    version: VERSION,
+    actions: [
+      {
+        action: 'addLineItem',
+        productId,
+        variantId,
+        quantity: 1
+      }
+    ]
+  };
+  return apiRootProfile
+    .me()
+    .carts()
+    .withId({ ID: CART_ID })
+    .post({
+      body: data
+    })
+    .execute();
+}
+
 // Update cart by changing product's quantity
 export function UpdateCartProdQuantity(
   CART_ID: string,
