@@ -103,8 +103,8 @@ export default class ProfileView extends Component {
         })
         .catch((error) => {
           console.error('Error getting current version:', error);
-          this.errorModal.innerText = error;
-          this.errorModal.showModal();
+          // this.errorModal.innerText = error;
+          // this.errorModal.showModal();
         });
     }
     this.editModal.close();
@@ -154,8 +154,8 @@ export default class ProfileView extends Component {
         })
         .catch((error) => {
           console.error('Error getting current version:', error);
-          this.errorModal.innerText = error;
-          this.errorModal.showModal();
+          // this.errorModal.innerText = error;
+          // this.errorModal.showModal();
         });
     }
     this.changePassModal.close();
@@ -186,8 +186,9 @@ export default class ProfileView extends Component {
             this.openEditModal(body);
           })
           .catch((error) => {
-            this.errorModal.innerText = error;
-            this.errorModal.showModal();
+            console.error('Something went wrong:', error);
+            // this.errorModal.innerText = error;
+            // this.errorModal.showModal();
           });
       }
     } else if (target && target.classList.contains('change-pass-btn')) {
@@ -204,6 +205,7 @@ export default class ProfileView extends Component {
       } catch (error) {
         this.errorModal.innerText = 'Something went wrong, try again';
         // this.errorModal.showModal();
+        console.error('Something went wrong:', error);
       }
     }
   }
@@ -250,8 +252,9 @@ export default class ProfileView extends Component {
         return body.version;
       })
       .catch((error) => {
-        this.errorModal.innerText = error;
-        this.errorModal.showModal();
+        console.error('Something went wrong:', error);
+        // this.errorModal.innerText = error;
+        // this.errorModal.showModal();
       });
   }
 
@@ -285,8 +288,9 @@ export default class ProfileView extends Component {
           this.refreshProfile();
         })
         .catch((error) => {
-          this.errorModal.innerText = error;
-          this.errorModal.showModal();
+          console.error('Something went wrong:', error);
+          // this.errorModal.innerText = error;
+          // this.errorModal.showModal();
         });
     }
   }
@@ -300,8 +304,9 @@ export default class ProfileView extends Component {
           this.errorModal.showModal();
         })
         .catch((error) => {
-          this.errorModal.innerText = error;
-          this.errorModal.showModal();
+          console.error('Something went wrong:', error);
+          // this.errorModal.innerText = error;
+          // this.errorModal.showModal();
         });
     }
   }
