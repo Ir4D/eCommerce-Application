@@ -51,9 +51,15 @@ export default class CartView extends Component {
 
     const productPrice = createElem('cart-product-price');
     if (product.price) {
-      productPrice.innerHTML = `€ ${String(
-        (product.price.value.centAmount / 100).toFixed(2)
-      )}`;
+      if (product.price.discounted) {
+        productPrice.innerHTML = `€ ${String(
+          (product.price.discounted.value.centAmount / 100).toFixed(2)
+        )}`;
+      } else {
+        productPrice.innerHTML = `€ ${String(
+          (product.price.value.centAmount / 100).toFixed(2)
+        )}`;
+      }
     }
 
     const productQuantity = createElem('cart-product-quantity');
@@ -64,7 +70,6 @@ export default class CartView extends Component {
       prodQuantNumber.innerHTML = `${product.quantity}`;
       productQuantity.append(prodQuantMinus, prodQuantNumber, prodQuantPlus);
     }
-    const index = 0;
     const lineItemId = product.id;
     prodQuantMinus.addEventListener(
       'click',
@@ -170,9 +175,20 @@ export default class CartView extends Component {
     const cart = State.cart?.body;
     const totalContainer = createElem('cart-total-container');
 
+    const subtotalPrice = createElem('cart-subtotal-price');
+    const subtotalTitle = createElem('cart-subtotal-title');
+    subtotalTitle.innerHTML = 'Subtotal:';
+    const subtotalAmount = createElem('cart-subtotal-amount');
+    if (cart && cart.totalPrice) {
+      subtotalAmount.innerHTML = `€ ${String(
+        (cart.totalPrice.centAmount / 100).toFixed(2)
+      )}`;
+    }
+    subtotalPrice.append(subtotalTitle, subtotalAmount);
+
     const totalPrice = createElem('cart-total-price');
     const totalTitle = createElem('cart-total-title');
-    totalTitle.innerHTML = 'Total price:';
+    totalTitle.innerHTML = 'Total:';
     const totalAmount = createElem('cart-total-amount');
     if (cart && cart.totalPrice) {
       totalAmount.innerHTML = `€ ${String(
@@ -190,7 +206,7 @@ export default class CartView extends Component {
     discountBtn.innerHTML = 'OK';
     discountContainer.append(discountInput, discountBtn);
 
-    totalContainer.append(totalPrice, discountContainer);
+    totalContainer.append(subtotalPrice, totalPrice, discountContainer);
     this.container.append(totalContainer);
   }
 

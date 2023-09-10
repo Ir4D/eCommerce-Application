@@ -1,0 +1,364 @@
+{
+  "type": "Cart",
+  "id": "1b0f749a-8ebb-4c2c-aecb-ce2e2566ed7f",
+  "version": 378,
+  "versionModifiedAt": "2023-09-10T05:55:28.759Z",
+  "lastMessageSequenceNumber": 1,
+  "createdAt": "2023-09-09T10:24:11.272Z",
+  "lastModifiedAt": "2023-09-10T05:55:28.759Z",
+  "lastModifiedBy": {
+    "isPlatformClient": true,
+    "user": {
+      "typeId": "user",
+      "id": "079ed9b5-f973-4ddb-ba4e-f6a13d254b44"
+    }
+  },
+  "createdBy": {
+    "clientId": "DvNMoxgsmbuytw_zn-ScLQlq",
+    "isPlatformClient": false,
+    "anonymousId": "78042afb-6caf-4936-a24e-da3e5fe92d5a"
+  },
+  "customerId": "dbc27050-d4bb-4258-aab5-031a4b0d13ec",
+  "anonymousId": "78042afb-6caf-4936-a24e-da3e5fe92d5a",
+  "lineItems": [
+    {
+      "id": "9ea58765-3468-43b1-8147-cb004b1e08b1",
+      "productId": "3d787ef2-43ad-4b78-a45b-07d7622d1c9a",
+      "productKey": "rb",
+      "name": {
+        "en": "Raspberry"
+      },
+      "productType": {
+        "typeId": "product-type",
+        "id": "51d5b6eb-6628-4744-89db-a7c01315eb95",
+        "version": 1
+      },
+      "productSlug": {
+        "en": "raspberry"
+      },
+      "variant": {
+        "id": 1,
+        "sku": "rb18",
+        "key": "rb18",
+        "prices": [
+          {
+            "id": "518582bf-c793-46fb-81b9-519fac571a2c",
+            "value": {
+              "type": "centPrecision",
+              "currencyCode": "EUR",
+              "centAmount": 1700,
+              "fractionDigits": 2
+            },
+            "key": "rb17",
+            "discounted": {
+              "value": {
+                "type": "centPrecision",
+                "currencyCode": "EUR",
+                "centAmount": 1445,
+                "fractionDigits": 2
+              },
+              "discount": {
+                "typeId": "product-discount",
+                "id": "c96227c1-41d1-4f79-8f53-c4ab97dbc202"
+              }
+            }
+          }
+        ],
+        "images": [
+          {
+            "url": "https://926408e87c1b7e742eda-8e98415434a57c0ab5153bafdc0be0ab.ssl.cf3.rackcdn.com/thumb-raspberry1-olVqFlwQ.jpg",
+            "label": "thumb-",
+            "dimensions": {
+              "w": 350,
+              "h": 350
+            }
+          },
+          {
+            "url": "https://926408e87c1b7e742eda-8e98415434a57c0ab5153bafdc0be0ab.ssl.cf3.rackcdn.com/raspberry1-dkbwsPSY.jpg",
+            "dimensions": {
+              "w": 4741,
+              "h": 4741
+            }
+          },
+          {
+            "url": "https://926408e87c1b7e742eda-8e98415434a57c0ab5153bafdc0be0ab.ssl.cf3.rackcdn.com/raspberry-wLO9AIcu.jpg",
+            "dimensions": {
+              "w": 2913,
+              "h": 2913
+            }
+          }
+        ],
+        "attributes": [],
+        "assets": []
+      },
+      "price": {
+        "id": "518582bf-c793-46fb-81b9-519fac571a2c",
+        "value": {
+          "type": "centPrecision",
+          "currencyCode": "EUR",
+          "centAmount": 1700,
+          "fractionDigits": 2
+        },
+        "key": "rb17",
+        "discounted": {
+          "value": {
+            "type": "centPrecision",
+            "currencyCode": "EUR",
+            "centAmount": 1445,
+            "fractionDigits": 2
+          },
+          "discount": {
+            "typeId": "product-discount",
+            "id": "c96227c1-41d1-4f79-8f53-c4ab97dbc202"
+          }
+        }
+      },
+      "quantity": 48,
+      "discountedPrice": {
+        "value": {
+          "type": "centPrecision",
+          "currencyCode": "EUR",
+          "centAmount": 1300,
+          "fractionDigits": 2
+        },
+        "includedDiscounts": [
+          {
+            "discount": {
+              "typeId": "cart-discount",
+              "id": "df67b74d-80df-41f2-b596-210d9d6d94ba"
+            },
+            "discountedAmount": {
+              "type": "centPrecision",
+              "currencyCode": "EUR",
+              "centAmount": 145,
+              "fractionDigits": 2
+            }
+          }
+        ]
+      },
+      "discountedPricePerQuantity": [
+        {
+          "quantity": 48,
+          "discountedPrice": {
+            "value": {
+              "type": "centPrecision",
+              "currencyCode": "EUR",
+              "centAmount": 1300,
+              "fractionDigits": 2
+            },
+            "includedDiscounts": [
+              {
+                "discount": {
+                  "typeId": "cart-discount",
+                  "id": "df67b74d-80df-41f2-b596-210d9d6d94ba"
+                },
+                "discountedAmount": {
+                  "type": "centPrecision",
+                  "currencyCode": "EUR",
+                  "centAmount": 145,
+                  "fractionDigits": 2
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "perMethodTaxRate": [],
+      "addedAt": "2023-09-09T20:15:00.673Z",
+      "lastModifiedAt": "2023-09-10T05:41:04.521Z",
+      "state": [
+        {
+          "quantity": 48,
+          "state": {
+            "typeId": "state",
+            "id": "93d78273-957d-429d-933f-b269e2117ab8"
+          }
+        }
+      ],
+      "priceMode": "Platform",
+      "lineItemMode": "Standard",
+      "totalPrice": {
+        "type": "centPrecision",
+        "currencyCode": "EUR",
+        "centAmount": 62400,
+        "fractionDigits": 2
+      },
+      "taxedPricePortions": []
+    },
+    {
+      "id": "02892a9f-dcc7-4286-a7a6-154ffe5af403",
+      "productId": "5afaa1e1-5929-40c3-ade7-b8fd99cb60cf",
+      "productKey": "le",
+      "name": {
+        "en": "Lemon"
+      },
+      "productType": {
+        "typeId": "product-type",
+        "id": "51d5b6eb-6628-4744-89db-a7c01315eb95",
+        "version": 1
+      },
+      "productSlug": {
+        "en": "lemon"
+      },
+      "variant": {
+        "id": 1,
+        "sku": "le01",
+        "key": "le01",
+        "prices": [
+          {
+            "id": "2b176b3d-933a-47be-9c84-a0c762cb2c09",
+            "value": {
+              "type": "centPrecision",
+              "currencyCode": "EUR",
+              "centAmount": 200,
+              "fractionDigits": 2
+            },
+            "key": "le12"
+          }
+        ],
+        "images": [
+          {
+            "url": "https://926408e87c1b7e742eda-8e98415434a57c0ab5153bafdc0be0ab.ssl.cf3.rackcdn.com/tumb-lemon-tRiqWqKq.jpg",
+            "dimensions": {
+              "w": 400,
+              "h": 400
+            }
+          },
+          {
+            "url": "https://926408e87c1b7e742eda-8e98415434a57c0ab5153bafdc0be0ab.ssl.cf3.rackcdn.com/lemon-V5UCtY7l.jpg",
+            "dimensions": {
+              "w": 4059,
+              "h": 4059
+            }
+          },
+          {
+            "url": "https://926408e87c1b7e742eda-8e98415434a57c0ab5153bafdc0be0ab.ssl.cf3.rackcdn.com/lemon1-97o7UdYI.jpg",
+            "dimensions": {
+              "w": 3036,
+              "h": 3036
+            }
+          },
+          {
+            "url": "https://926408e87c1b7e742eda-8e98415434a57c0ab5153bafdc0be0ab.ssl.cf3.rackcdn.com/lemon2-U_darELB.jpg",
+            "dimensions": {
+              "w": 4886,
+              "h": 4885
+            }
+          }
+        ],
+        "attributes": [],
+        "assets": []
+      },
+      "price": {
+        "id": "2b176b3d-933a-47be-9c84-a0c762cb2c09",
+        "value": {
+          "type": "centPrecision",
+          "currencyCode": "EUR",
+          "centAmount": 200,
+          "fractionDigits": 2
+        },
+        "key": "le12"
+      },
+      "quantity": 51,
+      "discountedPrice": {
+        "value": {
+          "type": "centPrecision",
+          "currencyCode": "EUR",
+          "centAmount": 180,
+          "fractionDigits": 2
+        },
+        "includedDiscounts": [
+          {
+            "discount": {
+              "typeId": "cart-discount",
+              "id": "df67b74d-80df-41f2-b596-210d9d6d94ba"
+            },
+            "discountedAmount": {
+              "type": "centPrecision",
+              "currencyCode": "EUR",
+              "centAmount": 20,
+              "fractionDigits": 2
+            }
+          }
+        ]
+      },
+      "discountedPricePerQuantity": [
+        {
+          "quantity": 51,
+          "discountedPrice": {
+            "value": {
+              "type": "centPrecision",
+              "currencyCode": "EUR",
+              "centAmount": 180,
+              "fractionDigits": 2
+            },
+            "includedDiscounts": [
+              {
+                "discount": {
+                  "typeId": "cart-discount",
+                  "id": "df67b74d-80df-41f2-b596-210d9d6d94ba"
+                },
+                "discountedAmount": {
+                  "type": "centPrecision",
+                  "currencyCode": "EUR",
+                  "centAmount": 20,
+                  "fractionDigits": 2
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "perMethodTaxRate": [],
+      "addedAt": "2023-09-09T20:58:22.787Z",
+      "lastModifiedAt": "2023-09-09T20:58:32.487Z",
+      "state": [
+        {
+          "quantity": 51,
+          "state": {
+            "typeId": "state",
+            "id": "93d78273-957d-429d-933f-b269e2117ab8"
+          }
+        }
+      ],
+      "priceMode": "Platform",
+      "lineItemMode": "Standard",
+      "totalPrice": {
+        "type": "centPrecision",
+        "currencyCode": "EUR",
+        "centAmount": 9180,
+        "fractionDigits": 2
+      },
+      "taxedPricePortions": []
+    }
+  ],
+  "cartState": "Active",
+  "totalPrice": {
+    "type": "centPrecision",
+    "currencyCode": "EUR",
+    "centAmount": 71580,
+    "fractionDigits": 2
+  },
+  "shippingMode": "Single",
+  "shipping": [],
+  "customLineItems": [],
+  "discountCodes": [
+    {
+      "discountCode": {
+        "typeId": "discount-code",
+        "id": "9c39b15e-6cc3-4e63-b7c1-abb46f58ef0e"
+      },
+      "state": "MatchesCart"
+    }
+  ],
+  "directDiscounts": [],
+  "inventoryMode": "None",
+  "taxMode": "Platform",
+  "taxRoundingMode": "HalfEven",
+  "taxCalculationMode": "LineItemLevel",
+  "deleteDaysAfterLastModification": 90,
+  "refusedGifts": [],
+  "origin": "Customer",
+  "itemShippingAddresses": [],
+  "totalLineItemQuantity": 99
+}

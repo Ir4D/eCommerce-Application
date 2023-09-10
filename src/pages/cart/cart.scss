@@ -125,14 +125,21 @@
   border-radius: 4px;
 }
 
+.cart-subtotal-price {
+  display: flex;
+  justify-content: space-between;
+}
+
 .cart-total-price {
   display: flex;
   justify-content: space-between;
   font-weight: 700;
+  font-size: 1.15rem;
 }
 
 .cart-total-title {
   font-weight: 700;
+  text-transform: uppercase;
 }
 
 .cart-discount-container {
