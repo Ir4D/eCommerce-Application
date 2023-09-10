@@ -13,11 +13,12 @@ export default class App {
   public async init(): Promise<void> {
     await State.init(
       () => {},
+      () => {},
       () => {}
     );
+
     if (!this.appContainer) throw new Error('error');
     this.layout.render(this.appContainer);
-
     this.menuIcon =
       this.appContainer?.querySelector<HTMLElement>('.nav-mobile');
     this.nav = this.appContainer?.querySelector<HTMLElement>('.nav');

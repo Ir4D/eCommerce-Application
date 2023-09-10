@@ -24,7 +24,10 @@ export default class CartView extends Component {
       <div class="title-column title-empty"></div>
     `;
     productsContainer.append(productsTitle);
-
+    if (!localStorage.getItem('card-id')) {
+      State.createNewCart(() => {});
+      console.log('cart from cart', State.cart);
+    }
     const cart = State.cart?.body;
     if (cart && cart.lineItems) {
       cart.lineItems.forEach((productItem) => {

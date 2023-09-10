@@ -1,17 +1,12 @@
 import MenuView from './menu';
 import Router from '../services/router/router';
+import State from '../services/state';
 
 const INNER_HTML = {
-  // searchItem: `<li class="profile_container-item search-item">
-  //     <a href="" class="profile_container-link link">
-  //       <img src="./images/icons/search-icon.png" alt="search" class="search" width="56" height="56">
-  //     </a>
-  //   </li>
-  //   `,
   cartItem: `<li class="profile_container-item cart-item">
       <a href="${Router.pages.cart}" class="profile_container-link link profile_container-link--cart">
         <img src="./images/icons/cart-icon.png" alt="cart" class="cart cart-icon" width="56" height="56">
-        <span class="cart cart-indicator">0</span>
+        <span class="cart cart-indicator">${State.cart?.body}</span>
       </a>
     </li>
     `,
@@ -82,6 +77,7 @@ export default class HeaderView {
   }
 
   public render(): HTMLElement {
+    console.log('after render header', State.cart);
     return this.container;
   }
 }

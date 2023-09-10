@@ -7,7 +7,8 @@ import {
 import {
   GetCart,
   GetProductsPublished,
-  getProductCategories
+  getProductCategories,
+  CreateCart
 } from '../api/apiMethods';
 
 export default abstract class State {
@@ -45,13 +46,24 @@ export default abstract class State {
 
   public static async setCart(handleError: () => void): Promise<void> {
     try {
-      const CUSTOMER_ID = localStorage.getItem('customerID');
+      const CUSTOMER_ID = localStorage.getItem(
+        'customerID' /* dbc27050-d4bb-4258-aab5-031a4b0d13ec */
+      );
       const CURRENCY = 'EUR';
       // for the purposes of cart testing:
       const CART_ID = 'daa28bb4-7a2d-42bb-9580-8b0fa6e3a998';
       if (CUSTOMER_ID) {
         State.cart = await GetCart(CART_ID);
+        console.log('state cart', State.cart);
       }
+    } catch {
+      handleError();
+    }
+  }
+
+  public static async createNewCart(handleError: () => void): Promise<void> {
+    try {
+      this.cart = await CreateCart('EUR');
     } catch {
       handleError();
     }
@@ -59,9 +71,11 @@ export default abstract class State {
 
   public static async init(
     handleCatalogError: () => void,
-    handleCategoriesError: () => void
+    handleCategoriesError: () => void,
+    handleCartError: () => void
   ): Promise<void> {
     await this.setCatalog(handleCatalogError);
     await this.setCategories(handleCategoriesError);
+    await this.setCart(handleCartError);
   }
 }

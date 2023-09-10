@@ -14,7 +14,8 @@ import {
   CustomerSetDefaultShippingAddressAction,
   CustomerSetDefaultBillingAddressAction,
   MyCartUpdate,
-  Cart
+  Cart,
+  MyCartDraft
 } from '@commercetools/platform-sdk';
 import { apiData } from './apiData';
 import { createCtpClient, createCtpClientExistingFlow } from './BuildClients';
@@ -69,6 +70,21 @@ export function getProductCategories() {
     return apiRoot.categories().get().execute();
   };
   return getCategories();
+}
+
+export async function CreateCart(
+  CURRENCY: string
+): Promise<ClientResponse<Cart>> {
+  const data: MyCartDraft = {
+    currency: CURRENCY
+  };
+  return apiRootProfile
+    .me()
+    .carts()
+    .post({
+      body: data
+    })
+    .execute();
 }
 
 // Get cart by ID
