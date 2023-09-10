@@ -203,7 +203,7 @@ export default class ProfileView extends Component {
         this.renderProfileInfo(body);
         this.renderAddresses(body);
       } catch (error) {
-        // this.errorModal.innerText = 'Something went wrong, try again';
+        this.errorModal.innerText = 'Something went wrong, try again';
         // this.errorModal.showModal();
         console.error('Something went wrong:', error);
       }
