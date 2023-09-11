@@ -79,10 +79,6 @@ export function GetProductsPublished(): Promise<
       .execute();
   };
   return getProducts();
-  // .then(({ body }) => {
-  //   console.log(body);
-  // })
-  // .catch(console.error);
 }
 
 export function getProductCategories() {
@@ -286,6 +282,33 @@ export function UpdateCartProdQuantity(
     .execute();
 }
 
+// Update anonim cart by changing product's quantity
+export function UpdateAnonimCartProdQuantity(
+  CART_ID: string,
+  VERSION: number,
+  LINE_ITEM_ID: string,
+  QUANTITY: number
+): Promise<ClientResponse<Cart>> {
+  const data: MyCartUpdate = {
+    version: VERSION,
+    actions: [
+      {
+        action: 'changeLineItemQuantity',
+        lineItemId: LINE_ITEM_ID,
+        quantity: QUANTITY
+      }
+    ]
+  };
+  return apiRootAnonim2
+    .me()
+    .carts()
+    .withId({ ID: CART_ID })
+    .post({
+      body: data
+    })
+    .execute();
+}
+
 // Create a new customer
 export function CreateCustomer(EMAIL: string, PASSWORD: string): void {
   const createCustomer = () => {
@@ -302,8 +325,8 @@ export function CreateCustomer(EMAIL: string, PASSWORD: string): void {
   };
   createCustomer()
     .then(({ body }) => {
-      console.log('create customer from methods', body.customer.id);
-      console.log('create customer from methods', body.customer.id);
+      // console.log('create customer from methods', body.customer.id);
+      // console.log('create customer from methods', body.customer.id);
       console.log(body.customer.email);
     })
     .catch(console.error);

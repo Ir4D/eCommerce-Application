@@ -314,7 +314,6 @@ export default class CatalogView extends Component {
           1
         );
       } else {
-        console.log('on anonim add id', State.cart!.body.id);
         await addToAnonimCart(
           State.cart!.body.id,
           await State.getCurrentAnonimCartVersion(State.cart!.body.id),
@@ -505,7 +504,6 @@ export default class CatalogView extends Component {
       body?.classList.toggle('stop-scroll');
     });
 
-    // console.log(document.querySelector('.swiper'))
     return this.container;
   }
 

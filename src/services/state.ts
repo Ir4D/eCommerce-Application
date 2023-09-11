@@ -59,7 +59,6 @@ export default abstract class State {
   }
 
   public static getCurrentAnonimCartVersion(CART_ID: string): Promise<number> {
-    console.log('cart id from state', CART_ID);
     return GetAnonimCartByID(CART_ID)
       .then(({ body }) => {
         console.log('version from state', body);
@@ -77,15 +76,15 @@ export default abstract class State {
       const CART_ID = localStorage.getItem('cartID');
       if (CUSTOMER_ID) {
         if (CART_ID) {
-          console.log('loged in with cart id');
+          // console.log('loged in with cart id');
           const VERSION = await this.getCurrentCartVersion(CART_ID);
           State.cart = await GetCartFromAnonim(CUSTOMER_ID, CART_ID, VERSION);
         } else {
-          console.log('loged in without cart id');
+          // console.log('loged in without cart id');
           State.cart = await CreateCartCustomer(CURRENCY);
         }
       } else {
-        console.log('not loged in');
+        // console.log('not loged in');
         State.cart = await CreateCartAnonim(CURRENCY);
         localStorage.setItem('cartID', State.cart.body.id);
       }
