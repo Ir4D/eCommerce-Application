@@ -200,7 +200,11 @@ export default class CartView extends Component {
 
   private renderCartTotal(): void {
     const cart = State.cart?.body;
+    const discountCodes = State.cart?.body.discountCodes;
     const totalContainer = createElem('cart-total-container');
+    if (discountCodes && discountCodes.length > 0) {
+      totalContainer.classList.add('discount');
+    }
 
     const subtotalPrice = createElem('cart-subtotal-price');
     const subtotalTitle = createElem('cart-subtotal-title');
@@ -234,6 +238,9 @@ export default class CartView extends Component {
     }
     totalPrice.append(totalTitle, totalAmount);
 
+    const discountApplied = createElem('cart-discount-applied');
+    discountApplied.innerHTML = `Discount applied`;
+
     const discountContainer = createElem('cart-discount-container');
     const discountInput = createElem(
       'cart-discount-input',
@@ -247,19 +254,20 @@ export default class CartView extends Component {
     discountBtn.addEventListener('click', async () => {
       try {
         const code = discountInput.value;
-        console.log(code);
         this.setDiscount(code);
         await this.refreshCart();
       } catch (error) {
         console.error('Error getting cart version:', error);
       }
-      // const code = discountInput.value;
-      // this.setDiscount(code);
     });
-
     discountContainer.append(discountInput, discountBtn);
 
-    totalContainer.append(subtotalPrice, totalPrice, discountContainer);
+    totalContainer.append(
+      subtotalPrice,
+      discountApplied,
+      totalPrice,
+      discountContainer
+    );
     this.container.append(totalContainer);
   }
 
@@ -271,7 +279,10 @@ export default class CartView extends Component {
         await SetDiscount(CART_ID, VERSION, code);
         await this.refreshCart();
       } catch (error) {
-        console.error('Error getting cart version:', error);
+        const wrongCode = createElem('cart-wrong-code');
+        const totalContainer = document.querySelector('.cart-total-container');
+        wrongCode.innerHTML = 'Enter a valid discount code';
+        totalContainer?.append(wrongCode);
       }
     }
   }
