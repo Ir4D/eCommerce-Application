@@ -15,7 +15,8 @@ import {
   apiData,
   apiDataCredentials,
   apiDataAnonymous,
-  apiDataPassManageCustomers
+  apiDataPassManageCustomers,
+  apiDataAnonymous2
 } from './apiData';
 import TokenHandle from '../services/token/token';
 
@@ -97,6 +98,27 @@ export function createCtpClientAnonymous(): Client {
       clientSecret: apiDataAnonymous.CLIENT_SECRET || ''
     },
     scopes: [apiDataAnonymous.SCOPES || ''],
+    fetch
+  };
+
+  return new ClientBuilder()
+    .withProjectKey(projectKey)
+    .withAnonymousSessionFlow(authAnonymousOptions)
+    .withHttpMiddleware(httpMiddlewareOptions)
+    .withLoggerMiddleware()
+    .build();
+}
+
+// Client Anonymous Flow with order view
+export function createCtpClientAnonymous2(): Client {
+  const authAnonymousOptions: AnonymousAuthMiddlewareOptions = {
+    host: apiData.AUTH_URL || '',
+    projectKey,
+    credentials: {
+      clientId: apiDataAnonymous2.CLIENT_ID || '',
+      clientSecret: apiDataAnonymous2.CLIENT_SECRET || ''
+    },
+    scopes: [apiDataAnonymous2.SCOPES || ''],
     fetch
   };
 

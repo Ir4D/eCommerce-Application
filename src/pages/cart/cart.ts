@@ -27,6 +27,7 @@ export default class CartView extends Component {
     productsContainer.append(productsTitle);
 
     const cart = State.cart?.body;
+    console.log('cart from cart', cart);
     if (cart && cart.lineItems) {
       cart.lineItems.forEach((productItem) => {
         const cartItem = this.renderCartItem(productItem);
@@ -37,7 +38,7 @@ export default class CartView extends Component {
   }
 
   private renderCartItem(product: LineItem): HTMLElement {
-    // console.log(product);
+    console.log('product', product);
     const productElem = createElem('cart-product-item');
     const productImage = createElem('cart-product-image');
     if (product.variant.images) {

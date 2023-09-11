@@ -16,7 +16,11 @@ import Router from '../../services/router/router';
 import State from '../../services/state';
 import Component from '../../components/abstract/component';
 import ItemView from '../item/item';
-import { addToCart } from '../../api/apiMethods';
+import {
+  GetAnonimCartByID,
+  addToAnonimCart,
+  addToCart
+} from '../../api/apiMethods';
 
 Swiper.use([Navigation, Pagination]);
 
@@ -301,12 +305,24 @@ export default class CatalogView extends Component {
     toCartBtn.textContent = 'Add to cart';
     toCartBtn.addEventListener('click', async (e) => {
       e.preventDefault();
-      await addToCart(
-        State.cart!.body.id,
-        await State.getCurrentCartVersion(State.cart!.body.id),
-        catalogItem.id,
-        catalogItem.masterVariant.id
-      );
+      if (localStorage.getItem('customerID')) {
+        await addToCart(
+          State.cart!.body.id,
+          await State.getCurrentCartVersion(State.cart!.body.id),
+          catalogItem.id,
+          catalogItem.masterVariant.id,
+          1
+        );
+      } else {
+        console.log('on anonim add id', State.cart!.body.id);
+        await addToAnonimCart(
+          State.cart!.body.id,
+          await State.getCurrentAnonimCartVersion(State.cart!.body.id),
+          catalogItem.id,
+          catalogItem.masterVariant.id,
+          1
+        );
+      }
     });
 
     const priceContainer = document.createElement('div');

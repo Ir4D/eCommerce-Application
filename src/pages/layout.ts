@@ -107,7 +107,7 @@ export default class Layout {
       this.slot.append(this.catalog.render());
       this.slot.append(await this.catalog.renderItemPage(route));
     } else if (route === Router.pages.cart) {
-      await State.setCart(() => {} /* error handling */);
+      await State.refreshCart(() => {} /* error handling */);
       this.slot.append(this.cart.render());
     } else {
       this.slot.innerHTML = pageHTML;
