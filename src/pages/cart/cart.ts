@@ -3,7 +3,11 @@
 import { Cart, LineItem } from '@commercetools/platform-sdk';
 import Component from '../../components/abstract/component';
 import State from '../../services/state';
-import { GetCartByID, UpdateCartProdQuantity } from '../../api/apiMethods';
+import {
+  GetCartByID,
+  SetDiscount,
+  UpdateCartProdQuantity
+} from '../../api/apiMethods';
 
 const createElem = (className: string, tag = 'div'): HTMLElement =>
   Object.assign(document.createElement(tag), { className });
@@ -231,21 +235,46 @@ export default class CartView extends Component {
     totalPrice.append(totalTitle, totalAmount);
 
     const discountContainer = createElem('cart-discount-container');
-    const discountInput = createElem('cart-discount-input', 'input');
+    const discountInput = createElem(
+      'cart-discount-input',
+      'input'
+    ) as HTMLInputElement;
     discountInput.setAttribute('type', 'text');
     discountInput.setAttribute('placeholder', 'Promo code');
     const discountBtn = createElem('cart-discount-btn', 'button');
     discountBtn.classList.add('btn', 'btn--yellow');
     discountBtn.innerHTML = 'OK';
+    discountBtn.addEventListener('click', async () => {
+      try {
+        const code = discountInput.value;
+        console.log(code);
+        this.setDiscount(code);
+        await this.refreshCart();
+      } catch (error) {
+        console.error('Error getting cart version:', error);
+      }
+      // const code = discountInput.value;
+      // this.setDiscount(code);
+    });
+
     discountContainer.append(discountInput, discountBtn);
 
     totalContainer.append(subtotalPrice, totalPrice, discountContainer);
     this.container.append(totalContainer);
   }
 
-  // private async setDiscount(code: string): void {
-  //   SetDiscount(CART_ID, VERSION, code);
-  // }
+  private async setDiscount(code: string): Promise<void> {
+    const CART_ID = localStorage.getItem('cartID');
+    if (CART_ID) {
+      try {
+        const VERSION = (await this.getCurrentCartVersion(CART_ID)).version;
+        await SetDiscount(CART_ID, VERSION, code);
+        await this.refreshCart();
+      } catch (error) {
+        console.error('Error getting cart version:', error);
+      }
+    }
+  }
 
   private async refreshCart(): Promise<void> {
     await State.refreshCart();
