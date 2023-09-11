@@ -64,18 +64,25 @@ export default abstract class State {
       const CART_ID = localStorage.getItem('cartID');
       if (CUSTOMER_ID) {
         if (CART_ID) {
-          const VERSION = this.getCurrentCartVersion(CART_ID);
-          State.cart = await GetCartFromAnonim(
-            CUSTOMER_ID,
-            CART_ID,
-            await VERSION
-          );
+          const VERSION = await this.getCurrentCartVersion(CART_ID);
+          State.cart = await GetCartFromAnonim(CUSTOMER_ID, CART_ID, VERSION);
         } else {
           State.cart = await CreateCartCustomer(CURRENCY);
         }
       } else {
         State.cart = await CreateCartAnonim(CURRENCY);
         localStorage.setItem('cartID', State.cart.body.id);
+      }
+    } catch {
+      if (handleError) handleError();
+    }
+  }
+
+  public static async refreshCart(handleError?: () => void): Promise<void> {
+    try {
+      const CART_ID = localStorage.getItem('cartID');
+      if (CART_ID) {
+        State.cart = await GetCartByID(CART_ID);
       }
     } catch {
       if (handleError) handleError();

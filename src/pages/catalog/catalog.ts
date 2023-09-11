@@ -301,10 +301,9 @@ export default class CatalogView extends Component {
     toCartBtn.textContent = 'Add to cart';
     toCartBtn.addEventListener('click', async (e) => {
       e.preventDefault();
-      console.log('State.cart', State.cart);
       await addToCart(
         State.cart!.body.id,
-        State.cart!.body.version,
+        await State.getCurrentCartVersion(State.cart!.body.id),
         catalogItem.id,
         catalogItem.masterVariant.id
       );

@@ -13,7 +13,7 @@ export default class CartView extends Component {
     this.container.className = 'cart-container';
   }
 
-  private renderCart(): void {
+  private async renderCart(): Promise<void> {
     const productsContainer = createElem('cart-products-container');
     const productsTitle = createElem('cart-products-title');
     productsTitle.innerHTML = `
@@ -37,7 +37,7 @@ export default class CartView extends Component {
   }
 
   private renderCartItem(product: LineItem): HTMLElement {
-    console.log(product);
+    // console.log(product);
     const productElem = createElem('cart-product-item');
     const productImage = createElem('cart-product-image');
     if (product.variant.images) {
@@ -130,8 +130,14 @@ export default class CartView extends Component {
         if (lineItem) {
           const QUANTITY = lineItem.quantity - 1;
           const VERSION = CART_INFO.version;
-          UpdateCartProdQuantity(CART_ID, VERSION, LINE_ITEM_ID, QUANTITY);
+          await UpdateCartProdQuantity(
+            CART_ID,
+            VERSION,
+            LINE_ITEM_ID,
+            QUANTITY
+          );
         }
+        await this.refreshCart();
       } catch (error) {
         console.error('Error getting cart version:', error);
       }
@@ -149,8 +155,14 @@ export default class CartView extends Component {
         if (lineItem) {
           const QUANTITY = lineItem.quantity + 1;
           const VERSION = CART_INFO.version;
-          UpdateCartProdQuantity(CART_ID, VERSION, LINE_ITEM_ID, QUANTITY);
+          await UpdateCartProdQuantity(
+            CART_ID,
+            VERSION,
+            LINE_ITEM_ID,
+            QUANTITY
+          );
         }
+        await this.refreshCart();
       } catch (error) {
         console.error('Error getting cart version:', error);
       }
@@ -164,7 +176,8 @@ export default class CartView extends Component {
         const CART_INFO = await this.getCurrentCartVersion(CART_ID);
         const QUANTITY = 0;
         const VERSION = CART_INFO.version;
-        UpdateCartProdQuantity(CART_ID, VERSION, LINE_ITEM_ID, QUANTITY);
+        await UpdateCartProdQuantity(CART_ID, VERSION, LINE_ITEM_ID, QUANTITY);
+        await this.refreshCart();
       } catch (error) {
         console.error('Error getting cart version:', error);
       }
@@ -208,6 +221,13 @@ export default class CartView extends Component {
 
     totalContainer.append(subtotalPrice, totalPrice, discountContainer);
     this.container.append(totalContainer);
+  }
+
+  private async refreshCart(): Promise<void> {
+    await State.refreshCart();
+    this.container.innerHTML = '';
+    this.renderCart();
+    this.renderCartTotal();
   }
 
   public render(): HTMLElement {
