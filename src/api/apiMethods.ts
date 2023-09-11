@@ -88,7 +88,7 @@ export function getProductCategories() {
 // Get cart by ID
 export function GetCart(CART_ID: string): Promise<ClientResponse> {
   const getCart = () => {
-    return apiRootProfile.me().carts().withId({ ID: CART_ID }).get().execute();
+    return apiRootAnonim.me().carts().withId({ ID: CART_ID }).get().execute();
   };
   return getCart();
 }
@@ -280,7 +280,6 @@ export function CreateCustomer(EMAIL: string, PASSWORD: string): void {
   };
   createCustomer()
     .then(({ body }) => {
-      console.log('create customer from methods', body.customer.id);
       console.log('create customer from methods', body.customer.id);
       console.log(body.customer.email);
     })

@@ -1,3 +1,4 @@
+/* eslint-disable no-lonely-if */
 import {
   Cart,
   CategoryPagedQueryResponse,
@@ -70,8 +71,12 @@ export default abstract class State {
           State.cart = await CreateCartCustomer(CURRENCY);
         }
       } else {
-        State.cart = await CreateCartAnonim(CURRENCY);
-        localStorage.setItem('cartID', State.cart.body.id);
+        if (CART_ID) {
+          State.cart = await GetCart(CART_ID);
+        } else {
+          State.cart = await CreateCartAnonim(CURRENCY);
+          localStorage.setItem('cartID', State.cart.body.id);
+        }
       }
     } catch {
       if (handleError) handleError();
