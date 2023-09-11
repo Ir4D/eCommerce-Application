@@ -239,6 +239,31 @@ export function UpdateCartProdQuantity(
     .execute();
 }
 
+// Add discount to the cart
+export function SetDiscount(
+  CART_ID: string,
+  VERSION: number,
+  DISCOUNT_CODE: string
+): Promise<ClientResponse<Cart>> {
+  const data: MyCartUpdate = {
+    version: VERSION,
+    actions: [
+      {
+        action: 'addDiscountCode',
+        code: DISCOUNT_CODE
+      }
+    ]
+  };
+  return apiRootProfile
+    .me()
+    .carts()
+    .withId({ ID: CART_ID })
+    .post({
+      body: data
+    })
+    .execute();
+}
+
 // Create a new customer
 export function CreateCustomer(EMAIL: string, PASSWORD: string): void {
   const createCustomer = () => {

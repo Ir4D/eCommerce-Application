@@ -1,11 +1,11 @@
 {
   "type": "Cart",
-  "id": "1b0f749a-8ebb-4c2c-aecb-ce2e2566ed7f",
-  "version": 378,
-  "versionModifiedAt": "2023-09-10T05:55:28.759Z",
+  "id": "7f0da41b-a171-4a80-9e79-1c6cd1617c1c",
+  "version": 85,
+  "versionModifiedAt": "2023-09-11T07:39:20.281Z",
   "lastMessageSequenceNumber": 1,
-  "createdAt": "2023-09-09T10:24:11.272Z",
-  "lastModifiedAt": "2023-09-10T05:55:28.759Z",
+  "createdAt": "2023-09-11T06:12:32.739Z",
+  "lastModifiedAt": "2023-09-11T07:39:20.281Z",
   "lastModifiedBy": {
     "isPlatformClient": true,
     "user": {
@@ -16,13 +16,159 @@
   "createdBy": {
     "clientId": "DvNMoxgsmbuytw_zn-ScLQlq",
     "isPlatformClient": false,
-    "anonymousId": "78042afb-6caf-4936-a24e-da3e5fe92d5a"
+    "anonymousId": "2a466275-39c6-4e46-af46-a75f7a323c55"
   },
   "customerId": "dbc27050-d4bb-4258-aab5-031a4b0d13ec",
-  "anonymousId": "78042afb-6caf-4936-a24e-da3e5fe92d5a",
+  "anonymousId": "2a466275-39c6-4e46-af46-a75f7a323c55",
   "lineItems": [
     {
-      "id": "9ea58765-3468-43b1-8147-cb004b1e08b1",
+      "id": "0c24e04e-6d24-4f17-8c6c-fa5e0583b792",
+      "productId": "5afaa1e1-5929-40c3-ade7-b8fd99cb60cf",
+      "productKey": "le",
+      "name": {
+        "en": "Lemon"
+      },
+      "productType": {
+        "typeId": "product-type",
+        "id": "51d5b6eb-6628-4744-89db-a7c01315eb95",
+        "version": 1
+      },
+      "productSlug": {
+        "en": "lemon"
+      },
+      "variant": {
+        "id": 1,
+        "sku": "le01",
+        "key": "le01",
+        "prices": [
+          {
+            "id": "2b176b3d-933a-47be-9c84-a0c762cb2c09",
+            "value": {
+              "type": "centPrecision",
+              "currencyCode": "EUR",
+              "centAmount": 200,
+              "fractionDigits": 2
+            },
+            "key": "le12"
+          }
+        ],
+        "images": [
+          {
+            "url": "https://926408e87c1b7e742eda-8e98415434a57c0ab5153bafdc0be0ab.ssl.cf3.rackcdn.com/tumb-lemon-tRiqWqKq.jpg",
+            "dimensions": {
+              "w": 400,
+              "h": 400
+            }
+          },
+          {
+            "url": "https://926408e87c1b7e742eda-8e98415434a57c0ab5153bafdc0be0ab.ssl.cf3.rackcdn.com/lemon-V5UCtY7l.jpg",
+            "dimensions": {
+              "w": 4059,
+              "h": 4059
+            }
+          },
+          {
+            "url": "https://926408e87c1b7e742eda-8e98415434a57c0ab5153bafdc0be0ab.ssl.cf3.rackcdn.com/lemon1-97o7UdYI.jpg",
+            "dimensions": {
+              "w": 3036,
+              "h": 3036
+            }
+          },
+          {
+            "url": "https://926408e87c1b7e742eda-8e98415434a57c0ab5153bafdc0be0ab.ssl.cf3.rackcdn.com/lemon2-U_darELB.jpg",
+            "dimensions": {
+              "w": 4886,
+              "h": 4885
+            }
+          }
+        ],
+        "attributes": [],
+        "assets": []
+      },
+      "price": {
+        "id": "2b176b3d-933a-47be-9c84-a0c762cb2c09",
+        "value": {
+          "type": "centPrecision",
+          "currencyCode": "EUR",
+          "centAmount": 200,
+          "fractionDigits": 2
+        },
+        "key": "le12"
+      },
+      "quantity": 10,
+      "discountedPrice": {
+        "value": {
+          "type": "centPrecision",
+          "currencyCode": "EUR",
+          "centAmount": 180,
+          "fractionDigits": 2
+        },
+        "includedDiscounts": [
+          {
+            "discount": {
+              "typeId": "cart-discount",
+              "id": "df67b74d-80df-41f2-b596-210d9d6d94ba"
+            },
+            "discountedAmount": {
+              "type": "centPrecision",
+              "currencyCode": "EUR",
+              "centAmount": 20,
+              "fractionDigits": 2
+            }
+          }
+        ]
+      },
+      "discountedPricePerQuantity": [
+        {
+          "quantity": 10,
+          "discountedPrice": {
+            "value": {
+              "type": "centPrecision",
+              "currencyCode": "EUR",
+              "centAmount": 180,
+              "fractionDigits": 2
+            },
+            "includedDiscounts": [
+              {
+                "discount": {
+                  "typeId": "cart-discount",
+                  "id": "df67b74d-80df-41f2-b596-210d9d6d94ba"
+                },
+                "discountedAmount": {
+                  "type": "centPrecision",
+                  "currencyCode": "EUR",
+                  "centAmount": 20,
+                  "fractionDigits": 2
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "perMethodTaxRate": [],
+      "addedAt": "2023-09-11T06:18:39.012Z",
+      "lastModifiedAt": "2023-09-11T07:02:27.466Z",
+      "state": [
+        {
+          "quantity": 10,
+          "state": {
+            "typeId": "state",
+            "id": "93d78273-957d-429d-933f-b269e2117ab8"
+          }
+        }
+      ],
+      "priceMode": "Platform",
+      "lineItemMode": "Standard",
+      "totalPrice": {
+        "type": "centPrecision",
+        "currencyCode": "EUR",
+        "centAmount": 1800,
+        "fractionDigits": 2
+      },
+      "taxedPricePortions": []
+    },
+    {
+      "id": "5d3a2d32-af1a-408e-82eb-7857fd2f42c9",
       "productId": "3d787ef2-43ad-4b78-a45b-07d7622d1c9a",
       "productKey": "rb",
       "name": {
@@ -113,7 +259,7 @@
           }
         }
       },
-      "quantity": 48,
+      "quantity": 10,
       "discountedPrice": {
         "value": {
           "type": "centPrecision",
@@ -138,7 +284,7 @@
       },
       "discountedPricePerQuantity": [
         {
-          "quantity": 48,
+          "quantity": 10,
           "discountedPrice": {
             "value": {
               "type": "centPrecision",
@@ -164,11 +310,11 @@
         }
       ],
       "perMethodTaxRate": [],
-      "addedAt": "2023-09-09T20:15:00.673Z",
-      "lastModifiedAt": "2023-09-10T05:41:04.521Z",
+      "addedAt": "2023-09-11T07:39:20.265Z",
+      "lastModifiedAt": "2023-09-11T07:39:20.265Z",
       "state": [
         {
-          "quantity": 48,
+          "quantity": 10,
           "state": {
             "typeId": "state",
             "id": "93d78273-957d-429d-933f-b269e2117ab8"
@@ -180,153 +326,7 @@
       "totalPrice": {
         "type": "centPrecision",
         "currencyCode": "EUR",
-        "centAmount": 62400,
-        "fractionDigits": 2
-      },
-      "taxedPricePortions": []
-    },
-    {
-      "id": "02892a9f-dcc7-4286-a7a6-154ffe5af403",
-      "productId": "5afaa1e1-5929-40c3-ade7-b8fd99cb60cf",
-      "productKey": "le",
-      "name": {
-        "en": "Lemon"
-      },
-      "productType": {
-        "typeId": "product-type",
-        "id": "51d5b6eb-6628-4744-89db-a7c01315eb95",
-        "version": 1
-      },
-      "productSlug": {
-        "en": "lemon"
-      },
-      "variant": {
-        "id": 1,
-        "sku": "le01",
-        "key": "le01",
-        "prices": [
-          {
-            "id": "2b176b3d-933a-47be-9c84-a0c762cb2c09",
-            "value": {
-              "type": "centPrecision",
-              "currencyCode": "EUR",
-              "centAmount": 200,
-              "fractionDigits": 2
-            },
-            "key": "le12"
-          }
-        ],
-        "images": [
-          {
-            "url": "https://926408e87c1b7e742eda-8e98415434a57c0ab5153bafdc0be0ab.ssl.cf3.rackcdn.com/tumb-lemon-tRiqWqKq.jpg",
-            "dimensions": {
-              "w": 400,
-              "h": 400
-            }
-          },
-          {
-            "url": "https://926408e87c1b7e742eda-8e98415434a57c0ab5153bafdc0be0ab.ssl.cf3.rackcdn.com/lemon-V5UCtY7l.jpg",
-            "dimensions": {
-              "w": 4059,
-              "h": 4059
-            }
-          },
-          {
-            "url": "https://926408e87c1b7e742eda-8e98415434a57c0ab5153bafdc0be0ab.ssl.cf3.rackcdn.com/lemon1-97o7UdYI.jpg",
-            "dimensions": {
-              "w": 3036,
-              "h": 3036
-            }
-          },
-          {
-            "url": "https://926408e87c1b7e742eda-8e98415434a57c0ab5153bafdc0be0ab.ssl.cf3.rackcdn.com/lemon2-U_darELB.jpg",
-            "dimensions": {
-              "w": 4886,
-              "h": 4885
-            }
-          }
-        ],
-        "attributes": [],
-        "assets": []
-      },
-      "price": {
-        "id": "2b176b3d-933a-47be-9c84-a0c762cb2c09",
-        "value": {
-          "type": "centPrecision",
-          "currencyCode": "EUR",
-          "centAmount": 200,
-          "fractionDigits": 2
-        },
-        "key": "le12"
-      },
-      "quantity": 51,
-      "discountedPrice": {
-        "value": {
-          "type": "centPrecision",
-          "currencyCode": "EUR",
-          "centAmount": 180,
-          "fractionDigits": 2
-        },
-        "includedDiscounts": [
-          {
-            "discount": {
-              "typeId": "cart-discount",
-              "id": "df67b74d-80df-41f2-b596-210d9d6d94ba"
-            },
-            "discountedAmount": {
-              "type": "centPrecision",
-              "currencyCode": "EUR",
-              "centAmount": 20,
-              "fractionDigits": 2
-            }
-          }
-        ]
-      },
-      "discountedPricePerQuantity": [
-        {
-          "quantity": 51,
-          "discountedPrice": {
-            "value": {
-              "type": "centPrecision",
-              "currencyCode": "EUR",
-              "centAmount": 180,
-              "fractionDigits": 2
-            },
-            "includedDiscounts": [
-              {
-                "discount": {
-                  "typeId": "cart-discount",
-                  "id": "df67b74d-80df-41f2-b596-210d9d6d94ba"
-                },
-                "discountedAmount": {
-                  "type": "centPrecision",
-                  "currencyCode": "EUR",
-                  "centAmount": 20,
-                  "fractionDigits": 2
-                }
-              }
-            ]
-          }
-        }
-      ],
-      "perMethodTaxRate": [],
-      "addedAt": "2023-09-09T20:58:22.787Z",
-      "lastModifiedAt": "2023-09-09T20:58:32.487Z",
-      "state": [
-        {
-          "quantity": 51,
-          "state": {
-            "typeId": "state",
-            "id": "93d78273-957d-429d-933f-b269e2117ab8"
-          }
-        }
-      ],
-      "priceMode": "Platform",
-      "lineItemMode": "Standard",
-      "totalPrice": {
-        "type": "centPrecision",
-        "currencyCode": "EUR",
-        "centAmount": 9180,
+        "centAmount": 13000,
         "fractionDigits": 2
       },
       "taxedPricePortions": []
@@ -336,7 +336,7 @@
   "totalPrice": {
     "type": "centPrecision",
     "currencyCode": "EUR",
-    "centAmount": 71580,
+    "centAmount": 14800,
     "fractionDigits": 2
   },
   "shippingMode": "Single",
@@ -360,5 +360,5 @@
   "refusedGifts": [],
   "origin": "Customer",
   "itemShippingAddresses": [],
-  "totalLineItemQuantity": 99
+  "totalLineItemQuantity": 20
 }

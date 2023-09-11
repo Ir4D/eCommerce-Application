@@ -95,6 +95,6 @@ export default abstract class State {
   ): Promise<void> {
     await this.setCatalog(handleCatalogError);
     await this.setCategories(handleCategoriesError);
-    await this.setCart();
+    // await this.setCart();
   }
 }

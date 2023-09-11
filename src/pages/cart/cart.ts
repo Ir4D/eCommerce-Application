@@ -1,3 +1,4 @@
+/* eslint-disable no-else-return */
 /* eslint-disable max-lines-per-function */
 import { Cart, LineItem } from '@commercetools/platform-sdk';
 import Component from '../../components/abstract/component';
@@ -82,10 +83,19 @@ export default class CartView extends Component {
     );
 
     const productTotalPrice = createElem('cart-product-price_total');
-    if (product.totalPrice) {
-      productTotalPrice.innerHTML = `€ ${String(
-        (product.totalPrice.centAmount / 100).toFixed(2)
-      )}`;
+    if (product.price && product.quantity) {
+      if (product.price.discounted) {
+        productTotalPrice.innerHTML = `€ ${String(
+          (
+            (product.price.discounted.value.centAmount * product.quantity) /
+            100
+          ).toFixed(2)
+        )}`;
+      } else {
+        productTotalPrice.innerHTML = `€ ${String(
+          ((product.price.value.centAmount * product.quantity) / 100).toFixed(2)
+        )}`;
+      }
     }
 
     const productRemove = createElem('cart-product-remove', 'button');
@@ -192,10 +202,20 @@ export default class CartView extends Component {
     const subtotalTitle = createElem('cart-subtotal-title');
     subtotalTitle.innerHTML = 'Subtotal:';
     const subtotalAmount = createElem('cart-subtotal-amount');
-    if (cart && cart.totalPrice) {
-      subtotalAmount.innerHTML = `€ ${String(
-        (cart.totalPrice.centAmount / 100).toFixed(2)
-      )}`;
+    if (cart && cart.lineItems) {
+      const amount = cart.lineItems.reduce((accumulator, currentItem) => {
+        if (currentItem.price.discounted) {
+          const itemTotal =
+            currentItem.price.discounted.value.centAmount *
+            currentItem.quantity;
+          return accumulator + itemTotal;
+        } else {
+          const itemTotal =
+            currentItem.price.value.centAmount * currentItem.quantity;
+          return accumulator + itemTotal;
+        }
+      }, 0);
+      subtotalAmount.innerHTML = `€ ${String((amount / 100).toFixed(2))}`;
     }
     subtotalPrice.append(subtotalTitle, subtotalAmount);
 
@@ -222,6 +242,10 @@ export default class CartView extends Component {
     totalContainer.append(subtotalPrice, totalPrice, discountContainer);
     this.container.append(totalContainer);
   }
+
+  // private async setDiscount(code: string): void {
+  //   SetDiscount(CART_ID, VERSION, code);
+  // }
 
   private async refreshCart(): Promise<void> {
     await State.refreshCart();
