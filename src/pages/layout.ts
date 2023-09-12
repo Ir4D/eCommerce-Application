@@ -121,7 +121,6 @@ export default class Layout {
 
   public render(container: HTMLElement): void {
     container.append(this.header.render());
-    console.log('indicator', document.querySelector('.cart-indicator'));
     this.header.refreshCartCounter(
       State.cart?.body.lineItems.length ? State.cart?.body.lineItems.length : 0
     );

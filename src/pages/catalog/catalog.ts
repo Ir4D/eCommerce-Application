@@ -532,11 +532,6 @@ export default class CatalogView extends Component {
       overlay?.classList.toggle('visible');
       body?.classList.toggle('stop-scroll');
     });
-    console.log(
-      'catalog button',
-      document.querySelector('.order-submit'),
-      document.querySelector('.order-quantity')
-    );
     const itemAddButton = document.querySelector('.order-submit');
     const itemAddQuantity = document.querySelector(
       '.order-quantity'
