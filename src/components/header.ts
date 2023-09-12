@@ -61,8 +61,9 @@ export default class HeaderView {
   private renderHeader(): void {
     this.container.append(this.menu.render());
     this.container.append(this.headerList());
-    window.addEventListener('cart-change', () => {
+    window.addEventListener('cart-change', async () => {
       console.log('listener', State.cart);
+      await State.refreshCart();
       this.refreshCartCounter(
         State.cart?.body.lineItems.length
           ? State.cart?.body.lineItems.length
