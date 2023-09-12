@@ -103,6 +103,26 @@ export function GetCartByID(CART_ID: string): Promise<ClientResponse> {
   return getCart();
 }
 
+export function GetActiveCart(): Promise<ClientResponse> {
+  const getCart = () => {
+    return apiRootProfile.me().activeCart().get().execute();
+  };
+  return getCart();
+}
+
+export function GetCartByCustomerId(
+  CISTOMER_ID: string
+): Promise<ClientResponse> {
+  const getCart = () => {
+    return apiRootProfile
+      .carts()
+      .withCustomerId({ customerId: CISTOMER_ID })
+      .get()
+      .execute();
+  };
+  return getCart();
+}
+
 export async function GetAnonimCartByID(
   CART_ID: string
 ): Promise<ClientResponse> {

@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 /* eslint-disable no-lonely-if */
 import {
   Cart,
@@ -10,6 +11,7 @@ import {
   CreateCartCustomer,
   GetAnonimCartByID,
   GetCart,
+  GetCartByCustomerId,
   GetCartByID,
   GetCartFromAnonim,
   GetProductsPublished,
@@ -76,24 +78,43 @@ export default abstract class State {
       const CURRENCY = 'EUR';
       const CART_ID = localStorage.getItem('cartID');
       if (CUSTOMER_ID) {
-        if (CART_ID) {
-          // console.log('loged in with cart id');
-          const VERSION = await this.getCurrentCartVersion(CART_ID);
-          State.cart = await GetCartFromAnonim(CUSTOMER_ID, CART_ID, VERSION);
-        } else {
-          // console.log('loged in without cart id');
-          State.cart = await CreateCartCustomer(CURRENCY);
+        try {
+          State.cart = await GetCartByCustomerId(CUSTOMER_ID);
+          localStorage.setItem('cartID', State.cart.body.id);
+        } catch {
+          if (CART_ID) {
+            const VERSION = await this.getCurrentCartVersion(CART_ID);
+            State.cart = await GetCartFromAnonim(CUSTOMER_ID, CART_ID, VERSION);
+          } else {
+            State.cart = await CreateCartCustomer(CURRENCY);
+            localStorage.setItem('cartID', State.cart.body.id);
+          }
         }
-      } else {
+
         // if (CART_ID) {
-        //  State.cart = await GetCart(CART_ID);
-        //} else {
-        //  State.cart = await CreateCartAnonim(CURRENCY);
-        //  localStorage.setItem('cartID', State.cart.body.id);
-        //}
+        //   // console.log('loged in with cart id');
+        //   const VERSION = await this.getCurrentCartVersion(CART_ID);
+        //   State.cart = await GetCartFromAnonim(CUSTOMER_ID, CART_ID, VERSION);
+        // } else {
+        //   // console.log('loged in without cart id');
+        //   try {
+        //     State.cart = await GetCartByCustomerId(CUSTOMER_ID);
+        //     localStorage.setItem('cartID', State.cart.body.id);
+        //   } catch {
+        //     State.cart = await CreateCartCustomer(CURRENCY);
+        //     localStorage.setItem('cartID', State.cart.body.id);
+        //   }
+        // }
+      } else {
+        if (CART_ID) {
+          State.cart = await GetAnonimCartByID(CART_ID);
+        } else {
+          State.cart = await CreateCartAnonim(CURRENCY);
+          localStorage.setItem('cartID', State.cart.body.id);
+        }
         // console.log('not loged in');
-        State.cart = await CreateCartAnonim(CURRENCY);
-        localStorage.setItem('cartID', State.cart.body.id);
+        // State.cart = await CreateCartAnonim(CURRENCY);
+        // localStorage.setItem('cartID', State.cart.body.id);
       }
     } catch {
       if (handleError) handleError();
@@ -123,6 +144,6 @@ export default abstract class State {
   ): Promise<void> {
     await this.setCatalog(handleCatalogError);
     await this.setCategories(handleCategoriesError);
-    await this.setCart();
+    // await this.setCart();
   }
 }

@@ -119,6 +119,7 @@ export function createCtpClientAnonymous2(): Client {
       clientSecret: apiDataAnonymous2.CLIENT_SECRET || ''
     },
     scopes: [apiDataAnonymous2.SCOPES || ''],
+    tokenCache,
     fetch
   };
 
