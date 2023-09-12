@@ -1,3 +1,4 @@
+/* eslint-disable no-lonely-if */
 import {
   Cart,
   CategoryPagedQueryResponse,
@@ -84,6 +85,12 @@ export default abstract class State {
           State.cart = await CreateCartCustomer(CURRENCY);
         }
       } else {
+        // if (CART_ID) {
+        //  State.cart = await GetCart(CART_ID);
+        //} else {
+        //  State.cart = await CreateCartAnonim(CURRENCY);
+        //  localStorage.setItem('cartID', State.cart.body.id);
+        //}
         // console.log('not loged in');
         State.cart = await CreateCartAnonim(CURRENCY);
         localStorage.setItem('cartID', State.cart.body.id);

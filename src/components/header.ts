@@ -42,6 +42,7 @@ export default class HeaderView {
         if (target.classList.contains('logout')) {
           localStorage.removeItem('customerID');
           localStorage.removeItem('access_token');
+          localStorage.removeItem('cartID');
           this.container.innerHTML = '';
           this.container.append(this.menu.render());
           document.querySelector('.logged-item')?.classList.add('hidden');

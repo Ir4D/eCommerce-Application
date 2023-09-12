@@ -91,7 +91,7 @@ export function getProductCategories() {
 // Get cart by ID
 export function GetCart(CART_ID: string): Promise<ClientResponse> {
   const getCart = () => {
-    return apiRootProfile.me().carts().withId({ ID: CART_ID }).get().execute();
+    return apiRootAnonim.me().carts().withId({ ID: CART_ID }).get().execute();
   };
   return getCart();
 }
@@ -300,6 +300,31 @@ export function UpdateAnonimCartProdQuantity(
     ]
   };
   return apiRootAnonim2
+    .me()
+    .carts()
+    .withId({ ID: CART_ID })
+    .post({
+      body: data
+    })
+    .execute();
+}
+
+// Add discount to the cart
+export function SetDiscount(
+  CART_ID: string,
+  VERSION: number,
+  DISCOUNT_CODE: string
+): Promise<ClientResponse<Cart>> {
+  const data: MyCartUpdate = {
+    version: VERSION,
+    actions: [
+      {
+        action: 'addDiscountCode',
+        code: DISCOUNT_CODE
+      }
+    ]
+  };
+  return apiRootProfile
     .me()
     .carts()
     .withId({ ID: CART_ID })

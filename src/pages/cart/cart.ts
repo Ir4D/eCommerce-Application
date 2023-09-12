@@ -1,8 +1,10 @@
+/* eslint-disable no-else-return */
 /* eslint-disable max-lines-per-function */
 import { Cart, LineItem } from '@commercetools/platform-sdk';
 import Component from '../../components/abstract/component';
 import State from '../../services/state';
 import {
+  SetDiscount,
   GetAnonimCartByID,
   GetCartByID,
   UpdateAnonimCartProdQuantity,
@@ -86,10 +88,19 @@ export default class CartView extends Component {
     );
 
     const productTotalPrice = createElem('cart-product-price_total');
-    if (product.totalPrice) {
-      productTotalPrice.innerHTML = `€ ${String(
-        (product.totalPrice.centAmount / 100).toFixed(2)
-      )}`;
+    if (product.price && product.quantity) {
+      if (product.price.discounted) {
+        productTotalPrice.innerHTML = `€ ${String(
+          (
+            (product.price.discounted.value.centAmount * product.quantity) /
+            100
+          ).toFixed(2)
+        )}`;
+      } else {
+        productTotalPrice.innerHTML = `€ ${String(
+          ((product.price.value.centAmount * product.quantity) / 100).toFixed(2)
+        )}`;
+      }
     }
 
     const productRemove = createElem('cart-product-remove', 'button');
@@ -255,16 +266,30 @@ export default class CartView extends Component {
 
   private renderCartTotal(): void {
     const cart = State.cart?.body;
+    const discountCodes = State.cart?.body.discountCodes;
     const totalContainer = createElem('cart-total-container');
+    if (discountCodes && discountCodes.length > 0) {
+      totalContainer.classList.add('discount');
+    }
 
     const subtotalPrice = createElem('cart-subtotal-price');
     const subtotalTitle = createElem('cart-subtotal-title');
     subtotalTitle.innerHTML = 'Subtotal:';
     const subtotalAmount = createElem('cart-subtotal-amount');
-    if (cart && cart.totalPrice) {
-      subtotalAmount.innerHTML = `€ ${String(
-        (cart.totalPrice.centAmount / 100).toFixed(2)
-      )}`;
+    if (cart && cart.lineItems) {
+      const amount = cart.lineItems.reduce((accumulator, currentItem) => {
+        if (currentItem.price.discounted) {
+          const itemTotal =
+            currentItem.price.discounted.value.centAmount *
+            currentItem.quantity;
+          return accumulator + itemTotal;
+        } else {
+          const itemTotal =
+            currentItem.price.value.centAmount * currentItem.quantity;
+          return accumulator + itemTotal;
+        }
+      }, 0);
+      subtotalAmount.innerHTML = `€ ${String((amount / 100).toFixed(2))}`;
     }
     subtotalPrice.append(subtotalTitle, subtotalAmount);
 
@@ -279,17 +304,53 @@ export default class CartView extends Component {
     }
     totalPrice.append(totalTitle, totalAmount);
 
+    const discountApplied = createElem('cart-discount-applied');
+    discountApplied.innerHTML = `Discount applied`;
+
     const discountContainer = createElem('cart-discount-container');
-    const discountInput = createElem('cart-discount-input', 'input');
+    const discountInput = createElem(
+      'cart-discount-input',
+      'input'
+    ) as HTMLInputElement;
     discountInput.setAttribute('type', 'text');
     discountInput.setAttribute('placeholder', 'Promo code');
     const discountBtn = createElem('cart-discount-btn', 'button');
     discountBtn.classList.add('btn', 'btn--yellow');
     discountBtn.innerHTML = 'OK';
+    discountBtn.addEventListener('click', async () => {
+      try {
+        const code = discountInput.value;
+        this.setDiscount(code);
+        await this.refreshCart();
+      } catch (error) {
+        console.error('Error getting cart version:', error);
+      }
+    });
     discountContainer.append(discountInput, discountBtn);
 
-    totalContainer.append(subtotalPrice, totalPrice, discountContainer);
+    totalContainer.append(
+      subtotalPrice,
+      discountApplied,
+      totalPrice,
+      discountContainer
+    );
     this.container.append(totalContainer);
+  }
+
+  private async setDiscount(code: string): Promise<void> {
+    const CART_ID = localStorage.getItem('cartID');
+    if (CART_ID) {
+      try {
+        const VERSION = (await this.getCurrentCartVersion(CART_ID)).version;
+        await SetDiscount(CART_ID, VERSION, code);
+        await this.refreshCart();
+      } catch (error) {
+        const wrongCode = createElem('cart-wrong-code');
+        const totalContainer = document.querySelector('.cart-total-container');
+        wrongCode.innerHTML = 'Enter a valid discount code';
+        totalContainer?.append(wrongCode);
+      }
+    }
   }
 
   private async refreshCart(): Promise<void> {
