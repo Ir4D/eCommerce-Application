@@ -20,10 +20,11 @@ import {
   CartSetCustomerIdAction,
   CartUpdate
 } from '@commercetools/platform-sdk';
-import { apiData } from './apiData';
+import { apiData, apiDataAnonymous2 } from './apiData';
 import {
   createCtpClient,
   createCtpClientAnonymous,
+  createCtpClientAnonymous2,
   createCtpClientExistingFlow
 } from './BuildClients';
 
@@ -41,6 +42,12 @@ const apiRootProfile = createApiBuilderFromCtpClient(
 
 const apiRootAnonim = createApiBuilderFromCtpClient(
   createCtpClientAnonymous()
+).withProjectKey({
+  projectKey: apiData.PROJECT_KEY
+});
+
+const apiRootAnonim2 = createApiBuilderFromCtpClient(
+  createCtpClientAnonymous2()
 ).withProjectKey({
   projectKey: apiData.PROJECT_KEY
 });
@@ -72,10 +79,6 @@ export function GetProductsPublished(): Promise<
       .execute();
   };
   return getProducts();
-  // .then(({ body }) => {
-  //   console.log(body);
-  // })
-  // .catch(console.error);
 }
 
 export function getProductCategories() {
@@ -96,6 +99,15 @@ export function GetCart(CART_ID: string): Promise<ClientResponse> {
 export function GetCartByID(CART_ID: string): Promise<ClientResponse> {
   const getCart = () => {
     return apiRootProfile.carts().withId({ ID: CART_ID }).get().execute();
+  };
+  return getCart();
+}
+
+export async function GetAnonimCartByID(
+  CART_ID: string
+): Promise<ClientResponse> {
+  const getCart = async () => {
+    return apiRootAnonim2.carts().withId({ ID: CART_ID }).get().execute();
   };
   return getCart();
 }
@@ -133,7 +145,7 @@ export function CreateCartAnonim(
   const data: MyCartDraft = {
     currency: CURRENCY
   };
-  return apiRootAnonim
+  return apiRootAnonim2
     .me()
     .carts()
     .post({
@@ -189,7 +201,8 @@ export function addToCart(
   CART_ID: string,
   VERSION: number,
   productId: string,
-  variantId: number
+  variantId: number,
+  quantity: number
 ): Promise<ClientResponse<Cart>> {
   const data: MyCartUpdate = {
     version: VERSION,
@@ -198,11 +211,41 @@ export function addToCart(
         action: 'addLineItem',
         productId,
         variantId,
-        quantity: 1
+        quantity
       }
     ]
   };
+  console.log('auth');
   return apiRootProfile
+    .me()
+    .carts()
+    .withId({ ID: CART_ID })
+    .post({
+      body: data
+    })
+    .execute();
+}
+
+/* Add to anonim cart */
+export function addToAnonimCart(
+  CART_ID: string,
+  VERSION: number,
+  productId: string,
+  variantId: number,
+  quantity: number
+): Promise<ClientResponse<Cart>> {
+  const data: MyCartUpdate = {
+    version: VERSION,
+    actions: [
+      {
+        action: 'addLineItem',
+        productId,
+        variantId,
+        quantity
+      }
+    ]
+  };
+  return apiRootAnonim2
     .me()
     .carts()
     .withId({ ID: CART_ID })
@@ -230,6 +273,33 @@ export function UpdateCartProdQuantity(
     ]
   };
   return apiRootProfile
+    .me()
+    .carts()
+    .withId({ ID: CART_ID })
+    .post({
+      body: data
+    })
+    .execute();
+}
+
+// Update anonim cart by changing product's quantity
+export function UpdateAnonimCartProdQuantity(
+  CART_ID: string,
+  VERSION: number,
+  LINE_ITEM_ID: string,
+  QUANTITY: number
+): Promise<ClientResponse<Cart>> {
+  const data: MyCartUpdate = {
+    version: VERSION,
+    actions: [
+      {
+        action: 'changeLineItemQuantity',
+        lineItemId: LINE_ITEM_ID,
+        quantity: QUANTITY
+      }
+    ]
+  };
+  return apiRootAnonim2
     .me()
     .carts()
     .withId({ ID: CART_ID })
@@ -280,7 +350,8 @@ export function CreateCustomer(EMAIL: string, PASSWORD: string): void {
   };
   createCustomer()
     .then(({ body }) => {
-      console.log('create customer from methods', body.customer.id);
+      // console.log('create customer from methods', body.customer.id);
+      // console.log('create customer from methods', body.customer.id);
       console.log(body.customer.email);
     })
     .catch(console.error);

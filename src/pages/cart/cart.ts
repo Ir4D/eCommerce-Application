@@ -4,8 +4,10 @@ import { Cart, LineItem } from '@commercetools/platform-sdk';
 import Component from '../../components/abstract/component';
 import State from '../../services/state';
 import {
-  GetCartByID,
   SetDiscount,
+  GetAnonimCartByID,
+  GetCartByID,
+  UpdateAnonimCartProdQuantity,
   UpdateCartProdQuantity
 } from '../../api/apiMethods';
 
@@ -42,7 +44,6 @@ export default class CartView extends Component {
   }
 
   private renderCartItem(product: LineItem): HTMLElement {
-    // console.log(product);
     const productElem = createElem('cart-product-item');
     const productImage = createElem('cart-product-image');
     if (product.variant.images) {
@@ -133,23 +134,52 @@ export default class CartView extends Component {
     }
   }
 
+  public async getCurrentAnonimCartVersion(CART_ID: string): Promise<Cart> {
+    try {
+      const response = await GetAnonimCartByID(CART_ID);
+      const { body } = response;
+      return body;
+    } catch (error) {
+      console.error('Something went wrong:', error);
+      throw error;
+    }
+  }
+
   private async minusProductInCart(LINE_ITEM_ID: string): Promise<void> {
     const CART_ID = localStorage.getItem('cartID');
     if (CART_ID && LINE_ITEM_ID) {
       try {
-        const CART_INFO = await this.getCurrentCartVersion(CART_ID);
-        const lineItem = CART_INFO.lineItems.find(
-          (item) => item.id === LINE_ITEM_ID
-        );
-        if (lineItem) {
-          const QUANTITY = lineItem.quantity - 1;
-          const VERSION = CART_INFO.version;
-          await UpdateCartProdQuantity(
-            CART_ID,
-            VERSION,
-            LINE_ITEM_ID,
-            QUANTITY
+        const CUSTOMER_ID = localStorage.getItem('customerID');
+        if (CUSTOMER_ID) {
+          const CART_INFO = await this.getCurrentCartVersion(CART_ID);
+          const lineItem = CART_INFO.lineItems.find(
+            (item) => item.id === LINE_ITEM_ID
           );
+          if (lineItem) {
+            const QUANTITY = lineItem.quantity - 1;
+            const VERSION = CART_INFO.version;
+            await UpdateCartProdQuantity(
+              CART_ID,
+              VERSION,
+              LINE_ITEM_ID,
+              QUANTITY
+            );
+          }
+        } else {
+          const CART_INFO = await this.getCurrentAnonimCartVersion(CART_ID);
+          const lineItem = CART_INFO.lineItems.find(
+            (item) => item.id === LINE_ITEM_ID
+          );
+          if (lineItem) {
+            const QUANTITY = lineItem.quantity - 1;
+            const VERSION = CART_INFO.version;
+            await UpdateAnonimCartProdQuantity(
+              CART_ID,
+              VERSION,
+              LINE_ITEM_ID,
+              QUANTITY
+            );
+          }
         }
         await this.refreshCart();
       } catch (error) {
@@ -162,19 +192,37 @@ export default class CartView extends Component {
     const CART_ID = localStorage.getItem('cartID');
     if (CART_ID && LINE_ITEM_ID) {
       try {
-        const CART_INFO = await this.getCurrentCartVersion(CART_ID);
-        const lineItem = CART_INFO.lineItems.find(
-          (item) => item.id === LINE_ITEM_ID
-        );
-        if (lineItem) {
-          const QUANTITY = lineItem.quantity + 1;
-          const VERSION = CART_INFO.version;
-          await UpdateCartProdQuantity(
-            CART_ID,
-            VERSION,
-            LINE_ITEM_ID,
-            QUANTITY
+        const CUSTOMER_ID = localStorage.getItem('customerID');
+        if (CUSTOMER_ID) {
+          const CART_INFO = await this.getCurrentCartVersion(CART_ID);
+          const lineItem = CART_INFO.lineItems.find(
+            (item) => item.id === LINE_ITEM_ID
           );
+          if (lineItem) {
+            const QUANTITY = lineItem.quantity + 1;
+            const VERSION = CART_INFO.version;
+            await UpdateCartProdQuantity(
+              CART_ID,
+              VERSION,
+              LINE_ITEM_ID,
+              QUANTITY
+            );
+          }
+        } else {
+          const CART_INFO = await this.getCurrentAnonimCartVersion(CART_ID);
+          const lineItem = CART_INFO.lineItems.find(
+            (item) => item.id === LINE_ITEM_ID
+          );
+          if (lineItem) {
+            const QUANTITY = lineItem.quantity + 1;
+            const VERSION = CART_INFO.version;
+            await UpdateAnonimCartProdQuantity(
+              CART_ID,
+              VERSION,
+              LINE_ITEM_ID,
+              QUANTITY
+            );
+          }
         }
         await this.refreshCart();
       } catch (error) {
@@ -187,10 +235,28 @@ export default class CartView extends Component {
     const CART_ID = localStorage.getItem('cartID');
     if (CART_ID && LINE_ITEM_ID) {
       try {
-        const CART_INFO = await this.getCurrentCartVersion(CART_ID);
-        const QUANTITY = 0;
-        const VERSION = CART_INFO.version;
-        await UpdateCartProdQuantity(CART_ID, VERSION, LINE_ITEM_ID, QUANTITY);
+        const CUSTOMER_ID = localStorage.getItem('customerID');
+        if (CUSTOMER_ID) {
+          const CART_INFO = await this.getCurrentCartVersion(CART_ID);
+          const QUANTITY = 0;
+          const VERSION = CART_INFO.version;
+          await UpdateCartProdQuantity(
+            CART_ID,
+            VERSION,
+            LINE_ITEM_ID,
+            QUANTITY
+          );
+        } else {
+          const CART_INFO = await this.getCurrentAnonimCartVersion(CART_ID);
+          const QUANTITY = 0;
+          const VERSION = CART_INFO.version;
+          await UpdateAnonimCartProdQuantity(
+            CART_ID,
+            VERSION,
+            LINE_ITEM_ID,
+            QUANTITY
+          );
+        }
         await this.refreshCart();
       } catch (error) {
         console.error('Error getting cart version:', error);
