@@ -8,7 +8,7 @@ import {
   GetAnonimCartByID,
   GetCartByID,
   UpdateAnonimCartProdQuantity,
-  UpdateCartProdQuantity
+  UpdateCustomerCartProdQuantity
 } from '../../api/apiMethods';
 
 const createElem = (className: string, tag = 'div'): HTMLElement =>
@@ -158,7 +158,7 @@ export default class CartView extends Component {
           if (lineItem) {
             const QUANTITY = lineItem.quantity - 1;
             const VERSION = CART_INFO.version;
-            await UpdateCartProdQuantity(
+            await UpdateCustomerCartProdQuantity(
               CART_ID,
               VERSION,
               LINE_ITEM_ID,
@@ -194,21 +194,27 @@ export default class CartView extends Component {
       try {
         const CUSTOMER_ID = localStorage.getItem('customerID');
         if (CUSTOMER_ID) {
+          console.log('plusProductInCart -> CUSTOMER_ID');
           const CART_INFO = await this.getCurrentCartVersion(CART_ID);
           const lineItem = CART_INFO.lineItems.find(
             (item) => item.id === LINE_ITEM_ID
           );
           if (lineItem) {
+            console.log('plusProductInCart -> lineItem');
             const QUANTITY = lineItem.quantity + 1;
             const VERSION = CART_INFO.version;
-            await UpdateCartProdQuantity(
+            await UpdateCustomerCartProdQuantity(
               CART_ID,
               VERSION,
               LINE_ITEM_ID,
               QUANTITY
             );
           }
+          console.log(
+            'plusProductInCart -> CUSTOMER_ID -> getCurrentCartVersion'
+          );
         } else {
+          console.log('plusProductInCart -> NO CUSTOMER_ID');
           const CART_INFO = await this.getCurrentAnonimCartVersion(CART_ID);
           const lineItem = CART_INFO.lineItems.find(
             (item) => item.id === LINE_ITEM_ID
@@ -223,6 +229,9 @@ export default class CartView extends Component {
               QUANTITY
             );
           }
+          console.log(
+            'plusProductInCart -> NO CUSTOMER_ID -> getCurrentCartVersion'
+          );
         }
         await this.refreshCart();
       } catch (error) {
@@ -240,7 +249,7 @@ export default class CartView extends Component {
           const CART_INFO = await this.getCurrentCartVersion(CART_ID);
           const QUANTITY = 0;
           const VERSION = CART_INFO.version;
-          await UpdateCartProdQuantity(
+          await UpdateCustomerCartProdQuantity(
             CART_ID,
             VERSION,
             LINE_ITEM_ID,
@@ -360,7 +369,8 @@ export default class CartView extends Component {
     this.renderCartTotal();
   }
 
-  public render(): HTMLElement {
+  public async renderHTML(): Promise<HTMLElement> {
+    await State.setCart(() => {} /* error handling */);
     this.container.innerHTML = '';
     this.renderCart();
     this.renderCartTotal();

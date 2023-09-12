@@ -9,6 +9,7 @@ import {
 import {
   CreateCartAnonim,
   CreateCartCustomer,
+  GetActiveCart,
   GetAnonimCartByID,
   GetCart,
   GetCartByCustomerId,
@@ -80,6 +81,7 @@ export default abstract class State {
       if (CUSTOMER_ID) {
         try {
           State.cart = await GetCartByCustomerId(CUSTOMER_ID);
+          // State.cart = await GetActiveCart();
           localStorage.setItem('cartID', State.cart.body.id);
         } catch {
           if (CART_ID) {
@@ -90,21 +92,6 @@ export default abstract class State {
             localStorage.setItem('cartID', State.cart.body.id);
           }
         }
-
-        // if (CART_ID) {
-        //   // console.log('loged in with cart id');
-        //   const VERSION = await this.getCurrentCartVersion(CART_ID);
-        //   State.cart = await GetCartFromAnonim(CUSTOMER_ID, CART_ID, VERSION);
-        // } else {
-        //   // console.log('loged in without cart id');
-        //   try {
-        //     State.cart = await GetCartByCustomerId(CUSTOMER_ID);
-        //     localStorage.setItem('cartID', State.cart.body.id);
-        //   } catch {
-        //     State.cart = await CreateCartCustomer(CURRENCY);
-        //     localStorage.setItem('cartID', State.cart.body.id);
-        //   }
-        // }
       } else {
         if (CART_ID) {
           State.cart = await GetAnonimCartByID(CART_ID);
@@ -112,9 +99,6 @@ export default abstract class State {
           State.cart = await CreateCartAnonim(CURRENCY);
           localStorage.setItem('cartID', State.cart.body.id);
         }
-        // console.log('not loged in');
-        // State.cart = await CreateCartAnonim(CURRENCY);
-        // localStorage.setItem('cartID', State.cart.body.id);
       }
     } catch {
       if (handleError) handleError();
