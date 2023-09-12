@@ -503,6 +503,39 @@ export default class CatalogView extends Component {
       overlay?.classList.toggle('visible');
       body?.classList.toggle('stop-scroll');
     });
+    console.log(
+      'catalog button',
+      document.querySelector('.order-submit'),
+      document.querySelector('.order-quantity')
+    );
+    const itemAddButton = document.querySelector('.order-submit');
+    const itemAddQuantity = document.querySelector(
+      '.order-quantity'
+    ) as HTMLInputElement;
+    itemAddButton?.addEventListener('click', async (e) => {
+      const target = e.target as HTMLElement;
+      if (localStorage.getItem('customerID')) {
+        addToCart(
+          State.cart!.body.id,
+          await State.getCurrentCartVersion(State.cart!.body.id),
+          target.dataset.id!,
+          Number(target.dataset.masterVariant),
+          itemAddQuantity.value ? Number(itemAddQuantity?.value) : 1
+        );
+      } else {
+        console.log(
+          'quanto',
+          itemAddQuantity.value ? Number(itemAddQuantity?.value) : 1
+        );
+        addToAnonimCart(
+          State.cart!.body.id,
+          await State.getCurrentAnonimCartVersion(State.cart!.body.id),
+          target.dataset.id!,
+          Number(target.dataset.masterVariant),
+          itemAddQuantity.value ? Number(itemAddQuantity?.value) : 1
+        );
+      }
+    });
 
     return this.container;
   }

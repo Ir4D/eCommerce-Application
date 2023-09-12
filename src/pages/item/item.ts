@@ -77,7 +77,11 @@ const getContent = (
             <span class="order-text">Quantity:</span>
             <input type="text" class="order-quantity" />
           </div>
-          <button type="submit" class="order-submit btn btn--blue">Add To Cart</button>
+          <button type="submit" class="order-submit btn btn--blue" data-id=${
+            catalogItem.id
+          } data-masterVariant=${
+            catalogItem.masterVariant.id
+          }>Add To Cart</button>
         </form>
     </div>
   </section>`;

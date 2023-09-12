@@ -87,10 +87,10 @@ export default abstract class State {
       } else {
         // if (CART_ID) {
         //  State.cart = await GetCart(CART_ID);
-        //} else {
+        // } else {
         //  State.cart = await CreateCartAnonim(CURRENCY);
         //  localStorage.setItem('cartID', State.cart.body.id);
-        //}
+        // }
         // console.log('not loged in');
         State.cart = await CreateCartAnonim(CURRENCY);
         localStorage.setItem('cartID', State.cart.body.id);
