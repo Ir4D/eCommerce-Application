@@ -8,7 +8,7 @@ import {
   GetAnonimCartByID,
   GetCartByID,
   UpdateAnonimCartProdQuantity,
-  UpdateCartProdQuantity
+  UpdateCustomerCartProdQuantity
 } from '../../api/apiMethods';
 
 const createElem = (className: string, tag = 'div'): HTMLElement =>
@@ -158,7 +158,7 @@ export default class CartView extends Component {
           if (lineItem) {
             const QUANTITY = lineItem.quantity - 1;
             const VERSION = CART_INFO.version;
-            await UpdateCartProdQuantity(
+            await UpdateCustomerCartProdQuantity(
               CART_ID,
               VERSION,
               LINE_ITEM_ID,
@@ -201,7 +201,7 @@ export default class CartView extends Component {
           if (lineItem) {
             const QUANTITY = lineItem.quantity + 1;
             const VERSION = CART_INFO.version;
-            await UpdateCartProdQuantity(
+            await UpdateCustomerCartProdQuantity(
               CART_ID,
               VERSION,
               LINE_ITEM_ID,
@@ -240,7 +240,7 @@ export default class CartView extends Component {
           const CART_INFO = await this.getCurrentCartVersion(CART_ID);
           const QUANTITY = 0;
           const VERSION = CART_INFO.version;
-          await UpdateCartProdQuantity(
+          await UpdateCustomerCartProdQuantity(
             CART_ID,
             VERSION,
             LINE_ITEM_ID,
@@ -341,8 +341,15 @@ export default class CartView extends Component {
     const CART_ID = localStorage.getItem('cartID');
     if (CART_ID) {
       try {
-        const VERSION = (await this.getCurrentCartVersion(CART_ID)).version;
-        await SetDiscount(CART_ID, VERSION, code);
+        const CUSTOMER_ID = localStorage.getItem('customerID');
+        if (CUSTOMER_ID) {
+          const VERSION = (await this.getCurrentCartVersion(CART_ID)).version;
+          await SetDiscount(CART_ID, VERSION, code);
+        } else {
+          const VERSION = (await this.getCurrentAnonimCartVersion(CART_ID))
+            .version;
+          await SetDiscount(CART_ID, VERSION, code);
+        }
         await this.refreshCart();
       } catch (error) {
         const wrongCode = createElem('cart-wrong-code');
@@ -360,7 +367,8 @@ export default class CartView extends Component {
     this.renderCartTotal();
   }
 
-  public render(): HTMLElement {
+  public async renderHTML(): Promise<HTMLElement> {
+    await State.setCart(() => {} /* error handling */);
     this.container.innerHTML = '';
     this.renderCart();
     this.renderCartTotal();

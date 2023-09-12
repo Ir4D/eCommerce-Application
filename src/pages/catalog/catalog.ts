@@ -305,6 +305,8 @@ export default class CatalogView extends Component {
     toCartBtn.textContent = 'Add to cart';
     toCartBtn.addEventListener('click', async (e) => {
       e.preventDefault();
+      // const CART_ID = localStorage.getItem('cartID');
+      await State.setCart();
       if (localStorage.getItem('customerID')) {
         await addToCart(
           State.cart!.body.id,
