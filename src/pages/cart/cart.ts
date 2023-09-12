@@ -194,13 +194,11 @@ export default class CartView extends Component {
       try {
         const CUSTOMER_ID = localStorage.getItem('customerID');
         if (CUSTOMER_ID) {
-          console.log('plusProductInCart -> CUSTOMER_ID');
           const CART_INFO = await this.getCurrentCartVersion(CART_ID);
           const lineItem = CART_INFO.lineItems.find(
             (item) => item.id === LINE_ITEM_ID
           );
           if (lineItem) {
-            console.log('plusProductInCart -> lineItem');
             const QUANTITY = lineItem.quantity + 1;
             const VERSION = CART_INFO.version;
             await UpdateCustomerCartProdQuantity(
@@ -210,11 +208,7 @@ export default class CartView extends Component {
               QUANTITY
             );
           }
-          console.log(
-            'plusProductInCart -> CUSTOMER_ID -> getCurrentCartVersion'
-          );
         } else {
-          console.log('plusProductInCart -> NO CUSTOMER_ID');
           const CART_INFO = await this.getCurrentAnonimCartVersion(CART_ID);
           const lineItem = CART_INFO.lineItems.find(
             (item) => item.id === LINE_ITEM_ID
@@ -229,9 +223,6 @@ export default class CartView extends Component {
               QUANTITY
             );
           }
-          console.log(
-            'plusProductInCart -> NO CUSTOMER_ID -> getCurrentCartVersion'
-          );
         }
         await this.refreshCart();
       } catch (error) {
@@ -350,8 +341,15 @@ export default class CartView extends Component {
     const CART_ID = localStorage.getItem('cartID');
     if (CART_ID) {
       try {
-        const VERSION = (await this.getCurrentCartVersion(CART_ID)).version;
-        await SetDiscount(CART_ID, VERSION, code);
+        const CUSTOMER_ID = localStorage.getItem('customerID');
+        if (CUSTOMER_ID) {
+          const VERSION = (await this.getCurrentCartVersion(CART_ID)).version;
+          await SetDiscount(CART_ID, VERSION, code);
+        } else {
+          const VERSION = (await this.getCurrentAnonimCartVersion(CART_ID))
+            .version;
+          await SetDiscount(CART_ID, VERSION, code);
+        }
         await this.refreshCart();
       } catch (error) {
         const wrongCode = createElem('cart-wrong-code');
