@@ -103,7 +103,6 @@ export default class ItemView extends State {
     const category: string = getCategory(this.catalogItem.categories[0].id);
     this.container.innerHTML += getContent(this.catalogItem, category);
     if (!this.catalogItem.masterVariant.prices) throw new Error();
-
     return this.container;
   }
 }

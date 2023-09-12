@@ -16,6 +16,11 @@ import Router from '../../services/router/router';
 import State from '../../services/state';
 import Component from '../../components/abstract/component';
 import ItemView from '../item/item';
+import {
+  GetAnonimCartByID,
+  addToAnonimCart,
+  addToCart
+} from '../../api/apiMethods';
 
 Swiper.use([Navigation, Pagination]);
 
@@ -298,6 +303,26 @@ export default class CatalogView extends Component {
     const toCartBtn = document.createElement('button');
     toCartBtn.className = 'to_cart-btn btn btn--yellow order-submit';
     toCartBtn.textContent = 'Add to cart';
+    toCartBtn.addEventListener('click', async (e) => {
+      e.preventDefault();
+      if (localStorage.getItem('customerID')) {
+        await addToCart(
+          State.cart!.body.id,
+          await State.getCurrentCartVersion(State.cart!.body.id),
+          catalogItem.id,
+          catalogItem.masterVariant.id,
+          1
+        );
+      } else {
+        await addToAnonimCart(
+          State.cart!.body.id,
+          await State.getCurrentAnonimCartVersion(State.cart!.body.id),
+          catalogItem.id,
+          catalogItem.masterVariant.id,
+          1
+        );
+      }
+    });
 
     const priceContainer = document.createElement('div');
     priceContainer.classList.add('price-container');
@@ -479,7 +504,6 @@ export default class CatalogView extends Component {
       body?.classList.toggle('stop-scroll');
     });
 
-    // console.log(document.querySelector('.swiper'))
     return this.container;
   }
 
