@@ -1,5 +1,6 @@
 import MenuView from './menu';
 import Router from '../services/router/router';
+import State from '../services/state';
 
 const INNER_HTML = {
   // searchItem: `<li class="profile_container-item search-item">
@@ -60,6 +61,14 @@ export default class HeaderView {
   private renderHeader(): void {
     this.container.append(this.menu.render());
     this.container.append(this.headerList());
+    window.addEventListener('cart-change', () => {
+      console.log('listener', State.cart);
+      this.refreshCartCounter(
+        State.cart?.body.lineItems.length
+          ? State.cart?.body.lineItems.length
+          : 0
+      );
+    });
   }
 
   public headerList(): HTMLElement {
@@ -80,6 +89,12 @@ export default class HeaderView {
     }
     profileContainer.append(loggedItemList);
     return profileContainer;
+  }
+
+  public refreshCartCounter(itemsQuantity: number): void {
+    const counter = document.querySelector('.cart-indicator') as HTMLElement;
+    counter.innerText = itemsQuantity.toString();
+    console.log('rerender', State.cart?.body.lineItems);
   }
 
   public render(): HTMLElement {
