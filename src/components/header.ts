@@ -1,13 +1,8 @@
 import MenuView from './menu';
 import Router from '../services/router/router';
+import State from '../services/state';
 
 const INNER_HTML = {
-  // searchItem: `<li class="profile_container-item search-item">
-  //     <a href="" class="profile_container-link link">
-  //       <img src="./images/icons/search-icon.png" alt="search" class="search" width="56" height="56">
-  //     </a>
-  //   </li>
-  //   `,
   cartItem: `<li class="profile_container-item cart-item">
       <a href="${Router.pages.cart}" class="profile_container-link link profile_container-link--cart">
         <img src="./images/icons/cart-icon.png" alt="cart" class="cart cart-icon" width="56" height="56">
@@ -60,6 +55,14 @@ export default class HeaderView {
   private renderHeader(): void {
     this.container.append(this.menu.render());
     this.container.append(this.headerList());
+    window.addEventListener('cart-change', async () => {
+      await State.refreshCart();
+      this.refreshCartCounter(
+        State.cart?.body.lineItems.length
+          ? State.cart?.body.lineItems.length
+          : 0
+      );
+    });
   }
 
   public headerList(): HTMLElement {
@@ -80,6 +83,11 @@ export default class HeaderView {
     }
     profileContainer.append(loggedItemList);
     return profileContainer;
+  }
+
+  public refreshCartCounter(itemsQuantity: number): void {
+    const counter = document.querySelector('.cart-indicator') as HTMLElement;
+    counter.innerText = itemsQuantity.toString();
   }
 
   public render(): HTMLElement {

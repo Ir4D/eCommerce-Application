@@ -215,7 +215,8 @@ export function addToCart(
       }
     ]
   };
-  console.log('auth');
+  const cartChange = new Event('cart-change');
+  window.dispatchEvent(cartChange);
   return apiRootProfile
     .me()
     .carts()
@@ -245,6 +246,8 @@ export function addToAnonimCart(
       }
     ]
   };
+  const cartChange = new Event('cart-change');
+  window.dispatchEvent(cartChange);
   return apiRootAnonim2
     .me()
     .carts()
@@ -272,6 +275,8 @@ export function UpdateCartProdQuantity(
       }
     ]
   };
+  const cartChange = new Event('cart-change');
+  window.dispatchEvent(cartChange);
   return apiRootProfile
     .me()
     .carts()
@@ -299,6 +304,8 @@ export function UpdateAnonimCartProdQuantity(
       }
     ]
   };
+  const cartChange = new Event('cart-change');
+  window.dispatchEvent(cartChange);
   return apiRootAnonim2
     .me()
     .carts()
