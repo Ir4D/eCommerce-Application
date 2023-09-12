@@ -2,6 +2,7 @@
 @import url('../src/pages/login/login.scss');
 @import url('../src/pages/profile/profile.scss');
 @import url('../src/pages/cart/cart.scss');
+@import url('../src/pages/about/about.scss');
 @import url('../src/pages/catalog/catalog.scss');
 @import url('../src/pages/item/item.scss');
 
@@ -883,6 +884,7 @@ h6 {
 
 @media only screen and (max-width: 1100px) {
   .header {
+    max-width: 95vw;
     flex-wrap: wrap;
     justify-content: center;
     gap: 20px;

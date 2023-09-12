@@ -1,8 +1,8 @@
 /* eslint-disable max-lines-per-function */
-import {
+/* import {
   ClientResponse,
   ProductProjectionPagedQueryResponse
-} from '@commercetools/platform-sdk';
+} from '@commercetools/platform-sdk'; */
 import Router from '../services/router/router';
 import HeaderView from '../components/header';
 import FooterView from '../components/footer';
@@ -14,7 +14,7 @@ import SignupView from './signup/signup';
 import NotFoundView from './404/404';
 import CartView from './cart/cart';
 import State from '../services/state';
-import { GetProductsPublished } from '../api/apiMethods';
+// import { GetProductsPublished } from '../api/apiMethods';
 import ProfileView from './profile/profile';
 
 export default class Layout {
@@ -52,10 +52,6 @@ export default class Layout {
       switch (route) {
         case Router.pages.main: {
           pageHTML = this.main.render;
-          break;
-        }
-        case Router.pages.about: {
-          pageHTML = this.about.render;
           break;
         }
         case Router.pages.catalog: {
@@ -99,6 +95,9 @@ export default class Layout {
     if (route === Router.pages.catalog) {
       await State.setCatalog(() => {} /* error handling */);
       this.slot.append(this.catalog.render());
+    } else if (route === Router.pages.about) {
+      this.slot.innerHTML = '';
+      this.slot.append(this.about.render());
     } else if (route === Router.pages.profile) {
       this.slot.innerHTML = '';
       this.slot.append(this.profile.render());
