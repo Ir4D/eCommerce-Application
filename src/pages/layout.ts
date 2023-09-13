@@ -121,9 +121,7 @@ export default class Layout {
 
   public render(container: HTMLElement): void {
     container.append(this.header.render());
-    this.header.refreshCartCounter(
-      State.cart?.body.lineItems.length ? State.cart?.body.lineItems.length : 0
-    );
+    this.header.refreshCartCounter();
     container.append(this.slot);
     container.append(this.footer.render());
     this.renderPage(window.location.hash);

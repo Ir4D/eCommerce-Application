@@ -104,7 +104,6 @@ export default abstract class State {
     try {
       const CART_ID = localStorage.getItem('cartID');
       const CUSTOMER_ID = localStorage.getItem('customerID');
-
       if (CART_ID) {
         if (CUSTOMER_ID) {
           State.cart = await GetCartByID(CART_ID);
