@@ -1,79 +1,28 @@
-const goods = [
+interface ITeammate {
+  name: string;
+  bio: string;
+  git: string;
+  photo?: string;
+}
+const teammates: ITeammate[] = [
   {
-    src: './images/catalog/broccoli.png',
-    price: '13.00',
-    title: 'Calabrese Broccoli',
-    category: 'Vegetables'
+    name: 'Irina Dedova',
+    bio: 'Veniam sequi optio deserunt praesentium officia adipisci nihil animi velit earum labore quo, quas debitis architecto maiores excepturi quis laudantium tenetur atque expedita voluptatibus amet numquam consequuntur! Voluptates, voluptate necessitatibus',
+    git: 'https://github.com/Ir4D',
+    photo: './images/avatars/irina.jpg'
   },
   {
-    src: './images/catalog/bananas.png',
-    price: '10.00',
-    title: 'Fresh Banana Fruites',
-    category: 'Fruits'
+    name: 'Dzmitry Maltsau',
+    bio: 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Totam, libero similique illo minus dolor enim modi commodi delectus incidunt doloribus laborum unde quos expedita voluptas aut amet repudiandae eos veniam?',
+    git: 'https://github.com/Maltsau',
+    photo: './images/avatars/dzmitry.jpg'
   },
   {
-    src: './images/catalog/pistachios.png',
-    price: '19.00',
-    title: 'Pistachios',
-    category: 'Nuts'
-  },
-  {
-    src: './images/catalog/tomatos.png',
-    price: '15.00',
-    title: 'Red Tomato',
-    category: 'Vegetables'
-  },
-  {
-    src: './images/catalog/beans.png',
-    price: '11.00',
-    title: 'Mung Bean',
-    category: 'Health food'
-  },
-  {
-    src: './images/catalog/hazelnuts.png',
-    price: '18.00',
-    title: 'Hazelnuts',
-    category: 'Nuts'
-  },
-  {
-    src: './images/catalog/eggs.png',
-    price: '12.00',
-    title: 'Eggs',
-    category: 'Health food'
-  },
-  {
-    src: './images/catalog/bread.png',
-    price: '16.00',
-    title: 'Zelco Suji Elaichi Rusk',
-    category: 'Health food'
+    name: 'Natalia Vozhdaeva',
+    bio: 'Minima ut, eveniet, placeat sunt eos enim amet numquam libero atque fuga consequuntur quas maiores unde et inventore voluptatibus officia accusantium sint neque ducimus doloremque blanditiis? Deserunt, neque.',
+    git: 'https://github.com/NataliaVozhdaeva',
+    photo: './images/avatars/natalia.jpg'
   }
 ];
 
-const offers = [
-  {
-    src: './images/offer/broccoli.png',
-    price: '11.00',
-    title: 'Another Broccoli',
-    category: 'Vegetables'
-  },
-  {
-    src: './images/offer/zuccini.png',
-    price: '10.00',
-    title: 'Zuccini',
-    category: 'Vegetables'
-  },
-  {
-    src: './images/offer/onion.png',
-    price: '11.00',
-    title: 'Onion',
-    category: 'Vegetables'
-  },
-  {
-    src: './images/offer/cabbage.png',
-    price: '14.00',
-    title: 'Cabbadge',
-    category: 'Vegetables'
-  }
-];
-
-export { goods, offers };
+export { teammates };

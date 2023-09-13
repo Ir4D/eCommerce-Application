@@ -84,8 +84,12 @@
 }
 
 .item-img {
-  max-width: 100%;
+  width: 100%;
+  display: block;
+  height: 100%;
+  object-fit: cover;
 }
+
 .item-category--once {
   z-index: 2;
 }
