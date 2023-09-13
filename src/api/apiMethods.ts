@@ -98,8 +98,28 @@ export function GetCart(CART_ID: string): Promise<ClientResponse> {
 }
 
 export function GetCartByID(CART_ID: string): Promise<ClientResponse> {
-  const getCart = () => {
+  const getCart = async () => {
     return apiRootProfile.carts().withId({ ID: CART_ID }).get().execute();
+  };
+  return getCart();
+}
+
+export function GetActiveCart(): Promise<ClientResponse> {
+  const getCart = () => {
+    return apiRootProfile.me().activeCart().get().execute();
+  };
+  return getCart();
+}
+
+export function GetCartByCustomerId(
+  CISTOMER_ID: string
+): Promise<ClientResponse> {
+  const getCart = () => {
+    return apiRootProfile
+      .carts()
+      .withCustomerId({ customerId: CISTOMER_ID })
+      .get()
+      .execute();
   };
   return getCart();
 }
@@ -372,6 +392,32 @@ export function UpdateCartProdQuantity(
   window.dispatchEvent(cartChange);
   return apiRootProfile
     .me()
+    .carts()
+    .withId({ ID: CART_ID })
+    .post({
+      body: data
+    })
+    .execute();
+}
+
+// Update cart by changing product's quantity
+export function UpdateCustomerCartProdQuantity(
+  CART_ID: string,
+  VERSION: number,
+  LINE_ITEM_ID: string,
+  QUANTITY: number
+): Promise<ClientResponse<Cart>> {
+  const data: CartUpdate = {
+    version: VERSION,
+    actions: [
+      {
+        action: 'changeLineItemQuantity',
+        lineItemId: LINE_ITEM_ID,
+        quantity: QUANTITY
+      }
+    ]
+  };
+  return apiRootProfile
     .carts()
     .withId({ ID: CART_ID })
     .post({
