@@ -12,16 +12,33 @@ import {
   RemoveFromCart,
   RemoveFromAnonimCart,
   RemoveSeveralFromCart,
-  RemoveSeveralFromAnonimCart
+  RemoveSeveralFromAnonimCart,
+  UpdateCustomerCartProdQuantity
 } from '../../api/apiMethods';
+import Router from '../../services/router/router';
 
 const createElem = (className: string, tag = 'div'): HTMLElement =>
   Object.assign(document.createElement(tag), { className });
 
 export default class CartView extends Component {
+  private cartContainer: HTMLElement;
+
   constructor() {
     super();
-    this.container.className = 'cart-container';
+    this.container.className = 'cart';
+    this.renderHeading();
+    this.cartContainer = createElem('cart-container');
+    this.container.appendChild(this.cartContainer);
+  }
+
+  public async renderHeading(): Promise<void> {
+    const cartWrapper = createElem('cart-title_wrapper');
+    const cartBg = createElem('cart-background-image');
+    const cartTitle = createElem('cart-title', 'h1');
+    cartTitle.innerText = 'Cart';
+    cartWrapper.appendChild(cartBg);
+    cartBg.appendChild(cartTitle);
+    this.container.appendChild(cartWrapper);
   }
 
   private async renderCart(): Promise<void> {
@@ -50,7 +67,8 @@ export default class CartView extends Component {
       await this.clearCart();
     });
     productsContainer.append(resetButton);
-    this.container.append(productsContainer);
+    // this.container.append(productsContainer);
+    this.cartContainer.append(productsContainer);
   }
 
   private renderCartItem(product: LineItem): HTMLElement {
@@ -168,7 +186,7 @@ export default class CartView extends Component {
           if (lineItem) {
             const QUANTITY = lineItem.quantity - 1;
             const VERSION = CART_INFO.version;
-            await UpdateCartProdQuantity(
+            await UpdateCustomerCartProdQuantity(
               CART_ID,
               VERSION,
               LINE_ITEM_ID,
@@ -211,7 +229,7 @@ export default class CartView extends Component {
           if (lineItem) {
             const QUANTITY = lineItem.quantity + 1;
             const VERSION = CART_INFO.version;
-            await UpdateCartProdQuantity(
+            await UpdateCustomerCartProdQuantity(
               CART_ID,
               VERSION,
               LINE_ITEM_ID,
@@ -364,15 +382,22 @@ export default class CartView extends Component {
       totalPrice,
       discountContainer
     );
-    this.container.append(totalContainer);
+    this.cartContainer.append(totalContainer);
   }
 
   private async setDiscount(code: string): Promise<void> {
     const CART_ID = localStorage.getItem('cartID');
     if (CART_ID) {
       try {
-        const VERSION = (await this.getCurrentCartVersion(CART_ID)).version;
-        await SetDiscount(CART_ID, VERSION, code);
+        const CUSTOMER_ID = localStorage.getItem('customerID');
+        if (CUSTOMER_ID) {
+          const VERSION = (await this.getCurrentCartVersion(CART_ID)).version;
+          await SetDiscount(CART_ID, VERSION, code);
+        } else {
+          const VERSION = (await this.getCurrentAnonimCartVersion(CART_ID))
+            .version;
+          await SetDiscount(CART_ID, VERSION, code);
+        }
         await this.refreshCart();
       } catch (error) {
         const wrongCode = createElem('cart-wrong-code');
@@ -383,17 +408,45 @@ export default class CartView extends Component {
     }
   }
 
-  private async refreshCart(): Promise<void> {
-    await State.refreshCart();
-    this.container.innerHTML = '';
-    this.renderCart();
-    this.renderCartTotal();
+  private async renderEmptyCart(): Promise<void> {
+    const emptyContainer = createElem('cart-empty-container');
+    emptyContainer.innerHTML = `
+      <div class="cart-empty-title">
+        <h3>Your cart is currently empty.</h3>
+      </div>
+      <div class="cart-empty-btn">
+        <a href="${Router.pages.catalog}" class="btn link btn--blue">Shop here</a>
+      </div>
+    `;
+    this.cartContainer.append(emptyContainer);
   }
 
-  public render(): HTMLElement {
-    this.container.innerHTML = '';
-    this.renderCart();
-    this.renderCartTotal();
+  private async refreshCart(): Promise<void> {
+    // await this.renderHeading();
+    await State.refreshCart();
+    // console.log(State.cart?.body.lineItems);
+    if (State.cart?.body.lineItems.length === 0) {
+      this.cartContainer.innerHTML = '';
+      this.renderEmptyCart();
+    } else {
+      this.cartContainer.innerHTML = '';
+      this.renderCart();
+      this.renderCartTotal();
+    }
+  }
+
+  public async renderHTML(): Promise<HTMLElement> {
+    // await this.renderHeading();
+    await State.setCart(() => {} /* error handling */);
+    // console.log(State.cart?.body.lineItems);
+    if (State.cart?.body.lineItems.length === 0) {
+      this.cartContainer.innerHTML = '';
+      this.renderEmptyCart();
+    } else {
+      this.cartContainer.innerHTML = '';
+      this.renderCart();
+      this.renderCartTotal();
+    }
     return this.container;
   }
 }

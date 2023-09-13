@@ -103,8 +103,9 @@ export default class Layout {
       this.slot.append(this.catalog.render());
       this.slot.append(await this.catalog.renderItemPage(route));
     } else if (route === Router.pages.cart) {
-      await State.refreshCart(() => {} /* error handling */);
-      this.slot.append(this.cart.render());
+      // await State.refreshCart(() => {} /* error handling */);
+      // await State.setCart(() => {} /* error handling */);
+      this.slot.append(await this.cart.renderHTML());
     } else {
       this.slot.innerHTML = pageHTML;
     }
