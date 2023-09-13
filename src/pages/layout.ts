@@ -1,8 +1,9 @@
 /* eslint-disable max-lines-per-function */
-/* import {
+import {
   ClientResponse,
   ProductProjectionPagedQueryResponse
-} from '@commercetools/platform-sdk'; */
+} from '@commercetools/platform-sdk'; 
+
 import Router from '../services/router/router';
 import HeaderView from '../components/header';
 import FooterView from '../components/footer';
@@ -14,7 +15,9 @@ import SignupView from './signup/signup';
 import NotFoundView from './404/404';
 import CartView from './cart/cart';
 import State from '../services/state';
-// import { GetProductsPublished } from '../api/apiMethods';
+
+import { GetProductsPublished } from '../api/apiMethods';
+
 import ProfileView from './profile/profile';
 
 export default class Layout {
@@ -106,8 +109,9 @@ export default class Layout {
       this.slot.append(this.catalog.render());
       this.slot.append(await this.catalog.renderItemPage(route));
     } else if (route === Router.pages.cart) {
-      await State.setCart(() => {} /* error handling */);
-      this.slot.append(this.cart.render());
+      // await State.refreshCart(() => {} /* error handling */);
+      // await State.setCart(() => {} /* error handling */);
+      this.slot.append(await this.cart.renderHTML());
     } else {
       this.slot.innerHTML = pageHTML;
     }
@@ -124,6 +128,9 @@ export default class Layout {
 
   public render(container: HTMLElement): void {
     container.append(this.header.render());
+    this.header.refreshCartCounter(
+      State.cart?.body.lineItems.length ? State.cart?.body.lineItems.length : 0
+    );
     container.append(this.slot);
     container.append(this.footer.render());
     this.renderPage(window.location.hash);

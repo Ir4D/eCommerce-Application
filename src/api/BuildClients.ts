@@ -15,7 +15,8 @@ import {
   apiData,
   apiDataCredentials,
   apiDataAnonymous,
-  apiDataPassManageCustomers
+  apiDataPassManageCustomers,
+  apiDataAnonymous2
 } from './apiData';
 import TokenHandle from '../services/token/token';
 
@@ -25,10 +26,11 @@ const httpMiddlewareOptions: HttpMiddlewareOptions = {
   fetch
 };
 
-const tokenCache = new TokenHandle();
+// const tokenCache = new TokenHandle();
 
 // Client with existing Token Flow:
 export function createCtpClientExistingFlow(): Client {
+  const tokenCache = new TokenHandle();
   const existingTokenMiddlewareOptions: ExistingTokenMiddlewareOptions = {
     force: true
   };
@@ -67,6 +69,7 @@ export function createCtpClient(): Client {
 
 // Client Credentials Flow with extended scopes (for Signup)
 export function createCtpClientWithScopes(): Client {
+  const tokenCache = new TokenHandle();
   const authMiddlewareOptionsScopes: AuthMiddlewareOptions = {
     host: apiData.AUTH_URL || '',
     projectKey,
@@ -89,6 +92,7 @@ export function createCtpClientWithScopes(): Client {
 
 // Client Anonymous Flow
 export function createCtpClientAnonymous(): Client {
+  const tokenCache = new TokenHandle();
   const authAnonymousOptions: AnonymousAuthMiddlewareOptions = {
     host: apiData.AUTH_URL || '',
     projectKey,
@@ -97,6 +101,30 @@ export function createCtpClientAnonymous(): Client {
       clientSecret: apiDataAnonymous.CLIENT_SECRET || ''
     },
     scopes: [apiDataAnonymous.SCOPES || ''],
+    tokenCache,
+    fetch
+  };
+
+  return new ClientBuilder()
+    .withProjectKey(projectKey)
+    .withAnonymousSessionFlow(authAnonymousOptions)
+    .withHttpMiddleware(httpMiddlewareOptions)
+    .withLoggerMiddleware()
+    .build();
+}
+
+// Client Anonymous Flow with order view
+export function createCtpClientAnonymous2(): Client {
+  const tokenCache = new TokenHandle();
+  const authAnonymousOptions: AnonymousAuthMiddlewareOptions = {
+    host: apiData.AUTH_URL || '',
+    projectKey,
+    credentials: {
+      clientId: apiDataAnonymous2.CLIENT_ID || '',
+      clientSecret: apiDataAnonymous2.CLIENT_SECRET || ''
+    },
+    scopes: [apiDataAnonymous2.SCOPES || ''],
+    tokenCache,
     fetch
   };
 
@@ -113,6 +141,7 @@ export function createCtpClientWithCredentials(
   EMAIL: string,
   PASSWORD: string
 ): Client {
+  const tokenCache = new TokenHandle();
   const authPasswordOptionsNew: PasswordAuthMiddlewareOptions = {
     host: apiData.AUTH_URL || '',
     projectKey,

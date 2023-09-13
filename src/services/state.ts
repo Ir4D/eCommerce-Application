@@ -1,3 +1,5 @@
+/* eslint-disable max-lines-per-function */
+/* eslint-disable no-lonely-if */
 import {
   Cart,
   CategoryPagedQueryResponse,
@@ -5,7 +7,14 @@ import {
   ProductProjectionPagedQueryResponse
 } from '@commercetools/platform-sdk';
 import {
+  CreateCartAnonim,
+  CreateCartCustomer,
+  GetActiveCart,
+  GetAnonimCartByID,
   GetCart,
+  GetCartByCustomerId,
+  GetCartByID,
+  GetCartFromAnonim,
   GetProductsPublished,
   getProductCategories
 } from '../api/apiMethods';
@@ -43,17 +52,73 @@ export default abstract class State {
     return categoryMap;
   }
 
-  public static async setCart(handleError: () => void): Promise<void> {
+  public static getCurrentCartVersion(CART_ID: string): Promise<number> {
+    return GetCartByID(CART_ID)
+      .then(({ body }) => {
+        return body.version;
+      })
+      .catch((error) => {
+        console.error('Something went wrong:', error);
+      });
+  }
+
+  public static getCurrentAnonimCartVersion(CART_ID: string): Promise<number> {
+    return GetAnonimCartByID(CART_ID)
+      .then(({ body }) => {
+        console.log('version from state', body);
+        return body.version;
+      })
+      .catch((error) => {
+        console.error('Something went wrong:', error);
+      });
+  }
+
+  public static async setCart(handleError?: () => void): Promise<void> {
     try {
       const CUSTOMER_ID = localStorage.getItem('customerID');
       const CURRENCY = 'EUR';
-      // for the purposes of cart testing:
-      const CART_ID = 'daa28bb4-7a2d-42bb-9580-8b0fa6e3a998';
+      const CART_ID = localStorage.getItem('cartID');
       if (CUSTOMER_ID) {
-        State.cart = await GetCart(CART_ID);
+        try {
+          State.cart = await GetCartByCustomerId(CUSTOMER_ID);
+          // State.cart = await GetActiveCart();
+          localStorage.setItem('cartID', State.cart.body.id);
+        } catch {
+          if (CART_ID) {
+            const VERSION = await this.getCurrentCartVersion(CART_ID);
+            State.cart = await GetCartFromAnonim(CUSTOMER_ID, CART_ID, VERSION);
+          } else {
+            State.cart = await CreateCartCustomer(CURRENCY);
+            localStorage.setItem('cartID', State.cart.body.id);
+          }
+        }
+      } else {
+        if (CART_ID) {
+          State.cart = await GetAnonimCartByID(CART_ID);
+        } else {
+          State.cart = await CreateCartAnonim(CURRENCY);
+          localStorage.setItem('cartID', State.cart.body.id);
+        }
       }
     } catch {
-      handleError();
+      if (handleError) handleError();
+    }
+  }
+
+  public static async refreshCart(handleError?: () => void): Promise<void> {
+    try {
+      const CART_ID = localStorage.getItem('cartID');
+      const CUSTOMER_ID = localStorage.getItem('customerID');
+
+      if (CART_ID) {
+        if (CUSTOMER_ID) {
+          State.cart = await GetCartByID(CART_ID);
+        } else {
+          State.cart = await GetAnonimCartByID(CART_ID);
+        }
+      }
+    } catch {
+      if (handleError) handleError();
     }
   }
 
@@ -63,5 +128,6 @@ export default abstract class State {
   ): Promise<void> {
     await this.setCatalog(handleCatalogError);
     await this.setCategories(handleCategoriesError);
+    // await this.setCart();
   }
 }

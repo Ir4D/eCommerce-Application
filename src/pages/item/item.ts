@@ -77,7 +77,11 @@ const getContent = (
             <span class="order-text">Quantity:</span>
             <input type="text" class="order-quantity" />
           </div>
-          <button type="submit" class="order-submit btn btn--blue">Add To Cart</button>
+          <button type="submit" class="order-submit btn btn--blue" data-id=${
+            catalogItem.id
+          } data-masterVariant=${
+            catalogItem.masterVariant.id
+          }>Add To Cart</button>
         </form>
     </div>
   </section>`;
@@ -103,7 +107,6 @@ export default class ItemView extends State {
     const category: string = getCategory(this.catalogItem.categories[0].id);
     this.container.innerHTML += getContent(this.catalogItem, category);
     if (!this.catalogItem.masterVariant.prices) throw new Error();
-
     return this.container;
   }
 }

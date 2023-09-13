@@ -16,6 +16,11 @@ import Router from '../../services/router/router';
 import State from '../../services/state';
 import Component from '../../components/abstract/component';
 import ItemView from '../item/item';
+import {
+  GetAnonimCartByID,
+  addToAnonimCart,
+  addToCart
+} from '../../api/apiMethods';
 
 Swiper.use([Navigation, Pagination]);
 
@@ -298,6 +303,36 @@ export default class CatalogView extends Component {
     const toCartBtn = document.createElement('button');
     toCartBtn.className = 'to_cart-btn btn btn--yellow order-submit';
     toCartBtn.textContent = 'Add to cart';
+    toCartBtn.addEventListener('click', async (e) => {
+      e.preventDefault();
+      // const CART_ID = localStorage.getItem('cartID');
+      await State.setCart();
+      if (localStorage.getItem('customerID')) {
+        await addToCart(
+          State.cart!.body.id,
+          await State.getCurrentCartVersion(State.cart!.body.id),
+          catalogItem.id,
+          catalogItem.masterVariant.id,
+          1
+        );
+      } else {
+        await addToAnonimCart(
+          State.cart!.body.id,
+          await State.getCurrentAnonimCartVersion(State.cart!.body.id),
+          catalogItem.id,
+          catalogItem.masterVariant.id,
+          1
+        );
+      }
+      // this.addItemsToCart(
+      //   State.cart!.body.id,
+      //   await State.getCurrentCartVersion(State.cart!.body.id),
+      //   await State.getCurrentAnonimCartVersion(State.cart!.body.id),
+      //   catalogItem.id,
+      //   catalogItem.masterVariant.id,
+      //   1
+      // );
+    });
 
     const priceContainer = document.createElement('div');
     priceContainer.classList.add('price-container');
@@ -337,6 +372,27 @@ export default class CatalogView extends Component {
 
     return catalogItemLink;
   }
+
+  // private async addItemsToCart(
+  //   cartId: string,
+  //   cartVersion: number,
+  //   anonimCartVersion: number,
+  //   itemId: string,
+  //   variantId: number,
+  //   quantity: number
+  // ): Promise<void> {
+  //   if (localStorage.getItem('customerID')) {
+  //     await addToCart(cartId, cartVersion, itemId, variantId, quantity);
+  //   } else {
+  //     await addToAnonimCart(
+  //       cartId,
+  //       anonimCartVersion,
+  //       itemId,
+  //       variantId,
+  //       quantity
+  //     );
+  //   }
+  // }
 
   private fillCardContainer(searchPattern?: string): void {
     const sortByName = (
@@ -478,8 +534,31 @@ export default class CatalogView extends Component {
       overlay?.classList.toggle('visible');
       body?.classList.toggle('stop-scroll');
     });
+    const itemAddButton = document.querySelector('.order-submit');
+    const itemAddQuantity = document.querySelector(
+      '.order-quantity'
+    ) as HTMLInputElement;
+    itemAddButton?.addEventListener('click', async (e) => {
+      const target = e.target as HTMLElement;
+      if (localStorage.getItem('customerID')) {
+        addToCart(
+          State.cart!.body.id,
+          await State.getCurrentCartVersion(State.cart!.body.id),
+          target.dataset.id!,
+          Number(target.dataset.masterVariant),
+          itemAddQuantity.value ? Number(itemAddQuantity?.value) : 1
+        );
+      } else {
+        addToAnonimCart(
+          State.cart!.body.id,
+          await State.getCurrentAnonimCartVersion(State.cart!.body.id),
+          target.dataset.id!,
+          Number(target.dataset.masterVariant),
+          itemAddQuantity.value ? Number(itemAddQuantity?.value) : 1
+        );
+      }
+    });
 
-    // console.log(document.querySelector('.swiper'))
     return this.container;
   }
 
