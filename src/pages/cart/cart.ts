@@ -61,6 +61,7 @@ export default class CartView extends Component {
         productsContainer.append(cartItem);
       });
     }
+
     const resetButton = createElem('reset-cart-button btn btn--blue');
     resetButton.innerHTML = 'Clear cart';
     resetButton.addEventListener('click', async () => {

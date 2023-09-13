@@ -304,10 +304,14 @@ export default class CatalogView extends Component {
     toCartBtn.className = 'to_cart-btn btn btn--yellow order-submit';
     toCartBtn.textContent = 'Add to cart';
     toCartBtn.addEventListener('click', async (e) => {
+      console.log('listener', State.cart);
       e.preventDefault();
-      // const CART_ID = localStorage.getItem('cartID');
-      await State.setCart();
+      const CART_ID = localStorage.getItem('cartID');
+      if (!CART_ID) {
+        await State.setCart();
+      }
       if (localStorage.getItem('customerID')) {
+        console.log('registered');
         await addToCart(
           State.cart!.body.id,
           await State.getCurrentCartVersion(State.cart!.body.id),
@@ -316,6 +320,7 @@ export default class CatalogView extends Component {
           1
         );
       } else {
+        console.log('anon');
         await addToAnonimCart(
           State.cart!.body.id,
           await State.getCurrentAnonimCartVersion(State.cart!.body.id),

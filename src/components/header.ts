@@ -56,7 +56,7 @@ export default class HeaderView {
     this.container.append(this.menu.render());
     this.container.append(this.headerList());
     window.addEventListener('cart-change', async () => {
-      await State.refreshCart();
+      // await State.refreshCart();
       await this.refreshCartCounter();
     });
   }

@@ -79,18 +79,12 @@ export default abstract class State {
       const CURRENCY = 'EUR';
       const CART_ID = localStorage.getItem('cartID');
       if (CUSTOMER_ID) {
-        try {
-          State.cart = await GetCartByCustomerId(CUSTOMER_ID);
-          // State.cart = await GetActiveCart();
+        if (CART_ID) {
+          const VERSION = await this.getCurrentCartVersion(CART_ID);
+          State.cart = await GetCartFromAnonim(CUSTOMER_ID, CART_ID, VERSION);
+        } else {
+          State.cart = await CreateCartCustomer(CURRENCY);
           localStorage.setItem('cartID', State.cart.body.id);
-        } catch {
-          if (CART_ID) {
-            const VERSION = await this.getCurrentCartVersion(CART_ID);
-            State.cart = await GetCartFromAnonim(CUSTOMER_ID, CART_ID, VERSION);
-          } else {
-            State.cart = await CreateCartCustomer(CURRENCY);
-            localStorage.setItem('cartID', State.cart.body.id);
-          }
         }
       } else {
         if (CART_ID) {
