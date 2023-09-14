@@ -8,7 +8,7 @@ const teammates: ITeammate[] = [
   {
     name: 'Irina Dedova',
     bio: `
-      Alexandroupoli, Grecce.<br>
+      Alexandroupoli, Greece.<br>
       I used to work at a bank in the Compliance Department. In 2022, I acquired a web development diploma from ITMO University, and in 2023 I successfully completed the course 'JS/FE Pre-School 2022Q4' at RS School with the maximum score. I am currently learning Front-end development at RS School.<br>
       <strong>Contributions to the project:</strong><br>
       - CommerceTools Project creation and API Client Setup;<br>
