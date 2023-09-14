@@ -227,8 +227,6 @@ export function RemoveFromCart(
     version: VERSION,
     actions: [{ action: 'removeLineItem', lineItemId: productId }]
   };
-  const cartChange = new Event('cart-change');
-  window.dispatchEvent(cartChange);
   return apiRootProfile
     .me()
     .carts()
@@ -249,8 +247,6 @@ export function RemoveFromAnonimCart(
     version: VERSION,
     actions: [{ action: 'removeLineItem', lineItemId: productId }]
   };
-  const cartChange = new Event('cart-change');
-  window.dispatchEvent(cartChange);
   return apiRootAnonim2
     .me()
     .carts()
@@ -273,8 +269,6 @@ export function RemoveSeveralFromCart(
       return { action: 'removeLineItem', lineItemId: id };
     })
   };
-  const cartChange = new Event('cart-change');
-  window.dispatchEvent(cartChange);
   return apiRootProfile
     .me()
     .carts()
@@ -297,8 +291,6 @@ export function RemoveSeveralFromAnonimCart(
       return { action: 'removeLineItem', lineItemId: id };
     })
   };
-  const cartChange = new Event('cart-change');
-  window.dispatchEvent(cartChange);
   return apiRootAnonim2
     .me()
     .carts()
@@ -328,8 +320,6 @@ export function addToCart(
       }
     ]
   };
-  const cartChange = new Event('cart-change');
-  window.dispatchEvent(cartChange);
   return apiRootProfile
     .me()
     .carts()
@@ -359,8 +349,6 @@ export function addToAnonimCart(
       }
     ]
   };
-  const cartChange = new Event('cart-change');
-  window.dispatchEvent(cartChange);
   return apiRootAnonim2
     .me()
     .carts()
@@ -388,8 +376,6 @@ export function UpdateCartProdQuantity(
       }
     ]
   };
-  const cartChange = new Event('cart-change');
-  window.dispatchEvent(cartChange);
   return apiRootProfile
     .me()
     .carts()

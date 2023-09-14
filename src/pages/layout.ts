@@ -2,7 +2,7 @@
 import {
   ClientResponse,
   ProductProjectionPagedQueryResponse
-} from '@commercetools/platform-sdk'; 
+} from '@commercetools/platform-sdk';
 
 import Router from '../services/router/router';
 import HeaderView from '../components/header';
@@ -109,7 +109,7 @@ export default class Layout {
       this.slot.append(this.catalog.render());
       this.slot.append(await this.catalog.renderItemPage(route));
     } else if (route === Router.pages.cart) {
-      // await State.refreshCart(() => {} /* error handling */);
+      await State.refreshCart(() => {} /* error handling */);
       // await State.setCart(() => {} /* error handling */);
       this.slot.append(await this.cart.renderHTML());
     } else {
