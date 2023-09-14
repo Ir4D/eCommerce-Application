@@ -327,6 +327,8 @@ export default class CatalogView extends Component {
         );
       }
       await State.refreshCart();
+      const cartChange = new Event('cart-change');
+      window.dispatchEvent(cartChange);
     });
 
     const priceContainer = document.createElement('div');
@@ -367,27 +369,6 @@ export default class CatalogView extends Component {
 
     return catalogItemLink;
   }
-
-  // private async addItemsToCart(
-  //   cartId: string,
-  //   cartVersion: number,
-  //   anonimCartVersion: number,
-  //   itemId: string,
-  //   variantId: number,
-  //   quantity: number
-  // ): Promise<void> {
-  //   if (localStorage.getItem('customerID')) {
-  //     await addToCart(cartId, cartVersion, itemId, variantId, quantity);
-  //   } else {
-  //     await addToAnonimCart(
-  //       cartId,
-  //       anonimCartVersion,
-  //       itemId,
-  //       variantId,
-  //       quantity
-  //     );
-  //   }
-  // }
 
   private fillCardContainer(searchPattern?: string): void {
     const sortByName = (
@@ -557,6 +538,8 @@ export default class CatalogView extends Component {
         );
       }
       await State.refreshCart();
+      const cartChange = new Event('cart-change');
+      window.dispatchEvent(cartChange);
     });
     return this.container;
   }

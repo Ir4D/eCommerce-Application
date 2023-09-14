@@ -65,7 +65,6 @@ export default abstract class State {
   public static getCurrentAnonimCartVersion(CART_ID: string): Promise<number> {
     return GetAnonimCartByID(CART_ID)
       .then(({ body }) => {
-        console.log('version from state', body);
         return body.version;
       })
       .catch((error) => {
@@ -110,8 +109,6 @@ export default abstract class State {
           State.cart = await GetAnonimCartByID(CART_ID);
         }
       }
-      const cartChange = new Event('cart-change');
-      window.dispatchEvent(cartChange);
     } catch {
       if (handleError) handleError();
     }
