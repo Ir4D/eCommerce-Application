@@ -5,6 +5,7 @@ import Component from '../../components/abstract/component';
 import State from '../../services/state';
 import {
   SetDiscount,
+  SetDiscountAnonim,
   GetAnonimCartByID,
   GetCartByID,
   UpdateAnonimCartProdQuantity,
@@ -397,7 +398,7 @@ export default class CartView extends Component {
         } else {
           const VERSION = (await this.getCurrentAnonimCartVersion(CART_ID))
             .version;
-          await SetDiscount(CART_ID, VERSION, code);
+          await SetDiscountAnonim(CART_ID, VERSION, code);
         }
         await this.refreshCart();
       } catch (error) {

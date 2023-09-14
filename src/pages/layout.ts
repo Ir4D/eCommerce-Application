@@ -2,7 +2,7 @@
 import {
   ClientResponse,
   ProductProjectionPagedQueryResponse
-} from '@commercetools/platform-sdk'; 
+} from '@commercetools/platform-sdk';
 
 import Router from '../services/router/router';
 import HeaderView from '../components/header';
