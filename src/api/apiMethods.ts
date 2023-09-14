@@ -18,7 +18,8 @@ import {
   MyCartDraft,
   CartDraft,
   CartSetCustomerIdAction,
-  CartUpdate
+  CartUpdate,
+  MyCartRemoveLineItemAction
 } from '@commercetools/platform-sdk';
 import { apiData, apiDataAnonymous2 } from './apiData';
 import {
@@ -207,6 +208,98 @@ export function UpdateCart(
     ]
   };
   return apiRootProfile
+    .me()
+    .carts()
+    .withId({ ID: CART_ID })
+    .post({
+      body: data
+    })
+    .execute();
+}
+
+/* Remove from cart */
+export function RemoveFromCart(
+  CART_ID: string,
+  VERSION: number,
+  productId: string
+): Promise<ClientResponse<Cart>> {
+  const data: MyCartUpdate = {
+    version: VERSION,
+    actions: [{ action: 'removeLineItem', lineItemId: productId }]
+  };
+  const cartChange = new Event('cart-change');
+  window.dispatchEvent(cartChange);
+  return apiRootProfile
+    .me()
+    .carts()
+    .withId({ ID: CART_ID })
+    .post({
+      body: data
+    })
+    .execute();
+}
+
+/* Remove from anonim cart */
+export function RemoveFromAnonimCart(
+  CART_ID: string,
+  VERSION: number,
+  productId: string
+): Promise<ClientResponse<Cart>> {
+  const data: MyCartUpdate = {
+    version: VERSION,
+    actions: [{ action: 'removeLineItem', lineItemId: productId }]
+  };
+  const cartChange = new Event('cart-change');
+  window.dispatchEvent(cartChange);
+  return apiRootAnonim2
+    .me()
+    .carts()
+    .withId({ ID: CART_ID })
+    .post({
+      body: data
+    })
+    .execute();
+}
+
+/* Remove several fron cart */
+export function RemoveSeveralFromCart(
+  CART_ID: string,
+  VERSION: number,
+  productIds: string[]
+): Promise<ClientResponse<Cart>> {
+  const data: MyCartUpdate = {
+    version: VERSION,
+    actions: productIds.map((id) => {
+      return { action: 'removeLineItem', lineItemId: id };
+    })
+  };
+  const cartChange = new Event('cart-change');
+  window.dispatchEvent(cartChange);
+  return apiRootProfile
+    .me()
+    .carts()
+    .withId({ ID: CART_ID })
+    .post({
+      body: data
+    })
+    .execute();
+}
+
+/* Remove several from anonim cart */
+export function RemoveSeveralFromAnonimCart(
+  CART_ID: string,
+  VERSION: number,
+  productIds: string[]
+): Promise<ClientResponse<Cart>> {
+  const data: MyCartUpdate = {
+    version: VERSION,
+    actions: productIds.map((id) => {
+      return { action: 'removeLineItem', lineItemId: id };
+    })
+  };
+  const cartChange = new Event('cart-change');
+  window.dispatchEvent(cartChange);
+  return apiRootAnonim2
     .me()
     .carts()
     .withId({ ID: CART_ID })

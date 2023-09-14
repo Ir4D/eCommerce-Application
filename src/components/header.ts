@@ -56,12 +56,8 @@ export default class HeaderView {
     this.container.append(this.menu.render());
     this.container.append(this.headerList());
     window.addEventListener('cart-change', async () => {
-      await State.refreshCart();
-      this.refreshCartCounter(
-        State.cart?.body.lineItems.length
-          ? State.cart?.body.lineItems.length
-          : 0
-      );
+      // await State.refreshCart();
+      await this.refreshCartCounter();
     });
   }
 
@@ -85,9 +81,12 @@ export default class HeaderView {
     return profileContainer;
   }
 
-  public refreshCartCounter(itemsQuantity: number): void {
+  public async refreshCartCounter(): Promise<void> {
+    await State.refreshCart();
     const counter = document.querySelector('.cart-indicator') as HTMLElement;
-    counter.innerText = itemsQuantity.toString();
+    counter.innerText = State.cart
+      ? State.cart?.body.lineItems.length.toString()
+      : '0';
   }
 
   public render(): HTMLElement {

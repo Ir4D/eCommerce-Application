@@ -144,6 +144,20 @@
   display: none;
 }
 
+.reset-cart-button.btn--blue {
+  display: inline-block;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  text-align: center;
+  padding: 4px 12px;
+  line-height: 25px;
+}
+
+.reset-cart-button.btn--blue::after {
+  display: none;
+}
+
 .cart-total-container {
   display: flex;
   flex-direction: column;

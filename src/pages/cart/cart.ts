@@ -8,6 +8,11 @@ import {
   GetAnonimCartByID,
   GetCartByID,
   UpdateAnonimCartProdQuantity,
+  UpdateCartProdQuantity,
+  RemoveFromCart,
+  RemoveFromAnonimCart,
+  RemoveSeveralFromCart,
+  RemoveSeveralFromAnonimCart,
   UpdateCustomerCartProdQuantity
 } from '../../api/apiMethods';
 import Router from '../../services/router/router';
@@ -56,6 +61,14 @@ export default class CartView extends Component {
         productsContainer.append(cartItem);
       });
     }
+
+    const resetButton = createElem('reset-cart-button btn btn--blue');
+    resetButton.innerHTML = 'Clear cart';
+    resetButton.addEventListener('click', async () => {
+      await this.clearCart();
+    });
+    productsContainer.append(resetButton);
+    // this.container.append(productsContainer);
     this.cartContainer.append(productsContainer);
   }
 
@@ -248,35 +261,55 @@ export default class CartView extends Component {
   }
 
   private async removeProductFromCart(LINE_ITEM_ID: string): Promise<void> {
-    const CART_ID = localStorage.getItem('cartID');
-    if (CART_ID && LINE_ITEM_ID) {
-      try {
+    try {
+      const CART_ID = localStorage.getItem('cartID');
+      if (CART_ID) {
         const CUSTOMER_ID = localStorage.getItem('customerID');
         if (CUSTOMER_ID) {
-          const CART_INFO = await this.getCurrentCartVersion(CART_ID);
-          const QUANTITY = 0;
-          const VERSION = CART_INFO.version;
-          await UpdateCustomerCartProdQuantity(
+          await RemoveFromCart(
             CART_ID,
-            VERSION,
-            LINE_ITEM_ID,
-            QUANTITY
+            (await this.getCurrentCartVersion(CART_ID)).version,
+            LINE_ITEM_ID
           );
         } else {
-          const CART_INFO = await this.getCurrentAnonimCartVersion(CART_ID);
-          const QUANTITY = 0;
-          const VERSION = CART_INFO.version;
-          await UpdateAnonimCartProdQuantity(
+          await RemoveFromAnonimCart(
             CART_ID,
-            VERSION,
-            LINE_ITEM_ID,
-            QUANTITY
+            (await this.getCurrentAnonimCartVersion(CART_ID)).version,
+            LINE_ITEM_ID
           );
         }
-        await this.refreshCart();
-      } catch (error) {
-        console.error('Error getting cart version:', error);
       }
+      await this.refreshCart();
+    } catch (error) {
+      console.error('Error getting cart version:', error);
+    }
+  }
+
+  private async clearCart(): Promise<void> {
+    try {
+      const catalogItemIds = State.cart?.body.lineItems.map(
+        (item) => item.id
+      ) as string[];
+      const CART_ID = localStorage.getItem('cartID');
+      if (CART_ID) {
+        const CUSTOMER_ID = localStorage.getItem('customerID');
+        if (CUSTOMER_ID) {
+          await RemoveSeveralFromCart(
+            CART_ID,
+            (await this.getCurrentCartVersion(CART_ID)).version,
+            catalogItemIds
+          );
+        } else {
+          await RemoveSeveralFromAnonimCart(
+            CART_ID,
+            (await this.getCurrentAnonimCartVersion(CART_ID)).version,
+            catalogItemIds
+          );
+        }
+      }
+      await this.refreshCart();
+    } catch (error) {
+      console.error('Error getting cart version:', error);
     }
   }
 
