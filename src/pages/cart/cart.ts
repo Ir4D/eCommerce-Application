@@ -211,8 +211,6 @@ export default class CartView extends Component {
           }
         }
         await this.refreshCart();
-        const cartChange = new Event('cart-change');
-        window.dispatchEvent(cartChange);
       } catch (error) {
         console.error('Error getting cart version:', error);
       }
@@ -282,8 +280,6 @@ export default class CartView extends Component {
         }
       }
       await this.refreshCart();
-      const cartChange = new Event('cart-change');
-      window.dispatchEvent(cartChange);
     } catch (error) {
       console.error('Error getting cart version:', error);
     }
@@ -312,8 +308,6 @@ export default class CartView extends Component {
         }
       }
       await this.refreshCart();
-      const cartChange = new Event('cart-change');
-      window.dispatchEvent(cartChange);
     } catch (error) {
       console.error('Error getting cart version:', error);
     }

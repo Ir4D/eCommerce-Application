@@ -110,6 +110,8 @@ export default abstract class State {
           State.cart = await GetAnonimCartByID(CART_ID);
         }
       }
+      const cartChange = new Event('cart-change');
+      window.dispatchEvent(cartChange);
     } catch {
       if (handleError) handleError();
     }

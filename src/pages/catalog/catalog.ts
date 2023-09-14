@@ -327,8 +327,6 @@ export default class CatalogView extends Component {
         );
       }
       await State.refreshCart();
-      const cartChange = new Event('cart-change');
-      window.dispatchEvent(cartChange);
     });
 
     const priceContainer = document.createElement('div');
@@ -536,6 +534,10 @@ export default class CatalogView extends Component {
       '.order-quantity'
     ) as HTMLInputElement;
     itemAddButton?.addEventListener('click', async (e) => {
+      const CART_ID = localStorage.getItem('cartID');
+      if (!CART_ID) {
+        await State.setCart();
+      }
       const target = e.target as HTMLElement;
       if (localStorage.getItem('customerID')) {
         addToCart(
@@ -555,10 +557,7 @@ export default class CatalogView extends Component {
         );
       }
       await State.refreshCart();
-      const cartChange = new Event('cart-change');
-      window.dispatchEvent(cartChange);
     });
-
     return this.container;
   }
 
