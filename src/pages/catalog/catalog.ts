@@ -304,14 +304,12 @@ export default class CatalogView extends Component {
     toCartBtn.className = 'to_cart-btn btn btn--yellow order-submit';
     toCartBtn.textContent = 'Add to cart';
     toCartBtn.addEventListener('click', async (e) => {
-      console.log('listener', State.cart);
       e.preventDefault();
       const CART_ID = localStorage.getItem('cartID');
       if (!CART_ID) {
         await State.setCart();
       }
       if (localStorage.getItem('customerID')) {
-        console.log('registered');
         await addToCart(
           State.cart!.body.id,
           await State.getCurrentCartVersion(State.cart!.body.id),
@@ -320,7 +318,6 @@ export default class CatalogView extends Component {
           1
         );
       } else {
-        console.log('anon');
         await addToAnonimCart(
           State.cart!.body.id,
           await State.getCurrentAnonimCartVersion(State.cart!.body.id),
@@ -329,14 +326,9 @@ export default class CatalogView extends Component {
           1
         );
       }
-      // this.addItemsToCart(
-      //   State.cart!.body.id,
-      //   await State.getCurrentCartVersion(State.cart!.body.id),
-      //   await State.getCurrentAnonimCartVersion(State.cart!.body.id),
-      //   catalogItem.id,
-      //   catalogItem.masterVariant.id,
-      //   1
-      // );
+      await State.refreshCart();
+      const cartChange = new Event('cart-change');
+      window.dispatchEvent(cartChange);
     });
 
     const priceContainer = document.createElement('div');
@@ -377,27 +369,6 @@ export default class CatalogView extends Component {
 
     return catalogItemLink;
   }
-
-  // private async addItemsToCart(
-  //   cartId: string,
-  //   cartVersion: number,
-  //   anonimCartVersion: number,
-  //   itemId: string,
-  //   variantId: number,
-  //   quantity: number
-  // ): Promise<void> {
-  //   if (localStorage.getItem('customerID')) {
-  //     await addToCart(cartId, cartVersion, itemId, variantId, quantity);
-  //   } else {
-  //     await addToAnonimCart(
-  //       cartId,
-  //       anonimCartVersion,
-  //       itemId,
-  //       variantId,
-  //       quantity
-  //     );
-  //   }
-  // }
 
   private fillCardContainer(searchPattern?: string): void {
     const sortByName = (
@@ -544,6 +515,10 @@ export default class CatalogView extends Component {
       '.order-quantity'
     ) as HTMLInputElement;
     itemAddButton?.addEventListener('click', async (e) => {
+      const CART_ID = localStorage.getItem('cartID');
+      if (!CART_ID) {
+        await State.setCart();
+      }
       const target = e.target as HTMLElement;
       if (localStorage.getItem('customerID')) {
         addToCart(
@@ -562,8 +537,10 @@ export default class CatalogView extends Component {
           itemAddQuantity.value ? Number(itemAddQuantity?.value) : 1
         );
       }
+      await State.refreshCart();
+      const cartChange = new Event('cart-change');
+      window.dispatchEvent(cartChange);
     });
-
     return this.container;
   }
 

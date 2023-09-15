@@ -65,7 +65,6 @@ export default abstract class State {
   public static getCurrentAnonimCartVersion(CART_ID: string): Promise<number> {
     return GetAnonimCartByID(CART_ID)
       .then(({ body }) => {
-        console.log('version from state', body);
         return body.version;
       })
       .catch((error) => {

@@ -22,9 +22,9 @@ const teammates: ITeammate[] = [
   },
   {
     name: 'Dzmitry Maltsau',
-    bio: 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Totam, libero similique illo minus dolor enim modi commodi delectus incidunt doloribus laborum unde quos expedita voluptas aut amet repudiandae eos veniam?',
+    bio: 'Gomel, Republic of Belarus <br/> Used to work as oil engineer, currently making first steps in front-end development <br/> Tech Stack: JS, TS, HTML, CSS, React <br/> Participation on project: Routing implementation, 404 page layout, Catalog page layout, Catalog sort and filter algorithms implementation',
     git: 'https://github.com/Maltsau',
-    photo: './images/avatars/dzmitry.jpg'
+    photo: './images/avatars/dzmitry.png'
   },
   {
     name: 'Natalia Vozhdaeva',
