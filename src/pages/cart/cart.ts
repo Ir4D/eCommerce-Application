@@ -429,9 +429,7 @@ export default class CartView extends Component {
   }
 
   private async refreshCart(): Promise<void> {
-    // await this.renderHeading();
     await State.refreshCart();
-    // console.log(State.cart?.body.lineItems);
     if (State.cart?.body.lineItems.length === 0) {
       this.cartContainer.innerHTML = '';
       this.renderEmptyCart();
@@ -443,9 +441,7 @@ export default class CartView extends Component {
   }
 
   public async renderHTML(): Promise<HTMLElement> {
-    // await this.renderHeading();
-    await State.setCart(() => {} /* error handling */);
-    // console.log(State.cart?.body.lineItems);
+    await State.setCart(() => {});
     if (State.cart?.body.lineItems.length === 0) {
       this.cartContainer.innerHTML = '';
       this.renderEmptyCart();
