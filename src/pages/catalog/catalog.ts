@@ -16,11 +16,7 @@ import Router from '../../services/router/router';
 import State from '../../services/state';
 import Component from '../../components/abstract/component';
 import ItemView from '../item/item';
-import {
-  GetAnonimCartByID,
-  addToAnonimCart,
-  addToCart
-} from '../../api/apiMethods';
+import { addToAnonimCart, addToCart } from '../../api/apiMethods';
 
 Swiper.use([Navigation, Pagination]);
 
@@ -39,6 +35,11 @@ type PaginationBarType = {
 
 type PaginationDirectionType = '+' | '-';
 
+const createElem = (
+  className: string,
+  tag: keyof HTMLElementTagNameMap = 'div'
+): HTMLElement => Object.assign(document.createElement(tag), { className });
+
 export default class CatalogView extends Component {
   private errorModal: HTMLDialogElement;
   private cardContainer: HTMLElement;
@@ -56,18 +57,14 @@ export default class CatalogView extends Component {
     super();
     this.container.classList.add('catalog-container');
     this.errorModal = document.createElement('dialog');
-    this.cardContainer = document.createElement('div');
-    this.cardContainer.classList.add('catalog-card-container');
+    this.cardContainer = createElem('catalog-card-container');
     this.container.append(this.errorModal);
     this.errorModal.addEventListener('click', () => {
       this.errorModal.close();
     });
     this.currentCategory = 'All categories';
-    this.abcSortArrow = document.createElement('div');
-    this.priceSortArrow = document.createElement('div');
-    [this.abcSortArrow, this.priceSortArrow].forEach((arrow) => {
-      arrow.classList.add('catalog-sort-arrow');
-    });
+    this.abcSortArrow = createElem('catalog-sort-arrow') as HTMLDivElement;
+    this.priceSortArrow = createElem('catalog-sort-arrow') as HTMLDivElement;
     this.priceFloor = 0;
     this.priceCeli = Infinity;
     this.currentPage = 1;
@@ -109,22 +106,16 @@ export default class CatalogView extends Component {
     this.container.classList.remove('item-page');
 
     /* catalog controls */
-    const catalogHeader = document.createElement('div');
-    catalogHeader.classList.add('catalog-header');
-    const navGroup = document.createElement('div');
-    navGroup.classList.add('catalog-nav-group', 'hiden');
-    const filterTitle = document.createElement('span');
-    filterTitle.classList.add('catalog-filter-title');
+    const catalogHeader = createElem('catalog-header');
+    const navGroup = createElem('catalog-nav-group hiden');
+    const filterTitle = createElem('catalog-filter-title', 'span');
     filterTitle.innerText = 'Filters';
     filterTitle.addEventListener('click', () => {
       navGroup.classList.toggle('hiden');
       filterTitle.classList.toggle('open');
     });
-    const controls = document.createElement('form');
-    controls.classList.add('catalog-controls');
-
-    const categorySelect = document.createElement('select');
-    categorySelect.classList.add('catalog-category-select');
+    const controls = createElem('catalog-controls', 'form');
+    const categorySelect = createElem('catalog-category-select', 'select');
     categorySelect.innerHTML = `<option data-id="all">All categories</option>`;
     State.categories?.body.results.forEach((category) => {
       categorySelect.innerHTML += `<option data-id="${category.id}">${category.name.en}</option>`;
@@ -135,53 +126,47 @@ export default class CatalogView extends Component {
       this.fillCardContainer();
     });
 
-    const searchGroup = document.createElement('div');
-    searchGroup.classList.add('catalog-controls-search-group');
-
-    const searchInput = document.createElement('input');
+    const searchGroup = createElem('catalog-controls-search-group');
+    const searchInput = createElem(
+      'catalog-search-input',
+      'input'
+    ) as HTMLInputElement;
     searchInput.placeholder = 'Search...';
-    searchInput.classList.add('catalog-search-input');
     searchInput.addEventListener('input', (e) => {
       const target = e.target as HTMLInputElement;
       this.fillCardContainer(target.value);
     });
-
-    const searchButton = document.createElement('button');
-    searchButton.classList.add('catalog-search-button');
+    const searchButton = createElem('catalog-search-button');
 
     searchGroup.append(searchInput, searchButton);
 
-    const abcSortButton = document.createElement('button');
-    const priceSortButton = document.createElement('button');
-    [abcSortButton, priceSortButton].forEach((button) => {
-      button.classList.add('catalog-sort-button');
-    });
+    const abcSortButton = createElem('catalog-sort-button', 'button');
+    const priceSortButton = createElem('catalog-sort-button', 'button');
     abcSortButton.classList.add('abc');
     priceSortButton.classList.add('price');
-
-    const abcSortGroup = document.createElement('div');
-    const priceSortGroup = document.createElement('div');
+    const abcSortGroup = createElem('catalog-controls-sort-group');
+    const priceSortGroup = createElem('catalog-controls-sort-group');
     abcSortGroup.append(abcSortButton, this.abcSortArrow);
     priceSortGroup.append(priceSortButton, this.priceSortArrow);
-    [abcSortGroup, priceSortGroup].forEach((div) => {
-      div.classList.add('catalog-controls-sort-group');
-    });
     abcSortGroup.append(abcSortButton, this.abcSortArrow);
     priceSortGroup.append(priceSortButton, this.priceSortArrow);
 
-    const priceRangeGroup = document.createElement('div');
-    priceRangeGroup.classList.add('catalog-controls-range-group');
-    const titleSpan = document.createElement('span');
-    const betweenSpan = document.createElement('span');
+    const priceRangeGroup = createElem('catalog-controls-range-group');
+    const titleSpan = createElem('catalog-controls-range-span', 'span');
+    const betweenSpan = createElem('catalog-controls-range-span', 'span');
+    const afterSpan = createElem('catalog-controls-range-span', 'span');
     titleSpan.innerText = 'Price filter';
     betweenSpan.innerText = '-';
-    [titleSpan, betweenSpan].forEach((span) => {
-      span.classList.add('catalog-controls-range-span');
-    });
-    const priceFloorInput = document.createElement('input');
-    const priceCeliInput = document.createElement('input');
+    afterSpan.innerText = '€';
+    const priceFloorInput = createElem(
+      'catalog-controls-range-input',
+      'input'
+    ) as HTMLInputElement;
+    const priceCeliInput = createElem(
+      'catalog-controls-range-input',
+      'input'
+    ) as HTMLInputElement;
     [priceFloorInput, priceCeliInput].forEach((input) => {
-      input.classList.add('catalog-controls-range-input');
       input.type = 'number';
     });
 
@@ -236,7 +221,8 @@ export default class CatalogView extends Component {
       titleSpan,
       priceFloorInput,
       betweenSpan,
-      priceCeliInput
+      priceCeliInput,
+      afterSpan
     );
 
     catalogHeader.append(filterTitle, navGroup);
@@ -250,8 +236,7 @@ export default class CatalogView extends Component {
     this.fillCardContainer();
 
     /* paggination bar */
-    const paginationBar = document.createElement('nav');
-    paginationBar.classList.add('catalog-pagination-bar');
+    const paginationBar = createElem('catalog-pagination-bar', 'nav');
     this.paginationControls.currentPageSpan.classList.add(
       'catalog-current-page-span'
     );
@@ -274,12 +259,13 @@ export default class CatalogView extends Component {
   }
 
   private renderCatalogItemCard(catalogItem: ProductProjection): HTMLElement {
-    const catalogItemLink = document.createElement('a');
-    catalogItemLink.classList.add('card-item-link');
+    const catalogItemLink = createElem(
+      'card-item-link',
+      'a'
+    ) as HTMLAnchorElement;
     catalogItemLink.href = `${Router.pages.catalog}/${catalogItem.slug.en}`;
 
-    const categoryButton = document.createElement('div');
-    categoryButton.classList.add('catalog-card-category-button');
+    const categoryButton = createElem('catalog-card-category-button');
     if (catalogItem.categories[0]) {
       for (const [key, value] of State.CategoryMap.entries()) {
         if (value === catalogItem.categories[0].id) {
@@ -290,18 +276,21 @@ export default class CatalogView extends Component {
       categoryButton.innerText = 'No category';
     }
 
-    const cardImage = document.createElement('div');
-    cardImage.classList.add('catalog-card-image');
+    const cardImage = createElem('catalog-card-image');
     if (catalogItem.masterVariant.images?.length) {
       cardImage.style.background = `center / contain no-repeat url('${catalogItem.masterVariant.images[0].url}') #ffff`;
     }
 
-    const cardName = document.createElement('p');
-    cardName.classList.add('catalog-card-title');
+    const cardName = createElem(
+      'catalog-card-title',
+      'p'
+    ) as HTMLParagraphElement;
     cardName.innerText = catalogItem.name.en;
 
-    const toCartBtn = document.createElement('button');
-    toCartBtn.className = 'to_cart-btn btn btn--yellow order-submit';
+    const toCartBtn = createElem(
+      'to_cart-btn btn btn--yellow order-submit',
+      'button'
+    ) as HTMLButtonElement;
     toCartBtn.textContent = 'Add to cart';
     toCartBtn.addEventListener('click', async (e) => {
       e.preventDefault();
@@ -331,22 +320,21 @@ export default class CatalogView extends Component {
       window.dispatchEvent(cartChange);
     });
 
-    const priceContainer = document.createElement('div');
-    priceContainer.classList.add('price-container');
-    const cardPrice = document.createElement('span');
-    cardPrice.classList.add('catalog-card-price');
+    const priceContainer = createElem('price-container');
+    const cardPrice = createElem('catalog-card-price', 'span');
     if (
       catalogItem.masterVariant.prices?.length &&
       catalogItem.masterVariant.prices[0].discounted
     ) {
-      const fullPrice = document.createElement('span');
+      const fullPrice = createElem('catalog-card-price full', 'span');
       fullPrice.innerText = `€${(
         Number(catalogItem.masterVariant.prices[0]?.value.centAmount) / 100
       ).toFixed(2)}`;
-      const discountIcon = document.createElement('span');
-      discountIcon.classList.add('catalog-card-discount-icon');
+      const discountIcon = createElem(
+        'catalog-card-discount-icon',
+        'span'
+      ) as HTMLSpanElement;
       priceContainer.append(fullPrice, discountIcon);
-      fullPrice.classList.add('catalog-card-price', 'full');
       cardPrice.innerText = `€${(
         Number(
           catalogItem.masterVariant.prices[0].discounted.value.centAmount
@@ -392,20 +380,17 @@ export default class CatalogView extends Component {
       const undefinedPriceArr = catalog?.filter((item) => {
         return !item.masterVariant.prices?.length;
       });
-      let definedPriceArr = catalog?.filter((item) => {
+      const definedPriceArr = catalog?.filter((item) => {
         return item.masterVariant.prices?.length;
       });
-
-      const sortPricesArr: [number, ProductProjection][] | undefined =
-        definedPriceArr?.map((product) => {
-          const sortPrice = product.masterVariant.prices![0].discounted
-            ? product.masterVariant.prices![0].discounted.value.centAmount
-            : product.masterVariant.prices![0].value.centAmount;
-          return [sortPrice, product];
-        });
-      sortPricesArr?.sort((a, b) => a[0] - b[0]);
-      definedPriceArr = sortPricesArr?.map((item) => item[1]);
-
+      definedPriceArr?.sort((a, b) => {
+        return (
+          (a.masterVariant.prices![0].discounted?.value.centAmount ||
+            a.masterVariant.prices![0].value.centAmount) -
+          (b.masterVariant.prices![0].discounted?.value.centAmount ||
+            b.masterVariant.prices![0].value.centAmount)
+        );
+      });
       catalog = [...definedPriceArr!, ...undefinedPriceArr!];
       return catalog;
     };
@@ -495,8 +480,7 @@ export default class CatalogView extends Component {
     if (document.querySelector('.overlay')) {
       document.querySelector('.overlay')?.remove();
     }
-    const overlay = document.createElement('div');
-    overlay.className = 'overlay';
+    const overlay = createElem('overlay');
     body?.append(overlay);
 
     swiperWrapper?.addEventListener('click', () => {
