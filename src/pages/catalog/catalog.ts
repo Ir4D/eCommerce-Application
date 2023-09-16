@@ -37,8 +37,13 @@ type PaginationDirectionType = '+' | '-';
 
 const createElem = (
   className: string,
-  tag: keyof HTMLElementTagNameMap = 'div'
-): HTMLElement => Object.assign(document.createElement(tag), { className });
+  tag: keyof HTMLElementTagNameMap = 'div',
+  innerText = ''
+): HTMLElement =>
+  Object.assign(document.createElement(tag), {
+    className,
+    innerText
+  });
 
 export default class CatalogView extends Component {
   private errorModal: HTMLDialogElement;
@@ -108,8 +113,7 @@ export default class CatalogView extends Component {
     /* catalog controls */
     const catalogHeader = createElem('catalog-header');
     const navGroup = createElem('catalog-nav-group hiden');
-    const filterTitle = createElem('catalog-filter-title', 'span');
-    filterTitle.innerText = 'Filters';
+    const filterTitle = createElem('catalog-filter-title', 'span', 'Filters');
     filterTitle.addEventListener('click', () => {
       navGroup.classList.toggle('hiden');
       filterTitle.classList.toggle('open');
@@ -148,16 +152,15 @@ export default class CatalogView extends Component {
     const priceSortGroup = createElem('catalog-controls-sort-group');
     abcSortGroup.append(abcSortButton, this.abcSortArrow);
     priceSortGroup.append(priceSortButton, this.priceSortArrow);
-    abcSortGroup.append(abcSortButton, this.abcSortArrow);
-    priceSortGroup.append(priceSortButton, this.priceSortArrow);
 
     const priceRangeGroup = createElem('catalog-controls-range-group');
-    const titleSpan = createElem('catalog-controls-range-span', 'span');
-    const betweenSpan = createElem('catalog-controls-range-span', 'span');
-    const afterSpan = createElem('catalog-controls-range-span', 'span');
-    titleSpan.innerText = 'Price filter';
-    betweenSpan.innerText = '-';
-    afterSpan.innerText = '€';
+    const titleSpan = createElem(
+      'catalog-controls-range-span',
+      'span',
+      'Price filter'
+    );
+    const betweenSpan = createElem('catalog-controls-range-span', 'span', '-');
+    const afterSpan = createElem('catalog-controls-range-span', 'span', '€');
     const priceFloorInput = createElem(
       'catalog-controls-range-input',
       'input'
@@ -283,15 +286,15 @@ export default class CatalogView extends Component {
 
     const cardName = createElem(
       'catalog-card-title',
-      'p'
+      'p',
+      catalogItem.name.en
     ) as HTMLParagraphElement;
-    cardName.innerText = catalogItem.name.en;
 
     const toCartBtn = createElem(
       'to_cart-btn btn btn--yellow order-submit',
-      'button'
+      'button',
+      'Add to cart'
     ) as HTMLButtonElement;
-    toCartBtn.textContent = 'Add to cart';
     toCartBtn.addEventListener('click', async (e) => {
       e.preventDefault();
       const CART_ID = localStorage.getItem('cartID');
@@ -326,10 +329,13 @@ export default class CatalogView extends Component {
       catalogItem.masterVariant.prices?.length &&
       catalogItem.masterVariant.prices[0].discounted
     ) {
-      const fullPrice = createElem('catalog-card-price full', 'span');
-      fullPrice.innerText = `€${(
-        Number(catalogItem.masterVariant.prices[0]?.value.centAmount) / 100
-      ).toFixed(2)}`;
+      const fullPrice = createElem(
+        'catalog-card-price full',
+        'span',
+        `€${(
+          Number(catalogItem.masterVariant.prices[0]?.value.centAmount) / 100
+        ).toFixed(2)}`
+      );
       const discountIcon = createElem(
         'catalog-card-discount-icon',
         'span'

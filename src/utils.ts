@@ -22,7 +22,13 @@ const teammates: ITeammate[] = [
   },
   {
     name: 'Dzmitry Maltsau',
-    bio: 'Gomel, Republic of Belarus <br/> Used to work as oil engineer, currently making first steps in front-end development <br/> Tech Stack: JS, TS, HTML, CSS, React <br/> Participation on project: Routing implementation, 404 page layout, Catalog page layout, Catalog sort and filter algorithms implementation',
+    bio: `Gomel, Republic of Belarus <br/>
+     Used to work as oil engineer, currently making first steps in front-end development <br/>
+      <strong>Contributions to the project:</strong> <br/>
+      - Routing implementation; <br/>
+      - 404 page layout;<br/>
+      - Catalog page layout; <br/> 
+      - Catalog sort and filter algorithms implementation.`,
     git: 'https://github.com/Maltsau',
     photo: './images/avatars/dzmitry.png'
   },
