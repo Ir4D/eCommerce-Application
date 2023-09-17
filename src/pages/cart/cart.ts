@@ -9,7 +9,6 @@ import {
   GetAnonimCartByID,
   GetCartByID,
   UpdateAnonimCartProdQuantity,
-  UpdateCartProdQuantity,
   RemoveFromCart,
   RemoveFromAnonimCart,
   RemoveSeveralFromCart,
