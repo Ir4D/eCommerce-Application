@@ -19,7 +19,8 @@ import ItemView from '../item/item';
 import {
   GetAnonimCartByID,
   addToAnonimCart,
-  addToCart
+  addToCart,
+  GetCart
 } from '../../api/apiMethods';
 
 Swiper.use([Navigation, Pagination]);
@@ -303,9 +304,23 @@ export default class CatalogView extends Component {
     const toCartBtn = document.createElement('button');
     toCartBtn.className = 'to_cart-btn btn btn--yellow order-submit';
     toCartBtn.textContent = 'Add to cart';
+    toCartBtn.setAttribute('data-name', `${catalogItem.slug.en}`);
+
+    const cartArray = State.cart?.body.lineItems.map((el) => {
+      return el.name.en.toLowerCase();
+    });
+    if (cartArray?.includes(catalogItem.slug.en)) {
+      toCartBtn.setAttribute('disabled', 'true');
+    }
     toCartBtn.addEventListener('click', async (e) => {
       e.preventDefault();
       const CART_ID = localStorage.getItem('cartID');
+
+      /* корзина
+      if (!CART_ID) throw new Error('error');
+      let cartCheck = await GetAnonimCartByID(CART_ID);
+      console.log('cart', cartCheck.body.lineItems[1].name.en); */
+
       if (!CART_ID) {
         await State.setCart();
       }
