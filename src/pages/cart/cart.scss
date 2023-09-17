@@ -240,6 +240,20 @@
   display: none;
 }
 
+.cart-order-btn.btn--yellow {
+  display: inline-block;
+  border: none;
+  text-align: center;
+  padding: 12px 6px;
+  line-height: 25px;
+  border-radius: 12px;
+  margin-top: 1.2em;
+}
+
+.cart-order-btn.btn.btn--yellow::after {
+  display: none;
+}
+
 .cart-wrong-code {
   margin-top: 0.3em;
   margin-left: 2px;
