@@ -1,9 +1,4 @@
 /* eslint-disable max-lines-per-function */
-import {
-  ClientResponse,
-  ProductProjectionPagedQueryResponse
-} from '@commercetools/platform-sdk';
-
 import Router from '../services/router/router';
 import HeaderView from '../components/header';
 import FooterView from '../components/footer';
@@ -15,9 +10,6 @@ import SignupView from './signup/signup';
 import NotFoundView from './404/404';
 import CartView from './cart/cart';
 import State from '../services/state';
-
-import { GetProductsPublished } from '../api/apiMethods';
-
 import ProfileView from './profile/profile';
 
 export default class Layout {

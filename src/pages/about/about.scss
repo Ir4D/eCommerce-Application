@@ -34,10 +34,10 @@
 .teammate {
   display: flex;
   gap: 1rem;
-
   background-color: #f9f8f8;
   border-radius: 30px;
   overflow: hidden;
+  align-items: center;
   transition: 0.3s;
   cursor: pointer;
 }
@@ -53,7 +53,7 @@
   flex-direction: column;
   justify-content: space-between;
   align-items: flex-start;
-
+  width: 100%;
   padding: 1.75rem;
 }
 
@@ -127,6 +127,10 @@
     text-align: center;
   }
 
+  .info {
+    width: auto;
+  }
+
   .teammate {
     flex-direction: column;
   }
@@ -134,7 +138,6 @@
   .teammate img {
     width: 250px;
     height: auto;
-
     align-self: center;
   }
 }

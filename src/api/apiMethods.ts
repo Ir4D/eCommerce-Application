@@ -192,30 +192,30 @@ export function CreateCartCustomer(
 }
 
 // Update cart
-export function UpdateCart(
-  CART_ID: string,
-  VERSION: number
-): Promise<ClientResponse<Cart>> {
-  const data: MyCartUpdate = {
-    version: VERSION,
-    actions: [
-      {
-        action: 'addLineItem',
-        productId: '5afaa1e1-5929-40c3-ade7-b8fd99cb60cf',
-        variantId: 1,
-        quantity: 2
-      }
-    ]
-  };
-  return apiRootProfile
-    .me()
-    .carts()
-    .withId({ ID: CART_ID })
-    .post({
-      body: data
-    })
-    .execute();
-}
+// export function UpdateCart(
+//   CART_ID: string,
+//   VERSION: number
+// ): Promise<ClientResponse<Cart>> {
+//   const data: MyCartUpdate = {
+//     version: VERSION,
+//     actions: [
+//       {
+//         action: 'addLineItem',
+//         productId: '5afaa1e1-5929-40c3-ade7-b8fd99cb60cf',
+//         variantId: 1,
+//         quantity: 2
+//       }
+//     ]
+//   };
+//   return apiRootProfile
+//     .me()
+//     .carts()
+//     .withId({ ID: CART_ID })
+//     .post({
+//       body: data
+//     })
+//     .execute();
+// }
 
 /* Remove from cart */
 export function RemoveFromCart(

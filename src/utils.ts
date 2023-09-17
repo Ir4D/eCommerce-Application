@@ -26,9 +26,10 @@ const teammates: ITeammate[] = [
      Used to work as oil engineer, currently making first steps in front-end development <br/>
       <strong>Contributions to the project:</strong> <br/>
       - Routing implementation; <br/>
-      - 404 page layout;<br/>
       - Catalog page layout; <br/> 
-      - Catalog sort and filter algorithms implementation.`,
+      - Catalog sort and filter algorithms implementation;<br/>
+      - 404 page layout.
+      `,
     git: 'https://github.com/Maltsau',
     photo: './images/avatars/dzmitry.png'
   },

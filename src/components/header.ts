@@ -2,6 +2,16 @@ import MenuView from './menu';
 import Router from '../services/router/router';
 import State from '../services/state';
 
+const createElem = (
+  className: string,
+  tag: keyof HTMLElementTagNameMap = 'div',
+  innerText = ''
+): HTMLElement =>
+  Object.assign(document.createElement(tag), {
+    className,
+    innerText
+  });
+
 const INNER_HTML = {
   cartItem: `<li class="profile_container-item cart-item">
       <a href="${Router.pages.cart}" class="profile_container-link link profile_container-link--cart">
@@ -25,8 +35,7 @@ export default class HeaderView {
   private menu: MenuView;
 
   constructor() {
-    this.container = document.createElement('header');
-    this.container.classList.add('header');
+    this.container = createElem('header', 'header');
     this.menu = new MenuView();
     this.renderHeader();
     this.logoutButton = this.container.querySelector('.logout') as HTMLElement;
@@ -56,20 +65,19 @@ export default class HeaderView {
     this.container.append(this.menu.render());
     this.container.append(this.headerList());
     window.addEventListener('cart-change', async () => {
-      // await State.refreshCart();
       await this.refreshCartCounter();
     });
   }
 
   public headerList(): HTMLElement {
-    const profileContainer = document.createElement('ul');
-    profileContainer.classList.add(
-      'profile_container',
-      'profile_container--header',
-      'list'
+    const profileContainer = createElem(
+      'profile_container profile_container--header list',
+      'ul'
     );
-    const loggedItemList = document.createElement('li');
-    loggedItemList.classList.add('profile_container-item', 'logged-item');
+    const loggedItemList = createElem(
+      'profile_container-item logged-item',
+      'li'
+    );
     loggedItemList.innerHTML = `${INNER_HTML.loggedItem}`;
     profileContainer.innerHTML = `${INNER_HTML.cartItem}`;
     if (!this.customerId) {
