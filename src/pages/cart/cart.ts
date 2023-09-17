@@ -382,11 +382,16 @@ export default class CartView extends Component {
     });
     discountContainer.append(discountInput, discountBtn);
 
+    const orderBtn = createElem('cart-order-btn', 'button');
+    orderBtn.classList.add('btn', 'btn--yellow');
+    orderBtn.innerHTML = 'Order';
+
     totalContainer.append(
       subtotalPrice,
       discountApplied,
       totalPrice,
-      discountContainer
+      discountContainer,
+      orderBtn
     );
     this.cartContainer.append(totalContainer);
   }
@@ -410,6 +415,10 @@ export default class CartView extends Component {
         const totalContainer = document.querySelector('.cart-total-container');
         wrongCode.innerHTML = 'Enter a valid discount code';
         totalContainer?.append(wrongCode);
+        const orderBtn = document.querySelector('.cart-order-btn');
+        if (orderBtn) {
+          totalContainer?.insertBefore(wrongCode, orderBtn);
+        }
       }
     }
   }
@@ -428,9 +437,7 @@ export default class CartView extends Component {
   }
 
   private async refreshCart(): Promise<void> {
-    // await this.renderHeading();
     await State.refreshCart();
-    // console.log(State.cart?.body.lineItems);
     if (State.cart?.body.lineItems.length === 0) {
       this.cartContainer.innerHTML = '';
       this.renderEmptyCart();
@@ -442,9 +449,7 @@ export default class CartView extends Component {
   }
 
   public async renderHTML(): Promise<HTMLElement> {
-    // await this.renderHeading();
-    await State.setCart(() => {} /* error handling */);
-    // console.log(State.cart?.body.lineItems);
+    await State.setCart(() => {});
     if (State.cart?.body.lineItems.length === 0) {
       this.cartContainer.innerHTML = '';
       this.renderEmptyCart();

@@ -4,6 +4,7 @@ import {
   Cart,
   CategoryPagedQueryResponse,
   ClientResponse,
+  LineItem,
   ProductProjectionPagedQueryResponse
 } from '@commercetools/platform-sdk';
 import {
@@ -105,6 +106,18 @@ export default abstract class State {
         } else {
           State.cart = await GetAnonimCartByID(CART_ID);
         }
+
+        const cartArray = State.cart?.body.lineItems.map((el) => {
+          return el.name.en.toLowerCase();
+        });
+        const toCartBtns = document.getElementsByClassName('to_cart-btn');
+        Array.from(toCartBtns).forEach((el) => {
+          const productName = el.getAttribute('data-name');
+          if (!productName) throw new Error('err');
+          if (cartArray?.includes(productName)) {
+            el.setAttribute('disabled', 'true');
+          }
+        });
       }
     } catch {
       if (handleError) handleError();

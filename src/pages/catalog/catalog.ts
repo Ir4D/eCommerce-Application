@@ -16,7 +16,13 @@ import Router from '../../services/router/router';
 import State from '../../services/state';
 import Component from '../../components/abstract/component';
 import ItemView from '../item/item';
-import { addToAnonimCart, addToCart } from '../../api/apiMethods';
+
+import {
+  GetAnonimCartByID,
+  addToAnonimCart,
+  addToCart,
+  GetCart
+} from '../../api/apiMethods';
 
 Swiper.use([Navigation, Pagination]);
 
@@ -284,20 +290,34 @@ export default class CatalogView extends Component {
       cardImage.style.background = `center / contain no-repeat url('${catalogItem.masterVariant.images[0].url}') #ffff`;
     }
 
-    const cardName = createElem(
-      'catalog-card-title',
-      'p',
-      catalogItem.name.en
-    ) as HTMLParagraphElement;
 
-    const toCartBtn = createElem(
-      'to_cart-btn btn btn--yellow order-submit',
-      'button',
-      'Add to cart'
-    ) as HTMLButtonElement;
+   
+
+    const cardName = document.createElement('p');
+    cardName.classList.add('catalog-card-title');
+    cardName.innerText = catalogItem.name.en;
+
+    const toCartBtn = document.createElement('button');
+    toCartBtn.className = 'to_cart-btn btn btn--yellow order-submit';
+    toCartBtn.textContent = 'Add to cart';
+    toCartBtn.setAttribute('data-name', `${catalogItem.slug.en}`);
+
+    const cartArray = State.cart?.body.lineItems.map((el) => {
+      return el.name.en.toLowerCase();
+    });
+    if (cartArray?.includes(catalogItem.slug.en)) {
+      toCartBtn.setAttribute('disabled', 'true');
+    }
+
     toCartBtn.addEventListener('click', async (e) => {
       e.preventDefault();
       const CART_ID = localStorage.getItem('cartID');
+
+      /* корзина
+      if (!CART_ID) throw new Error('error');
+      let cartCheck = await GetAnonimCartByID(CART_ID);
+      console.log('cart', cartCheck.body.lineItems[1].name.en); */
+
       if (!CART_ID) {
         await State.setCart();
       }
