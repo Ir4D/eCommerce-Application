@@ -130,8 +130,12 @@ h6 {
   }
 
   &:disabled {
-    background-color: #f8edc6;
+    filter: saturate(75%);
     color: #b1b1b1;
+
+    &:hover {
+      pointer-events: none;
+    }
   }
 }
 
@@ -946,6 +950,7 @@ h6 {
     &-contacts,
     &-additional {
       order: 1;
+      width: 232px;
     }
   }
 }
