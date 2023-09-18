@@ -462,7 +462,7 @@ export default class CartView extends Component {
         const totalContainer = document.querySelector('.cart-total-container');
         wrongCode.innerHTML = 'Enter a valid discount code';
         totalContainer?.append(wrongCode);
-        const orderBtn = document.querySelector('.cart-order-btn');
+        const orderBtn = document.querySelector('.cart-order');
         if (orderBtn) {
           totalContainer?.insertBefore(wrongCode, orderBtn);
         }
