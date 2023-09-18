@@ -328,7 +328,7 @@ export default class CartView extends Component {
     if (discountCodes && discountCodes.length > 0) {
       totalContainer.classList.add('discount');
     }
-    let orderBtn = createElem('cart-order btn--blue btn btn--small');
+    const orderBtn = createElem('cart-order btn--blue btn btn--small');
     orderBtn.textContent = 'Order';
     orderBtn.addEventListener('click', async () => {
       try {
@@ -392,10 +392,6 @@ export default class CartView extends Component {
       }
     });
     discountContainer.append(discountInput, discountBtn);
-
-    orderBtn = createElem('cart-order-btn', 'button');
-    orderBtn.classList.add('btn', 'btn--yellow');
-    orderBtn.innerHTML = 'Order';
 
     totalContainer.append(
       subtotalPrice,
