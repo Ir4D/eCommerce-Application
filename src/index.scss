@@ -122,6 +122,11 @@ h6 {
     }
   }
 
+  &--small {
+    padding: 1rem 2.5rem;
+    margin: 20px auto;
+  }
+
   &::after {
     content: url('./assets/images/icons/arrow-to-right.svg');
     margin-left: 1rem;
@@ -261,8 +266,10 @@ h6 {
   justify-content: space-between;
 
   &-banner {
-    padding: 110px 350px 110px 55px;
-
+    padding: 90px 350px 90px 55px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
     border-radius: 30px;
 
     &--first {
@@ -911,7 +918,7 @@ h6 {
     flex-wrap: wrap;
 
     &-banner {
-      padding: 110px 350px 110px 55px;
+      padding: 90px 350px 90px 55px;
     }
   }
 

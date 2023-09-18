@@ -30,6 +30,7 @@ const teammates: ITeammate[] = [
      - Catalog page layout;<br>
      - Catalog sort and filter algorithms implementation.<br>
      <strong>Additional responsibilities:</strong> Space harmonizer: insisted on unifying the code, developed basic parent components.`,
+
     git: 'https://github.com/Maltsau',
     photo: './images/avatars/dzmitry.png'
   },

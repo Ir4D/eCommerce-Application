@@ -19,7 +19,11 @@ import {
   CartDraft,
   CartSetCustomerIdAction,
   CartUpdate,
-  MyCartRemoveLineItemAction
+  MyCartRemoveLineItemAction,
+  MyCartRemoveDiscountCodeAction,
+  CartRemoveDiscountCodeAction,
+  DiscountCodeReference,
+  MyCartUpdateAction
 } from '@commercetools/platform-sdk';
 import { apiData, apiDataAnonymous2 } from './apiData';
 import {
@@ -192,30 +196,30 @@ export function CreateCartCustomer(
 }
 
 // Update cart
-export function UpdateCart(
-  CART_ID: string,
-  VERSION: number
-): Promise<ClientResponse<Cart>> {
-  const data: MyCartUpdate = {
-    version: VERSION,
-    actions: [
-      {
-        action: 'addLineItem',
-        productId: '5afaa1e1-5929-40c3-ade7-b8fd99cb60cf',
-        variantId: 1,
-        quantity: 2
-      }
-    ]
-  };
-  return apiRootProfile
-    .me()
-    .carts()
-    .withId({ ID: CART_ID })
-    .post({
-      body: data
-    })
-    .execute();
-}
+// export function UpdateCart(
+//   CART_ID: string,
+//   VERSION: number
+// ): Promise<ClientResponse<Cart>> {
+//   const data: MyCartUpdate = {
+//     version: VERSION,
+//     actions: [
+//       {
+//         action: 'addLineItem',
+//         productId: '5afaa1e1-5929-40c3-ade7-b8fd99cb60cf',
+//         variantId: 1,
+//         quantity: 2
+//       }
+//     ]
+//   };
+//   return apiRootProfile
+//     .me()
+//     .carts()
+//     .withId({ ID: CART_ID })
+//     .post({
+//       body: data
+//     })
+//     .execute();
+// }
 
 /* Remove from cart */
 export function RemoveFromCart(
@@ -477,6 +481,30 @@ export function SetDiscountAnonim(
       {
         action: 'addDiscountCode',
         code: DISCOUNT_CODE
+      }
+    ]
+  };
+  return apiRootAnonim2
+    .me()
+    .carts()
+    .withId({ ID: CART_ID })
+    .post({
+      body: data
+    })
+    .execute();
+}
+
+export function RemoveFirstVisitCode(
+  CART_ID: string,
+  VERSION: number,
+  DISCOUNT_CODE: DiscountCodeReference
+): Promise<ClientResponse<Cart>> {
+  const data: MyCartUpdate = {
+    version: VERSION,
+    actions: [
+      {
+        action: 'removeDiscountCode',
+        discountCode: DISCOUNT_CODE
       }
     ]
   };

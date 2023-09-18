@@ -10,10 +10,7 @@ import {
 import {
   CreateCartAnonim,
   CreateCartCustomer,
-  GetActiveCart,
   GetAnonimCartByID,
-  GetCart,
-  GetCartByCustomerId,
   GetCartByID,
   GetCartFromAnonim,
   GetProductsPublished,
@@ -133,6 +130,5 @@ export default abstract class State {
   ): Promise<void> {
     await this.setCatalog(handleCatalogError);
     await this.setCategories(handleCategoriesError);
-    // await this.setCart();
   }
 }
