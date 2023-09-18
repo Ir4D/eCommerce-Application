@@ -333,7 +333,6 @@ export default class CartView extends Component {
     orderBtn.addEventListener('click', async () => {
       try {
         this.removeFirstVisitCode();
-        await this.refreshCart();
       } catch (error) {
         console.error('Error getting cart version:', error);
       }
@@ -411,25 +410,23 @@ export default class CartView extends Component {
     if (CART_ID) {
       try {
         const CUSTOMER_ID = localStorage.getItem('customerID');
-        if (CUSTOMER_ID) {
-          const VERSION = (await this.getCurrentCartVersion(CART_ID)).version;
-          await RemoveFirstVisitCode(
-            CART_ID,
-            VERSION,
-            discountCodes[0].discountCode
-          );
+        const VERSION = CUSTOMER_ID
+          ? (await this.getCurrentCartVersion(CART_ID)).version
+          : (await this.getCurrentAnonimCartVersion(CART_ID)).version;
+
+        if (discountCodes.length === 0) {
+          await this.refreshCart();
         } else {
-          const VERSION = (await this.getCurrentAnonimCartVersion(CART_ID))
-            .version;
           await RemoveFirstVisitCode(
             CART_ID,
             VERSION,
             discountCodes[0].discountCode
           );
+          await this.refreshCart();
         }
       } finally {
-        this.writeMsg(true);
-        this.clearCart();
+        const condition = discountCodes.length === 0;
+        this.writeMsg(condition);
       }
     }
   }
@@ -441,6 +438,9 @@ export default class CartView extends Component {
       discount ? 'discount was applied, ' : ' '
     }thank you!`;
     totalContainer?.append(info);
+    setTimeout(() => {
+      info.innerHTML = '';
+    }, 5000);
   }
 
   private async setDiscount(code: string): Promise<void> {
@@ -504,6 +504,3 @@ export default class CartView extends Component {
     return this.container;
   }
 }
-
-//
-// const discountCodes = State.cart?.body.discountCodes;    console.log('discountCodes ',discountCodes)
