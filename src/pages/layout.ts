@@ -1,8 +1,4 @@
 /* eslint-disable max-lines-per-function */
-import {
-  ClientResponse,
-  ProductProjectionPagedQueryResponse
-} from '@commercetools/platform-sdk';
 import Router from '../services/router/router';
 import HeaderView from '../components/header';
 import FooterView from '../components/footer';
@@ -14,7 +10,6 @@ import SignupView from './signup/signup';
 import NotFoundView from './404/404';
 import CartView from './cart/cart';
 import State from '../services/state';
-import { GetProductsPublished } from '../api/apiMethods';
 import ProfileView from './profile/profile';
 
 export default class Layout {
@@ -54,10 +49,6 @@ export default class Layout {
           pageHTML = this.main.render;
           break;
         }
-        case Router.pages.about: {
-          pageHTML = this.about.render;
-          break;
-        }
         case Router.pages.catalog: {
           pageHTML = '';
           this.slot.innerHTML = '';
@@ -80,7 +71,8 @@ export default class Layout {
           break;
         }
         case Router.pages.cart: {
-          pageHTML = this.cart.render;
+          pageHTML = '';
+          this.slot.innerHTML = '';
           break;
         }
         default: {
@@ -98,6 +90,9 @@ export default class Layout {
     if (route === Router.pages.catalog) {
       await State.setCatalog(() => {} /* error handling */);
       this.slot.append(this.catalog.render());
+    } else if (route === Router.pages.about) {
+      this.slot.innerHTML = '';
+      this.slot.append(this.about.render());
     } else if (route === Router.pages.profile) {
       this.slot.innerHTML = '';
       this.slot.append(this.profile.render());
@@ -105,6 +100,10 @@ export default class Layout {
       pageHTML = '';
       this.slot.append(this.catalog.render());
       this.slot.append(await this.catalog.renderItemPage(route));
+    } else if (route === Router.pages.cart) {
+      // await State.refreshCart(() => {} /* error handling */);
+      // await State.setCart(() => {} /* error handling */);
+      this.slot.append(await this.cart.renderHTML());
     } else {
       this.slot.innerHTML = pageHTML;
     }
@@ -121,6 +120,7 @@ export default class Layout {
 
   public render(container: HTMLElement): void {
     container.append(this.header.render());
+    this.header.refreshCartCounter();
     container.append(this.slot);
     container.append(this.footer.render());
     this.renderPage(window.location.hash);

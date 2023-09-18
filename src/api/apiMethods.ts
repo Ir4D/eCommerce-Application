@@ -9,13 +9,21 @@ import {
   CustomerUpdateAction,
   CustomerChangePassword,
   CustomerChangeAddressAction,
-  CartSetShippingAddressAction,
-  CustomerAddShippingAddressIdAction,
   CustomerSetDefaultShippingAddressAction,
-  CustomerSetDefaultBillingAddressAction
+  CustomerSetDefaultBillingAddressAction,
+  MyCartUpdate,
+  Cart,
+  MyCartDraft,
+  CartUpdate,
+  DiscountCodeReference
 } from '@commercetools/platform-sdk';
 import { apiData } from './apiData';
-import { createCtpClient, createCtpClientExistingFlow } from './BuildClients';
+import {
+  createCtpClient,
+  createCtpClientAnonymous,
+  createCtpClientAnonymous2,
+  createCtpClientExistingFlow
+} from './BuildClients';
 
 const apiRoot = createApiBuilderFromCtpClient(createCtpClient()).withProjectKey(
   {
@@ -29,8 +37,20 @@ const apiRootProfile = createApiBuilderFromCtpClient(
   projectKey: apiData.PROJECT_KEY
 });
 
+const apiRootAnonim = createApiBuilderFromCtpClient(
+  createCtpClientAnonymous()
+).withProjectKey({
+  projectKey: apiData.PROJECT_KEY
+});
+
+const apiRootAnonim2 = createApiBuilderFromCtpClient(
+  createCtpClientAnonymous2()
+).withProjectKey({
+  projectKey: apiData.PROJECT_KEY
+});
+
 // Get info about the project - needs Admin Client API with the scope "manage_project:rss-ecom-app"
-export function GetProjectInfo(): void {
+export async function GetProjectInfo(): Promise<void> {
   const getProject = () => {
     return apiRoot.get().execute();
   };
@@ -42,12 +62,11 @@ export function GetProjectInfo(): void {
 }
 
 // Get info about published products
-
 export function GetProductsPublished(): Promise<
   ClientResponse<ProductProjectionPagedQueryResponse>
 > {
   const getProducts = () => {
-    return apiRoot
+    return apiRootAnonim2
       .productProjections()
       .get({
         queryArgs: {
@@ -57,17 +76,438 @@ export function GetProductsPublished(): Promise<
       .execute();
   };
   return getProducts();
-  // .then(({ body }) => {
-  //   console.log(body);
-  // })
-  // .catch(console.error);
 }
 
 export function getProductCategories() {
   const getCategories = () => {
-    return apiRoot.categories().get().execute();
+    return apiRootAnonim2.categories().get().execute();
   };
   return getCategories();
+}
+
+// Get cart by ID
+export function GetCart(CART_ID: string): Promise<ClientResponse> {
+  const getCart = () => {
+    return apiRootAnonim2.me().carts().withId({ ID: CART_ID }).get().execute();
+  };
+  return getCart();
+}
+
+export function GetCartByID(CART_ID: string): Promise<ClientResponse> {
+  const getCart = async () => {
+    return apiRootProfile.carts().withId({ ID: CART_ID }).get().execute();
+  };
+  return getCart();
+}
+
+export function GetActiveCart(): Promise<ClientResponse> {
+  const getCart = () => {
+    return apiRootProfile.me().activeCart().get().execute();
+  };
+  return getCart();
+}
+
+export function GetCartByCustomerId(
+  CISTOMER_ID: string
+): Promise<ClientResponse> {
+  const getCart = () => {
+    return apiRootProfile
+      .carts()
+      .withCustomerId({ customerId: CISTOMER_ID })
+      .get()
+      .execute();
+  };
+  return getCart();
+}
+
+export async function GetAnonimCartByID(
+  CART_ID: string
+): Promise<ClientResponse> {
+  const getCart = async () => {
+    return apiRootAnonim2.carts().withId({ ID: CART_ID }).get().execute();
+  };
+  return getCart();
+}
+
+// Get cart from anonymous customer by cart ID
+export function GetCartFromAnonim(
+  CUSTOMER_ID: string,
+  CART_ID: string,
+  VERSION: number
+): Promise<ClientResponse> {
+  const cartUpdate: CartUpdate = {
+    version: VERSION,
+    actions: [
+      {
+        action: 'setCustomerId',
+        customerId: CUSTOMER_ID
+      }
+    ]
+  };
+  return apiRootProfile
+    .carts()
+    .withId({
+      ID: CART_ID
+    })
+    .post({
+      body: cartUpdate
+    })
+    .execute();
+}
+
+// Create cart for anonymous customer
+export function CreateCartAnonim(
+  CURRENCY: string
+): Promise<ClientResponse<Cart>> {
+  const data: MyCartDraft = {
+    currency: CURRENCY
+  };
+  return apiRootAnonim2
+    .me()
+    .carts()
+    .post({
+      body: data
+    })
+    .execute();
+}
+
+// Create cart for logged customer
+export function CreateCartCustomer(
+  CURRENCY: string
+): Promise<ClientResponse<Cart>> {
+  const data: MyCartDraft = {
+    currency: CURRENCY
+  };
+  return apiRootProfile
+    .me()
+    .carts()
+    .post({
+      body: data
+    })
+    .execute();
+}
+
+// Update cart
+// export function UpdateCart(
+//   CART_ID: string,
+//   VERSION: number
+// ): Promise<ClientResponse<Cart>> {
+//   const data: MyCartUpdate = {
+//     version: VERSION,
+//     actions: [
+//       {
+//         action: 'addLineItem',
+//         productId: '5afaa1e1-5929-40c3-ade7-b8fd99cb60cf',
+//         variantId: 1,
+//         quantity: 2
+//       }
+//     ]
+//   };
+//   return apiRootProfile
+//     .me()
+//     .carts()
+//     .withId({ ID: CART_ID })
+//     .post({
+//       body: data
+//     })
+//     .execute();
+// }
+
+/* Remove from cart */
+export function RemoveFromCart(
+  CART_ID: string,
+  VERSION: number,
+  productId: string
+): Promise<ClientResponse<Cart>> {
+  const data: MyCartUpdate = {
+    version: VERSION,
+    actions: [{ action: 'removeLineItem', lineItemId: productId }]
+  };
+  return apiRootProfile
+    .me()
+    .carts()
+    .withId({ ID: CART_ID })
+    .post({
+      body: data
+    })
+    .execute();
+}
+
+/* Remove from anonim cart */
+export function RemoveFromAnonimCart(
+  CART_ID: string,
+  VERSION: number,
+  productId: string
+): Promise<ClientResponse<Cart>> {
+  const data: MyCartUpdate = {
+    version: VERSION,
+    actions: [{ action: 'removeLineItem', lineItemId: productId }]
+  };
+  return apiRootAnonim2
+    .me()
+    .carts()
+    .withId({ ID: CART_ID })
+    .post({
+      body: data
+    })
+    .execute();
+}
+
+/* Remove several fron cart */
+export function RemoveSeveralFromCart(
+  CART_ID: string,
+  VERSION: number,
+  productIds: string[]
+): Promise<ClientResponse<Cart>> {
+  const data: MyCartUpdate = {
+    version: VERSION,
+    actions: productIds.map((id) => {
+      return { action: 'removeLineItem', lineItemId: id };
+    })
+  };
+  return apiRootProfile
+    .me()
+    .carts()
+    .withId({ ID: CART_ID })
+    .post({
+      body: data
+    })
+    .execute();
+}
+
+/* Remove several from anonim cart */
+export function RemoveSeveralFromAnonimCart(
+  CART_ID: string,
+  VERSION: number,
+  productIds: string[]
+): Promise<ClientResponse<Cart>> {
+  const data: MyCartUpdate = {
+    version: VERSION,
+    actions: productIds.map((id) => {
+      return { action: 'removeLineItem', lineItemId: id };
+    })
+  };
+  return apiRootAnonim2
+    .me()
+    .carts()
+    .withId({ ID: CART_ID })
+    .post({
+      body: data
+    })
+    .execute();
+}
+
+/* Add to cart */
+export function addToCart(
+  CART_ID: string,
+  VERSION: number,
+  productId: string,
+  variantId: number,
+  quantity: number
+): Promise<ClientResponse<Cart>> {
+  const data: MyCartUpdate = {
+    version: VERSION,
+    actions: [
+      {
+        action: 'addLineItem',
+        productId,
+        variantId,
+        quantity
+      }
+    ]
+  };
+  return apiRootProfile
+    .me()
+    .carts()
+    .withId({ ID: CART_ID })
+    .post({
+      body: data
+    })
+    .execute();
+}
+
+/* Add to anonim cart */
+export function addToAnonimCart(
+  CART_ID: string,
+  VERSION: number,
+  productId: string,
+  variantId: number,
+  quantity: number
+): Promise<ClientResponse<Cart>> {
+  const data: MyCartUpdate = {
+    version: VERSION,
+    actions: [
+      {
+        action: 'addLineItem',
+        productId,
+        variantId,
+        quantity
+      }
+    ]
+  };
+  return apiRootAnonim2
+    .me()
+    .carts()
+    .withId({ ID: CART_ID })
+    .post({
+      body: data
+    })
+    .execute();
+}
+
+// Update cart by changing product's quantity
+export function UpdateCartProdQuantity(
+  CART_ID: string,
+  VERSION: number,
+  LINE_ITEM_ID: string,
+  QUANTITY: number
+): Promise<ClientResponse<Cart>> {
+  const data: MyCartUpdate = {
+    version: VERSION,
+    actions: [
+      {
+        action: 'changeLineItemQuantity',
+        lineItemId: LINE_ITEM_ID,
+        quantity: QUANTITY
+      }
+    ]
+  };
+  return apiRootProfile
+    .me()
+    .carts()
+    .withId({ ID: CART_ID })
+    .post({
+      body: data
+    })
+    .execute();
+}
+
+// Update cart by changing product's quantity
+export function UpdateCustomerCartProdQuantity(
+  CART_ID: string,
+  VERSION: number,
+  LINE_ITEM_ID: string,
+  QUANTITY: number
+): Promise<ClientResponse<Cart>> {
+  const data: CartUpdate = {
+    version: VERSION,
+    actions: [
+      {
+        action: 'changeLineItemQuantity',
+        lineItemId: LINE_ITEM_ID,
+        quantity: QUANTITY
+      }
+    ]
+  };
+  return apiRootProfile
+    .carts()
+    .withId({ ID: CART_ID })
+    .post({
+      body: data
+    })
+    .execute();
+}
+
+// Update anonim cart by changing product's quantity
+export function UpdateAnonimCartProdQuantity(
+  CART_ID: string,
+  VERSION: number,
+  LINE_ITEM_ID: string,
+  QUANTITY: number
+): Promise<ClientResponse<Cart>> {
+  const data: MyCartUpdate = {
+    version: VERSION,
+    actions: [
+      {
+        action: 'changeLineItemQuantity',
+        lineItemId: LINE_ITEM_ID,
+        quantity: QUANTITY
+      }
+    ]
+  };
+  const cartChange = new Event('cart-change');
+  window.dispatchEvent(cartChange);
+  return apiRootAnonim2
+    .me()
+    .carts()
+    .withId({ ID: CART_ID })
+    .post({
+      body: data
+    })
+    .execute();
+}
+
+// Add discount to the cart
+export function SetDiscount(
+  CART_ID: string,
+  VERSION: number,
+  DISCOUNT_CODE: string
+): Promise<ClientResponse<Cart>> {
+  const data: MyCartUpdate = {
+    version: VERSION,
+    actions: [
+      {
+        action: 'addDiscountCode',
+        code: DISCOUNT_CODE
+      }
+    ]
+  };
+  return apiRootProfile
+    .me()
+    .carts()
+    .withId({ ID: CART_ID })
+    .post({
+      body: data
+    })
+    .execute();
+}
+
+export function SetDiscountAnonim(
+  CART_ID: string,
+  VERSION: number,
+  DISCOUNT_CODE: string
+): Promise<ClientResponse<Cart>> {
+  const data: MyCartUpdate = {
+    version: VERSION,
+    actions: [
+      {
+        action: 'addDiscountCode',
+        code: DISCOUNT_CODE
+      }
+    ]
+  };
+  return apiRootAnonim2
+    .me()
+    .carts()
+    .withId({ ID: CART_ID })
+    .post({
+      body: data
+    })
+    .execute();
+}
+
+export function RemoveFirstVisitCode(
+  CART_ID: string,
+  VERSION: number,
+  DISCOUNT_CODE: DiscountCodeReference
+): Promise<ClientResponse<Cart>> {
+  const data: MyCartUpdate = {
+    version: VERSION,
+    actions: [
+      {
+        action: 'removeDiscountCode',
+        discountCode: DISCOUNT_CODE
+      }
+    ]
+  };
+  return apiRootAnonim2
+    .me()
+    .carts()
+    .withId({ ID: CART_ID })
+    .post({
+      body: data
+    })
+    .execute();
 }
 
 // Create a new customer
@@ -86,8 +526,8 @@ export function CreateCustomer(EMAIL: string, PASSWORD: string): void {
   };
   createCustomer()
     .then(({ body }) => {
-      console.log('create customer from methods', body.customer.id);
-      console.log('create customer from methods', body.customer.id);
+      // console.log('create customer from methods', body.customer.id);
+      // console.log('create customer from methods', body.customer.id);
       console.log(body.customer.email);
     })
     .catch(console.error);

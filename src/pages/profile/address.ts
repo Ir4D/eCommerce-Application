@@ -92,10 +92,10 @@ export default class Address {
       adrTitle.classList.add('adr-shipping');
     }
     if (this.isDefaultBilling) {
-      adrTitle.classList.add('adr-billing_deafult');
+      adrTitle.classList.add('adr-billing_default');
     }
     if (this.isDefaultShipping) {
-      adrTitle.classList.add('adr-shipping_deafult');
+      adrTitle.classList.add('adr-shipping_default');
     }
     adrTitle.innerHTML = 'Address:';
     const adrStreet = new InfoElem(

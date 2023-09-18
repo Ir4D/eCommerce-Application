@@ -14,7 +14,8 @@ const getCategory = (currentId: string): string => {
 
 const getContent = (
   catalogItem: ProductProjection,
-  category: string
+  category: string,
+  orderBtn: boolean
 ): string => {
   if (
     !catalogItem.masterVariant.images ||
@@ -28,6 +29,7 @@ const getContent = (
     <button class="btn catalog-card_btn item-category item-category--once">${category}</button>
       <div class="swiper-wrapper">
           ${catalogItem.masterVariant.images
+            .slice(1)
             .map(
               (img) =>
                 `<div class="swiper-slide"><img src="${img.url}" class="item-img" /></div>`
@@ -50,8 +52,7 @@ const getContent = (
       <div class="price-container">
       ${
         catalogItem.masterVariant.prices[0].discounted
-          ? `
-          
+          ? `          
             <span class="catalog-card-price full">€${
               catalogItem.masterVariant.prices[0].value.centAmount / 100
             }</span>
@@ -76,7 +77,10 @@ const getContent = (
             <span class="order-text">Quantity:</span>
             <input type="text" class="order-quantity" />
           </div>
-          <button type="submit" class="order-submit btn btn--blue">Add To Cart</button>
+          <button type="submit" class="order-submit btn btn--blue" data-id=${
+            catalogItem.id
+          } data-masterVariant=${catalogItem.masterVariant.id}
+          ${orderBtn ? '>Add To Cart' : '>Remove from Cart'}</button>
         </form>
     </div>
   </section>`;
@@ -89,20 +93,25 @@ const INNER_HTML = {
 export default class ItemView extends State {
   private container: HTMLElement;
   private catalogItem: ProductProjection;
+  private orderBtn: boolean;
 
-  constructor(catalogItem: ProductProjection) {
+  constructor(catalogItem: ProductProjection, orderBtn: boolean) {
     super();
     this.container = document.createElement('section');
     this.container.classList.add('good-cart');
     this.container.innerHTML = `${INNER_HTML.hero}`;
     this.catalogItem = catalogItem;
+    this.orderBtn = orderBtn;
   }
 
   public async render(): Promise<HTMLElement> {
     const category: string = getCategory(this.catalogItem.categories[0].id);
-    this.container.innerHTML += getContent(this.catalogItem, category);
+    this.container.innerHTML += getContent(
+      this.catalogItem,
+      category,
+      this.orderBtn
+    );
     if (!this.catalogItem.masterVariant.prices) throw new Error();
-
     return this.container;
   }
 }

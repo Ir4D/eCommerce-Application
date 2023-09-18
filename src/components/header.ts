@@ -1,17 +1,22 @@
 import MenuView from './menu';
 import Router from '../services/router/router';
+import State from '../services/state';
+
+const createElem = (
+  className: string,
+  tag: keyof HTMLElementTagNameMap = 'div',
+  innerText = ''
+): HTMLElement =>
+  Object.assign(document.createElement(tag), {
+    className,
+    innerText
+  });
 
 const INNER_HTML = {
-  // searchItem: `<li class="profile_container-item search-item">
-  //     <a href="" class="profile_container-link link">
-  //       <img src="./images/icons/search-icon.png" alt="search" class="search" width="56" height="56">
-  //     </a>
-  //   </li>
-  //   `,
   cartItem: `<li class="profile_container-item cart-item">
       <a href="${Router.pages.cart}" class="profile_container-link link profile_container-link--cart">
-        <img src="./images/icons/cart-icon.png" alt="cart" class="cart" width="56" height="56">
-        <span class="cart">Cart (0)</span>
+        <img src="./images/icons/cart-icon.png" alt="cart" class="cart cart-icon" width="56" height="56">
+        <span class="cart cart-indicator">0</span>
       </a>
     </li>
     `,
@@ -30,8 +35,7 @@ export default class HeaderView {
   private menu: MenuView;
 
   constructor() {
-    this.container = document.createElement('header');
-    this.container.classList.add('header');
+    this.container = createElem('header', 'header');
     this.menu = new MenuView();
     this.renderHeader();
     this.logoutButton = this.container.querySelector('.logout') as HTMLElement;
@@ -42,6 +46,7 @@ export default class HeaderView {
         if (target.classList.contains('logout')) {
           localStorage.removeItem('customerID');
           localStorage.removeItem('access_token');
+          localStorage.removeItem('cartID');
           this.container.innerHTML = '';
           this.container.append(this.menu.render());
           document.querySelector('.logged-item')?.classList.add('hidden');
@@ -59,17 +64,20 @@ export default class HeaderView {
   private renderHeader(): void {
     this.container.append(this.menu.render());
     this.container.append(this.headerList());
+    window.addEventListener('cart-change', async () => {
+      await this.refreshCartCounter();
+    });
   }
 
   public headerList(): HTMLElement {
-    const profileContainer = document.createElement('ul');
-    profileContainer.classList.add(
-      'profile_container',
-      'profile_container--header',
-      'list'
+    const profileContainer = createElem(
+      'profile_container profile_container--header list',
+      'ul'
     );
-    const loggedItemList = document.createElement('li');
-    loggedItemList.classList.add('profile_container-item', 'logged-item');
+    const loggedItemList = createElem(
+      'profile_container-item logged-item',
+      'li'
+    );
     loggedItemList.innerHTML = `${INNER_HTML.loggedItem}`;
     profileContainer.innerHTML = `${INNER_HTML.cartItem}`;
     if (!this.customerId) {
@@ -79,6 +87,14 @@ export default class HeaderView {
     }
     profileContainer.append(loggedItemList);
     return profileContainer;
+  }
+
+  public async refreshCartCounter(): Promise<void> {
+    await State.refreshCart();
+    const counter = document.querySelector('.cart-indicator') as HTMLElement;
+    counter.innerText = State.cart
+      ? State.cart?.body.lineItems.length.toString()
+      : '0';
   }
 
   public render(): HTMLElement {

@@ -14,7 +14,7 @@ function getAlpha2Code(inputCountry: string): string {
   return '';
 }
 
-export const signupCreate = (): void => {
+export const signupCreate = async (): Promise<void> => {
   const email = (document.querySelector('.email') as HTMLInputElement)?.value;
   const password = (document.querySelector('.psw') as HTMLInputElement)?.value;
   const firstName = (document.querySelector('.first-name') as HTMLInputElement)
@@ -82,7 +82,7 @@ export const signupCreate = (): void => {
   }
 
   const customer = new Customer();
-  customer.createCustomer(
+  await customer.createCustomer(
     email,
     password,
     firstName,

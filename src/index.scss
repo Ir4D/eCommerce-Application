@@ -1,6 +1,8 @@
 @import url('../src/pages/404/404.scss');
 @import url('../src/pages/login/login.scss');
 @import url('../src/pages/profile/profile.scss');
+@import url('../src/pages/cart/cart.scss');
+@import url('../src/pages/about/about.scss');
 @import url('../src/pages/catalog/catalog.scss');
 @import url('../src/pages/item/item.scss');
 
@@ -120,11 +122,25 @@ h6 {
     }
   }
 
+  &--small {
+    padding: 1rem 2.5rem;
+    margin: 20px auto;
+  }
+
   &::after {
     content: url('./assets/images/icons/arrow-to-right.svg');
     margin-left: 1rem;
     width: 19px;
     height: 19px;
+  }
+
+  &:disabled {
+    filter: saturate(75%);
+    color: #b1b1b1;
+
+    &:hover {
+      pointer-events: none;
+    }
   }
 }
 
@@ -169,6 +185,25 @@ h6 {
 .logo-text {
   @include title;
   font-size: 2rem;
+}
+
+.profile_container-link--cart {
+  position: relative;
+  display: inline-block;
+}
+
+.cart-indicator {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  width: 25px;
+  height: 25px;
+  background-color: $green;
+  color: $light-gray;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 25px;
+  font-size: 14px;
 }
 
 .nav-link {
@@ -231,8 +266,10 @@ h6 {
   justify-content: space-between;
 
   &-banner {
-    padding: 110px 350px 110px 55px;
-
+    padding: 90px 350px 90px 55px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
     border-radius: 30px;
 
     &--first {
@@ -318,11 +355,12 @@ h6 {
   align-items: center;
 
   &-list {
+    max-width: 1400px;
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
 
-    margin-top: 40px;
+    margin: 40px auto;
   }
 
   &-item {
@@ -857,6 +895,7 @@ h6 {
 
 @media only screen and (max-width: 1100px) {
   .header {
+    max-width: 95vw;
     flex-wrap: wrap;
     justify-content: center;
     gap: 20px;
@@ -879,7 +918,7 @@ h6 {
     flex-wrap: wrap;
 
     &-banner {
-      padding: 110px 350px 110px 55px;
+      padding: 90px 350px 90px 55px;
     }
   }
 
@@ -918,6 +957,7 @@ h6 {
     &-contacts,
     &-additional {
       order: 1;
+      width: 232px;
     }
   }
 }
