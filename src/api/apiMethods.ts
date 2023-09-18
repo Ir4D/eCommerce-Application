@@ -19,7 +19,11 @@ import {
   CartDraft,
   CartSetCustomerIdAction,
   CartUpdate,
-  MyCartRemoveLineItemAction
+  MyCartRemoveLineItemAction,
+  MyCartRemoveDiscountCodeAction,
+  CartRemoveDiscountCodeAction,
+  DiscountCodeReference,
+  MyCartUpdateAction
 } from '@commercetools/platform-sdk';
 import { apiData, apiDataAnonymous2 } from './apiData';
 import {
@@ -477,6 +481,30 @@ export function SetDiscountAnonim(
       {
         action: 'addDiscountCode',
         code: DISCOUNT_CODE
+      }
+    ]
+  };
+  return apiRootAnonim2
+    .me()
+    .carts()
+    .withId({ ID: CART_ID })
+    .post({
+      body: data
+    })
+    .execute();
+}
+
+export function RemoveFirstVisitCode(
+  CART_ID: string,
+  VERSION: number,
+  DISCOUNT_CODE: DiscountCodeReference
+): Promise<ClientResponse<Cart>> {
+  const data: MyCartUpdate = {
+    version: VERSION,
+    actions: [
+      {
+        action: 'removeDiscountCode',
+        discountCode: DISCOUNT_CODE
       }
     ]
   };

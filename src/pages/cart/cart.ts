@@ -14,7 +14,8 @@ import {
   RemoveFromAnonimCart,
   RemoveSeveralFromCart,
   RemoveSeveralFromAnonimCart,
-  UpdateCustomerCartProdQuantity
+  UpdateCustomerCartProdQuantity,
+  RemoveFirstVisitCode
 } from '../../api/apiMethods';
 import Router from '../../services/router/router';
 
@@ -323,10 +324,20 @@ export default class CartView extends Component {
     const cart = State.cart?.body;
     const discountCodes = State.cart?.body.discountCodes;
     const totalContainer = createElem('cart-total-container');
+
     if (discountCodes && discountCodes.length > 0) {
       totalContainer.classList.add('discount');
     }
-
+    const orderBtn = createElem('cart-order btn--blue btn btn--small');
+    orderBtn.textContent = 'Order';
+    orderBtn.addEventListener('click', async () => {
+      try {
+        this.removeFirstVisitCode();
+        await this.refreshCart();
+      } catch (error) {
+        console.error('Error getting cart version:', error);
+      }
+    });
     const subtotalPrice = createElem('cart-subtotal-price');
     const subtotalTitle = createElem('cart-subtotal-title');
     subtotalTitle.innerHTML = 'Subtotal:';
@@ -387,9 +398,49 @@ export default class CartView extends Component {
       subtotalPrice,
       discountApplied,
       totalPrice,
-      discountContainer
+      discountContainer,
+      orderBtn
     );
     this.cartContainer.append(totalContainer);
+  }
+
+  private async removeFirstVisitCode(): Promise<void> {
+    const CART_ID = localStorage.getItem('cartID');
+    const discountCodes = State.cart?.body.discountCodes;
+    if (!discountCodes) throw new Error('err in DC');
+    if (CART_ID) {
+      try {
+        const CUSTOMER_ID = localStorage.getItem('customerID');
+        if (CUSTOMER_ID) {
+          const VERSION = (await this.getCurrentCartVersion(CART_ID)).version;
+          await RemoveFirstVisitCode(
+            CART_ID,
+            VERSION,
+            discountCodes[0].discountCode
+          );
+        } else {
+          const VERSION = (await this.getCurrentAnonimCartVersion(CART_ID))
+            .version;
+          await RemoveFirstVisitCode(
+            CART_ID,
+            VERSION,
+            discountCodes[0].discountCode
+          );
+        }
+      } finally {
+        this.writeMsg(true);
+        this.clearCart();
+      }
+    }
+  }
+
+  private writeMsg(discount = false): void {
+    const info = createElem('cart-info-code');
+    const totalContainer = document.querySelector('.cart-total-container');
+    info.innerHTML = `We've got you order, ${
+      discount ? 'discount was applied, ' : ' '
+    }thank you!`;
+    totalContainer?.append(info);
   }
 
   private async setDiscount(code: string): Promise<void> {
@@ -453,3 +504,6 @@ export default class CartView extends Component {
     return this.container;
   }
 }
+
+//
+// const discountCodes = State.cart?.body.discountCodes;    console.log('discountCodes ',discountCodes)

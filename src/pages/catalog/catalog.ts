@@ -507,8 +507,6 @@ export default class CatalogView extends Component {
         return el.name.en.toLowerCase();
       });
       const orderBtn = !cartArray?.includes(chosenItem.slug.en);
-
-      console.log('orderBtn ', orderBtn);
       const item = new ItemView(chosenItem, orderBtn);
       this.container.append(await item.render());
       this.createSlides();
@@ -624,7 +622,6 @@ export default class CatalogView extends Component {
     try {
       const response = await GetAnonimCartByID(CART_ID);
       const { body } = response;
-      console.log('body catalog ', body);
       return body;
     } catch (error) {
       console.error('Something went wrong:', error);
