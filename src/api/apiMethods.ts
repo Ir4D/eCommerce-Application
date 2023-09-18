@@ -66,7 +66,7 @@ export function GetProductsPublished(): Promise<
   ClientResponse<ProductProjectionPagedQueryResponse>
 > {
   const getProducts = () => {
-    return apiRoot
+    return apiRootAnonim2
       .productProjections()
       .get({
         queryArgs: {
@@ -80,7 +80,7 @@ export function GetProductsPublished(): Promise<
 
 export function getProductCategories() {
   const getCategories = () => {
-    return apiRoot.categories().get().execute();
+    return apiRootAnonim2.categories().get().execute();
   };
   return getCategories();
 }
@@ -88,7 +88,7 @@ export function getProductCategories() {
 // Get cart by ID
 export function GetCart(CART_ID: string): Promise<ClientResponse> {
   const getCart = () => {
-    return apiRootAnonim.me().carts().withId({ ID: CART_ID }).get().execute();
+    return apiRootAnonim2.me().carts().withId({ ID: CART_ID }).get().execute();
   };
   return getCart();
 }
