@@ -10,7 +10,7 @@ const createCodeTemplate = (teammate: ITeammate): string => {
 
   return `
   <li class="teammate">
-    <img src="${teammate.photo}" alt="${teammate.name}" width="auto" height="250" />
+    <img src="${teammate.photo}" alt="${teammate.name}" width="auto" height="400" />
     <div class="info">
       <p class="catalog-card_title teammate_title">${teammate.name}</p>
       <div class="subtitle--green subtitle--small">Developer</div>

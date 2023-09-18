@@ -521,9 +521,10 @@ export default class CatalogView extends Component {
         const target = e.target as HTMLElement;
         if (!State.cart) throw new Error('err in catalog-renderItem');
         const currentGood = State.cart.body.lineItems
-          .map((el) => (el.name.en === chosenItem.slug.en ? el.id : ''))
+          .map((el) => {
+            return el.name.en.toLowerCase() === chosenItem.slug.en ? el.id : '';
+          })
           .join('');
-
         if (localStorage.getItem('customerID')) {
           if (!CART_ID) throw new Error('err');
           orderBtn
