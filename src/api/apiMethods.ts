@@ -14,7 +14,8 @@ import {
   MyCartUpdate,
   Cart,
   MyCartDraft,
-  CartUpdate
+  CartUpdate,
+  DiscountCodeReference
 } from '@commercetools/platform-sdk';
 import { apiData } from './apiData';
 import {
@@ -472,6 +473,30 @@ export function SetDiscountAnonim(
       {
         action: 'addDiscountCode',
         code: DISCOUNT_CODE
+      }
+    ]
+  };
+  return apiRootAnonim2
+    .me()
+    .carts()
+    .withId({ ID: CART_ID })
+    .post({
+      body: data
+    })
+    .execute();
+}
+
+export function RemoveFirstVisitCode(
+  CART_ID: string,
+  VERSION: number,
+  DISCOUNT_CODE: DiscountCodeReference
+): Promise<ClientResponse<Cart>> {
+  const data: MyCartUpdate = {
+    version: VERSION,
+    actions: [
+      {
+        action: 'removeDiscountCode',
+        discountCode: DISCOUNT_CODE
       }
     ]
   };

@@ -7,7 +7,8 @@
 import {
   ClientResponse,
   ProductProjection,
-  ProductProjectionPagedQueryResponse
+  ProductProjectionPagedQueryResponse,
+  Cart
 } from '@commercetools/platform-sdk';
 
 import Swiper from 'swiper';
@@ -18,7 +19,14 @@ import Component from '../../components/abstract/component';
 import ItemView from '../item/item';
 import { createElem } from '../../services/viewBuilderFunction';
 
-import { addToAnonimCart, addToCart } from '../../api/apiMethods';
+import {
+  GetAnonimCartByID,
+  addToAnonimCart,
+  addToCart,
+  RemoveFromCart,
+  RemoveFromAnonimCart,
+  GetCartByID
+} from '../../api/apiMethods';
 
 Swiper.use([Navigation, Pagination]);
 
@@ -321,6 +329,7 @@ export default class CatalogView extends Component {
           1
         );
       }
+
       await State.refreshCart();
       const cartChange = new Event('cart-change');
       window.dispatchEvent(cartChange);
@@ -476,9 +485,69 @@ export default class CatalogView extends Component {
       );
       if (!chosenItem) throw new Error('error');
 
-      const item = new ItemView(chosenItem);
+      const cartArray = State.cart?.body.lineItems.map((el) => {
+        return el.name.en.toLowerCase();
+      });
+      const orderBtn = !cartArray?.includes(chosenItem.slug.en);
+      const item = new ItemView(chosenItem, orderBtn);
       this.container.append(await item.render());
       this.createSlides();
+
+      // marker
+      const itemAddButton = document.querySelector('.order-submit');
+      const itemAddQuantity = document.querySelector(
+        '.order-quantity'
+      ) as HTMLInputElement;
+
+      itemAddButton?.addEventListener('click', async (e) => {
+        const CART_ID = localStorage.getItem('cartID');
+        if (!CART_ID) {
+          await State.setCart();
+        }
+        const target = e.target as HTMLElement;
+        if (!State.cart) throw new Error('err in catalog-renderItem');
+        const currentGood = State.cart.body.lineItems
+          .map((el) => {
+            return el.name.en.toLowerCase() === chosenItem.slug.en ? el.id : '';
+          })
+          .join('');
+        if (localStorage.getItem('customerID')) {
+          if (!CART_ID) throw new Error('err');
+          orderBtn
+            ? addToCart(
+                State.cart!.body.id,
+                await State.getCurrentCartVersion(State.cart!.body.id),
+                target.dataset.id!,
+                Number(target.dataset.masterVariant),
+                itemAddQuantity.value ? Number(itemAddQuantity?.value) : 1
+              )
+            : await RemoveFromCart(
+                CART_ID,
+                (await this.getCurrentCartVersion(CART_ID)).version,
+                currentGood
+              );
+        } else {
+          if (!CART_ID) throw new Error('err');
+          orderBtn
+            ? addToAnonimCart(
+                State.cart!.body.id,
+                await State.getCurrentAnonimCartVersion(State.cart!.body.id),
+                target.dataset.id!,
+                Number(target.dataset.masterVariant),
+                itemAddQuantity.value ? Number(itemAddQuantity?.value) : 1
+              )
+            : await RemoveFromAnonimCart(
+                CART_ID,
+                (await this.getCurrentAnonimCartVersion(CART_ID)).version,
+                currentGood
+              );
+        }
+        await State.refreshCart();
+        setTimeout(() => this.renderItemPage(route), 1000);
+
+        const cartChange = new Event('cart-change');
+        window.dispatchEvent(cartChange);
+      });
     } else {
       Router.navigate(Router.pages.notFound);
     }
@@ -503,37 +572,6 @@ export default class CatalogView extends Component {
       overlay?.classList.toggle('visible');
       body?.classList.toggle('stop-scroll');
     });
-    const itemAddButton = document.querySelector('.order-submit');
-    const itemAddQuantity = document.querySelector(
-      '.order-quantity'
-    ) as HTMLInputElement;
-    itemAddButton?.addEventListener('click', async (e) => {
-      const CART_ID = localStorage.getItem('cartID');
-      if (!CART_ID) {
-        await State.setCart();
-      }
-      const target = e.target as HTMLElement;
-      if (localStorage.getItem('customerID')) {
-        addToCart(
-          State.cart!.body.id,
-          await State.getCurrentCartVersion(State.cart!.body.id),
-          target.dataset.id!,
-          Number(target.dataset.masterVariant),
-          itemAddQuantity.value ? Number(itemAddQuantity?.value) : 1
-        );
-      } else {
-        addToAnonimCart(
-          State.cart!.body.id,
-          await State.getCurrentAnonimCartVersion(State.cart!.body.id),
-          target.dataset.id!,
-          Number(target.dataset.masterVariant),
-          itemAddQuantity.value ? Number(itemAddQuantity?.value) : 1
-        );
-      }
-      await State.refreshCart();
-      const cartChange = new Event('cart-change');
-      window.dispatchEvent(cartChange);
-    });
     return this.container;
   }
 
@@ -549,6 +587,28 @@ export default class CatalogView extends Component {
       },
       loop: true
     });
+  }
+
+  public async getCurrentCartVersion(CART_ID: string): Promise<Cart> {
+    try {
+      const response = await GetCartByID(CART_ID);
+      const { body } = response;
+      return body;
+    } catch (error) {
+      console.error('Something went wrong:', error);
+      throw error;
+    }
+  }
+
+  public async getCurrentAnonimCartVersion(CART_ID: string): Promise<Cart> {
+    try {
+      const response = await GetAnonimCartByID(CART_ID);
+      const { body } = response;
+      return body;
+    } catch (error) {
+      console.error('Something went wrong:', error);
+      throw error;
+    }
   }
 
   private fillPaginationBar = (): void => {
