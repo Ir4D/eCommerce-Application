@@ -17,9 +17,10 @@ import {
   RemoveFirstVisitCode
 } from '../../api/apiMethods';
 import Router from '../../services/router/router';
+import { createElem } from '../../services/viewBuilderFunction';
 
-const createElem = (className: string, tag = 'div'): HTMLElement =>
-  Object.assign(document.createElement(tag), { className });
+// export const createElem = (className: string, tag = 'div'): HTMLElement =>
+//   Object.assign(document.createElement(tag), { className });
 
 export default class CartView extends Component {
   private cartContainer: HTMLElement;
@@ -392,10 +393,6 @@ export default class CartView extends Component {
     });
     discountContainer.append(discountInput, discountBtn);
 
-    const orderBtn = createElem('cart-order-btn', 'button');
-    orderBtn.classList.add('btn', 'btn--yellow');
-    orderBtn.innerHTML = 'Order';
-
     totalContainer.append(
       subtotalPrice,
       discountApplied,
@@ -428,7 +425,7 @@ export default class CartView extends Component {
           await this.refreshCart();
         }
       } finally {
-        const condition = discountCodes.length === 0;
+        const condition = discountCodes.length !== 0;
         this.writeMsg(condition);
       }
     }

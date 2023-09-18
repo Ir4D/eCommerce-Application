@@ -80,6 +80,7 @@ export default abstract class State {
           const VERSION = await this.getCurrentCartVersion(CART_ID);
           State.cart = await GetCartFromAnonim(CUSTOMER_ID, CART_ID, VERSION);
         } else {
+          console.log('creating');
           State.cart = await CreateCartCustomer(CURRENCY);
           localStorage.setItem('cartID', State.cart.body.id);
         }
@@ -130,5 +131,6 @@ export default abstract class State {
   ): Promise<void> {
     await this.setCatalog(handleCatalogError);
     await this.setCategories(handleCategoriesError);
+    // await this.refreshCart();
   }
 }

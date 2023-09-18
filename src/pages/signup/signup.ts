@@ -36,7 +36,7 @@ const createCodeTemplate = (): string => {
     }
   });
 
-  document.addEventListener('click', (event: MouseEvent) => {
+  document.addEventListener('click', async (event: MouseEvent) => {
     const target = event.target as HTMLElement;
     event.stopImmediatePropagation();
     if (target && target.classList.contains('form-button')) {
@@ -63,7 +63,7 @@ const createCodeTemplate = (): string => {
       if (hasError || allInputsEmpty) {
         signUpModal.show({ status: 'form error' });
       } else {
-        signupCreate();
+        await signupCreate();
       }
     }
 

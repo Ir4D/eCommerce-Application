@@ -22,8 +22,8 @@ import TokenHandle from '../services/token/token';
 
 const projectKey = apiData.PROJECT_KEY || '';
 const httpMiddlewareOptions: HttpMiddlewareOptions = {
-  host: apiData.API_URL || '',
-  fetch
+  host: apiData.API_URL || ''
+  /* fetch */
 };
 
 // const tokenCache = new TokenHandle();
@@ -55,8 +55,8 @@ export function createCtpClient(): Client {
       clientId: apiDataCredentials.CLIENT_ID || '',
       clientSecret: apiDataCredentials.CLIENT_SECRET || ''
     },
-    scopes: [apiDataCredentials.SCOPES || ''],
-    fetch
+    scopes: [apiDataCredentials.SCOPES || '']
+    /* fetch */
   };
 
   return new ClientBuilder()
@@ -78,8 +78,8 @@ export function createCtpClientWithScopes(): Client {
       clientSecret: apiDataPassManageCustomers.CLIENT_SECRET || ''
     },
     scopes: [apiDataPassManageCustomers.SCOPES || ''],
-    tokenCache,
-    fetch
+    tokenCache
+    /* fetch */
   };
   const builder = new ClientBuilder()
     .withProjectKey(projectKey)
@@ -101,8 +101,8 @@ export function createCtpClientAnonymous(): Client {
       clientSecret: apiDataAnonymous.CLIENT_SECRET || ''
     },
     scopes: [apiDataAnonymous.SCOPES || ''],
-    tokenCache,
-    fetch
+    tokenCache
+    /* fetch */
   };
 
   return new ClientBuilder()
@@ -124,8 +124,8 @@ export function createCtpClientAnonymous2(): Client {
       clientSecret: apiDataAnonymous2.CLIENT_SECRET || ''
     },
     scopes: [apiDataAnonymous2.SCOPES || ''],
-    tokenCache,
-    fetch
+    tokenCache
+    /* fetch */
   };
 
   return new ClientBuilder()
@@ -154,8 +154,8 @@ export function createCtpClientWithCredentials(
       }
     },
     scopes: [apiDataPassManageCustomers.SCOPES || ''],
-    tokenCache,
-    fetch
+    tokenCache
+    /* fetch */
   };
 
   return new ClientBuilder()

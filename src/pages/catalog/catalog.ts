@@ -8,8 +8,7 @@ import {
   ClientResponse,
   ProductProjection,
   ProductProjectionPagedQueryResponse,
-  Cart,
-  LineItem
+  Cart
 } from '@commercetools/platform-sdk';
 
 import Swiper from 'swiper';
@@ -18,12 +17,12 @@ import Router from '../../services/router/router';
 import State from '../../services/state';
 import Component from '../../components/abstract/component';
 import ItemView from '../item/item';
+import { createElem } from '../../services/viewBuilderFunction';
 
 import {
   GetAnonimCartByID,
   addToAnonimCart,
   addToCart,
-  GetCart,
   RemoveFromCart,
   RemoveFromAnonimCart,
   GetCartByID
@@ -45,16 +44,6 @@ type PaginationBarType = {
 };
 
 type PaginationDirectionType = '+' | '-';
-
-const createElem = (
-  className: string,
-  tag: keyof HTMLElementTagNameMap = 'div',
-  innerText = ''
-): HTMLElement =>
-  Object.assign(document.createElement(tag), {
-    className,
-    innerText
-  });
 
 export default class CatalogView extends Component {
   private errorModal: HTMLDialogElement;
@@ -294,9 +283,6 @@ export default class CatalogView extends Component {
     if (catalogItem.masterVariant.images?.length) {
       cardImage.style.background = `center / contain no-repeat url('${catalogItem.masterVariant.images[0].url}') #ffff`;
     }
-
-
-   
 
     const cardName = document.createElement('p');
     cardName.classList.add('catalog-card-title');
