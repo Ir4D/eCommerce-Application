@@ -9,19 +9,14 @@ import {
   CustomerUpdateAction,
   CustomerChangePassword,
   CustomerChangeAddressAction,
-  CartSetShippingAddressAction,
-  CustomerAddShippingAddressIdAction,
   CustomerSetDefaultShippingAddressAction,
   CustomerSetDefaultBillingAddressAction,
   MyCartUpdate,
   Cart,
   MyCartDraft,
-  CartDraft,
-  CartSetCustomerIdAction,
-  CartUpdate,
-  MyCartRemoveLineItemAction
+  CartUpdate
 } from '@commercetools/platform-sdk';
-import { apiData, apiDataAnonymous2 } from './apiData';
+import { apiData } from './apiData';
 import {
   createCtpClient,
   createCtpClientAnonymous,
@@ -54,7 +49,7 @@ const apiRootAnonim2 = createApiBuilderFromCtpClient(
 });
 
 // Get info about the project - needs Admin Client API with the scope "manage_project:rss-ecom-app"
-export function GetProjectInfo(): void {
+export async function GetProjectInfo(): Promise<void> {
   const getProject = () => {
     return apiRoot.get().execute();
   };

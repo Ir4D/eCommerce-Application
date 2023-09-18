@@ -16,13 +16,9 @@ import Router from '../../services/router/router';
 import State from '../../services/state';
 import Component from '../../components/abstract/component';
 import ItemView from '../item/item';
+import { createElem } from '../../services/viewBuilderFunction';
 
-import {
-  GetAnonimCartByID,
-  addToAnonimCart,
-  addToCart,
-  GetCart
-} from '../../api/apiMethods';
+import { addToAnonimCart, addToCart } from '../../api/apiMethods';
 
 Swiper.use([Navigation, Pagination]);
 
@@ -40,16 +36,6 @@ type PaginationBarType = {
 };
 
 type PaginationDirectionType = '+' | '-';
-
-const createElem = (
-  className: string,
-  tag: keyof HTMLElementTagNameMap = 'div',
-  innerText = ''
-): HTMLElement =>
-  Object.assign(document.createElement(tag), {
-    className,
-    innerText
-  });
 
 export default class CatalogView extends Component {
   private errorModal: HTMLDialogElement;

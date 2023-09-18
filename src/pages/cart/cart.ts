@@ -16,9 +16,10 @@ import {
   UpdateCustomerCartProdQuantity
 } from '../../api/apiMethods';
 import Router from '../../services/router/router';
+import { createElem } from '../../services/viewBuilderFunction';
 
-const createElem = (className: string, tag = 'div'): HTMLElement =>
-  Object.assign(document.createElement(tag), { className });
+// export const createElem = (className: string, tag = 'div'): HTMLElement =>
+//   Object.assign(document.createElement(tag), { className });
 
 export default class CartView extends Component {
   private cartContainer: HTMLElement;

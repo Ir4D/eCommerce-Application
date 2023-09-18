@@ -36,15 +36,7 @@ const formNameDob = `
 
 export const countriesList = `
   <option value='BELARUS'>BELARUS</option>
-  <option value='CYPRUS'>CYPRUS</option>
-  <option value='CZECH REPUBLIC'>CZECH REPUBLIC</option>
-  <option value='FRANCE'>FRANCE</option>
   <option value='GERMANY'>GERMANY</option>
-  <option value='GREECE'>GREECE</option>
-  <option value='ITALY'>ITALY</option>
-  <option value='POLAND'>POLAND</option>
-  <option value='SPAIN'>SPAIN</option>
-  <option value='UNITED STATES'>UNITED STATES</option>
 `;
 
 const formBillingAddress = `
