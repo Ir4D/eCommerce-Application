@@ -425,7 +425,7 @@ export default class CartView extends Component {
           await this.refreshCart();
         }
       } finally {
-        const condition = discountCodes.length === 0;
+        const condition = discountCodes.length !== 0;
         this.writeMsg(condition);
       }
     }
