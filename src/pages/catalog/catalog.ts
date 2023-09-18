@@ -290,9 +290,6 @@ export default class CatalogView extends Component {
       cardImage.style.background = `center / contain no-repeat url('${catalogItem.masterVariant.images[0].url}') #ffff`;
     }
 
-
-   
-
     const cardName = document.createElement('p');
     cardName.classList.add('catalog-card-title');
     cardName.innerText = catalogItem.name.en;
