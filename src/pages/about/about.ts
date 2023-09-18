@@ -31,7 +31,7 @@ export default class AboutView {
       ${arr?.map((el) => new Teammate(el).render).join('')}
       </ul>
     </div>
-    <div class='rss'><div class="subtitle">All this was created thanks to <a class='link' target='_blanc' href='https://rs.school/js/'><img width='150' height='auto' src='./images/icons/rs_school_js.svg' /></a></div></div>`;
+    <div class='rss'><div class="subtitle">All this was created thanks&nbsp;to <a class='link' target='_blanc' href='https://rs.school/js/'><img width='150' height='auto' src='./images/icons/rs_school_js.svg' /></a></div></div>`;
   }
 
   public render(): HTMLElement {

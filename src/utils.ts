@@ -22,13 +22,26 @@ const teammates: ITeammate[] = [
   },
   {
     name: 'Dzmitry Maltsau',
-    bio: 'Gomel, Republic of Belarus <br/> Used to work as oil engineer, currently making first steps in front-end development <br/> Tech Stack: JS, TS, HTML, CSS, React <br/> Participation on project: Routing implementation, 404 page layout, Catalog page layout, Catalog sort and filter algorithms implementation',
+    bio: `Gomel, Republic of Belarus <br/> 
+    Used to work as an oil engineer, currently making first steps in front-end development <br/> Tech Stack: JS, TS, HTML, CSS, React.<br/> 
+    <strong>Contributions to the project:</strong><br>
+     - Routing implementation;<br>
+     - 404 page layout;<br>
+     - Catalog page layout;<br>
+     - Catalog sort and filter algorithms implementation.<br>
+     <strong>Additional responsibilities:</strong> Space harmonizer: insisted on unifying the code, developed basic parent components.`,
     git: 'https://github.com/Maltsau',
     photo: './images/avatars/dzmitry.png'
   },
   {
     name: 'Natalia Vozhdaeva',
-    bio: 'Minima ut, eveniet, placeat sunt eos enim amet numquam libero atque fuga consequuntur quas maiores unde et inventore voluptatibus officia accusantium sint neque ducimus doloremque blanditiis? Deserunt, neque.',
+    bio: `Cairo, Egypt <br/> I used to work as a journalist and guide. In 2020 tried the first course in front-end, and couldn't stop. Nowadays I have experience in HTML, CSS, Javascript, and TypeScript, and a bit of experience with React and Angular. But I'm still a CSS lover: can make burger-menu, slider, accordion, and, maybe, everithing else without js)<br>
+    <strong>Contributions to the project:</strong><br>
+     - Main-, aboutUs-, and goodItem-pages;<br>
+     - Creating reusable components fof building pages;<br>
+     - User interaction with cart from product-page;<br>
+     - Product-base implementation.<br>
+     <strong>Additional responsibilities:</strong> Postproduction: searching pictures, correcting layouts, unifying appearance.`,
     git: 'https://github.com/NataliaVozhdaeva',
     photo: './images/avatars/natalia.jpg'
   }
